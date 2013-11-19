@@ -9,11 +9,14 @@
 
 using namespace std;
 
+int Node::node_name = 0;
+
 Node::Node() {
 
 	id = "";
 	nodeAppearance = "default";
 	nodeAnimation = "default";
+	node_name = node_name_index++;
 }
 
 Node::Node(string id) {
@@ -21,6 +24,7 @@ Node::Node(string id) {
 	this->id = id;
 	nodeAppearance = "default";
 	nodeAnimation = "default";
+	node_name = node_name_index++;
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -35,6 +39,7 @@ Node::Node(string id, float transforms[16]) {
 	copy(&transforms[0], &transforms[16], this->transforms);
 	nodeAppearance = "default";
 	nodeAnimation = "default";
+	node_name = node_name_index++;
 }
 
 void Node::addRef(string ref) {
@@ -199,4 +204,8 @@ vector<MyPrimitive *> Node::getPrims() {
 
 void Node::closeDefinition(stack<string> apps_stack) {
 
+}
+
+int Node::getName() {
+	return node_name;
 }
