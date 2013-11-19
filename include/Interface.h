@@ -13,15 +13,14 @@ using namespace std;
 class Interface {
 private:
 	static int modifiers; ///< Stores the state of modifier keys (CTRL, ALT, SHIFT) for use in mouse and keyboard event handlers
-	static Interface * activeInterface;
 	GLUI* glui_window;
-	float displacementX;
-	float displacementY;
-	bool pressing_left;
-	bool pressing_middle;
-	bool pressing_right;
-	float prev_X;
-	float prev_Y;
+	static float displacementX;
+	static float displacementY;
+	static bool pressing_left;
+	static bool pressing_middle;
+	static bool pressing_right;
+	static float prev_X;
+	static float prev_Y;
 
 	// 1-> live_var
 	// 2-> id
@@ -36,13 +35,14 @@ private:
 
 	static int id_counter;
 
+	static GLuint *selectBuf;
+
 public:
 	Interface();
 	virtual ~Interface();
 
 	void init(int parent);///< Initializes the interface, in terms of handler setup and other low-level operations. Should not be overriden by subclasses
 	void initGUI(); ///< Initializes the graphical interface itself, i.e. creating controls and establishing relations with the scene. Should be overriden by subclasses. Default is empty.
-	static void setActiveInterface(Interface *gli); ///< registers _gli_ as the active interface
 
 	/** @name Static input (keyboard, mouse) handlers to be registered with GLUT
 	 * These methods are global handlers that are registered by the application as the keyboard and mouse handlers.
@@ -56,6 +56,9 @@ public:
 	//@}
 
 	static void processGUI(GLUI_Control *ctrl);	///< Static handler to be registered as callback for every control created. When a control is interacted with, this function will route execution to the active interface's processGUI() method, providing a pointer to the control.
+
+	static void performPicking(int x, int y);
+	static void processHits (GLint hits, GLuint buffer[]);
 };
 
 #endif /* INTERFACE_H_ */

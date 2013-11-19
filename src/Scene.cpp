@@ -370,3 +370,19 @@ string Scene::findLastNameAvail(string id) {
 	} while (graph.find(ss.str()) != graph.end());
 	return tmp;
 }
+
+void Scene::setSceneSize(int scene_size) {
+	this->scene_size = scene_size;
+}
+
+int Scene::getSceneSize() {
+	return scene_size;
+}
+
+void Scene::setDepth(int depth) {
+	this->depth = depth;
+}
+
+int Scene::getDepth() {
+	return depth;
+}

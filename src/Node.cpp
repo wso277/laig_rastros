@@ -193,6 +193,10 @@ int Node::getType() {
 	return NONE;
 }
 
+vector<MyPrimitive *> Node::getPrims() {
+	return prims;
+}
+
 void Node::closeDefinition(stack<string> apps_stack) {
 
 }

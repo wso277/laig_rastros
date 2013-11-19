@@ -49,6 +49,7 @@ public:
 	virtual void drawPrims(string appearance);
 	virtual void closeDefinition(stack<string> apps_stack);
 	virtual int getType();
+	vector<MyPrimitive *> getPrims();
 };
 
 #endif /* NODE_H_ */

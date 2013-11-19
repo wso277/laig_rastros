@@ -55,6 +55,8 @@ private:
 	bool local;
 	bool enabled;
 	float amb_r, amb_g, amb_b, amb_a;
+	int scene_size;
+	int depth;
 	Scene();
 public:
 	static unsigned int HEIGHT;
@@ -101,6 +103,10 @@ public:
 	string getInitCamera();
 	string findNextNameAvail(string id);
 	string findLastNameAvail(string id);
+	void setSceneSize(int scene_size);
+	int getSceneSize();
+	void setDepth(int depth);
+	int getDepth();
 };
 
 #endif /* SCENE_H_ */

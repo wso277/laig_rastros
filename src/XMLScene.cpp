@@ -30,6 +30,10 @@
 
 using namespace std;
 
+int scene_size = 0;
+int max_val = 0;
+int child_counter = 0;
+
 XMLScene::XMLScene() {
 	valid = false;
 }
@@ -99,6 +103,10 @@ void XMLScene::loadFile() {
 		printf("\n\n");
 	}
 	parseGraph();
+	printf("Scene Size: %d\n", scene_size);
+	printf("Depth: %d\n", max_val);
+	Scene::getInstance()->setSceneSize(scene_size);
+	Scene::getInstance()->setDepth(max_val);
 	printf("\n\n");
 }
 
@@ -974,6 +982,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 		strdup(child_type, child->Value());
 
 		if (strcmp(child_type, "rectangle") == 0) {
+			scene_size++;
 			char tmp_str[MAX_STRING_LEN];
 			double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 			if (strdup(tmp_str, child->Attribute("xy1")) == NULL) {
@@ -1000,6 +1009,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			printf("Rectangle\nxy1: (%f,%f)\nxy2: (%f,%f)\n", x1, y1, x2, y2);
 
 		} else if (strcmp(child_type, "triangle") == 0) {
+			scene_size++;
 			char tmp_str[MAX_STRING_LEN];
 			double x1 = 0, x2 = 0, x3 = 0, y1 = 0, y2 = 0, y3 = 0, z1 = 0, z2 = 0, z3 = 0;
 			if (strdup(tmp_str, child->Attribute("xyz1")) == NULL) {
@@ -1036,6 +1046,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 					z3);
 
 		} else if (strcmp(child_type, "cylinder") == 0) {
+			scene_size++;
 			double cyl_base = 0, cyl_top = 0, cyl_height = 0;
 			unsigned int cyl_slices = 0, cyl_stacks = 0;
 
@@ -1071,6 +1082,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 					cyl_slices, cyl_stacks);
 
 		} else if (strcmp(child_type, "sphere") == 0) {
+			scene_size++;
 			double sph_rad = 0;
 			unsigned int sph_slices = 0, sph_stacks = 0;
 
@@ -1092,6 +1104,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			printf("Sphere\nradius: %f\nslices: %d\nstacks: %d\n", sph_rad, sph_slices, sph_stacks);
 
 		} else if (strcmp(child_type, "torus") == 0) {
+			scene_size++;
 			double tor_inner = 0, tor_out = 0;
 			unsigned int tor_slices = 0, tor_loops = 0;
 
@@ -1116,6 +1129,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 
 			printf("Torus\ninner: %f\nouter: %f\nslices: %d\nloops: %d\n", tor_inner, tor_out, tor_slices, tor_loops);
 		} else if (strcmp(child_type, "plane") == 0) {
+			scene_size++;
 			int parts = 0;
 
 			if (child->QueryIntAttribute("parts", &parts) != TIXML_SUCCESS) {
@@ -1133,6 +1147,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			Plane *p = new Plane(parts);
 			n->addPrimitive(p);
 		} else if (strcmp(child_type, "patch") == 0) {
+			scene_size++;
 			int order = 0;
 			int parts_u = 0;
 			int parts_v = 0;
@@ -1189,6 +1204,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 
 			} while ((ctrl_p = ctrl_p->NextSiblingElement("controlpoint")) != NULL);
 		} else if (strcmp(child_type, "waterline") == 0) {
+			scene_size++;
 			char heightmap[MAX_STRING_LEN];
 			char texturemap[MAX_STRING_LEN];
 			char vert_shader[MAX_STRING_LEN];
@@ -1223,6 +1239,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			n->addPrimitive(wl);
 
 		} else if (strcmp(child_type, "vehicle") == 0) {
+			scene_size++;
 			MyVehicle *v = new MyVehicle();
 			n->addPrimitive(v);
 
@@ -1236,6 +1253,7 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 					!= nodes_being_processed.end()) {
 				if (find(nodes_finished_processing.begin(), nodes_finished_processing.end(), next_node_id)
 						!= nodes_finished_processing.end()) {
+					scene_size++;
 					printf("Node has already been processed.\n");
 					string last_node_name = Scene::getInstance()->findLastNameAvail(next_node_id);
 					if (Scene::getInstance()->getNode(last_node_name)->getType() != DISPLAY_LIST) { // normal node
@@ -1282,11 +1300,16 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 	} else {
 		Scene::getInstance()->addNode(node_id, n);
 	}
+	child_counter = n->getRefs().size() + n->getPrims().size();
+	if (child_counter > max_val) {
+		max_val = child_counter;
+	}
 	printf("closing %s\n", node_id);
 	n->closeDefinition(app_stck);
 	printf("closed %s\n", node_id);
 	app_stck.pop();
 	nodes_finished_processing.push_back(node_id);
+	scene_size++;
 	return true;
 }
 
