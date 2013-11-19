@@ -21,6 +21,7 @@ typedef map<string, CGFtexture *> TexElem;
 typedef map<string, Appearance *> AppearanceElem;
 typedef map<string, Camera *> CameraElem;
 typedef map<string, Animation *> AnimationElem;
+typedef map<GLuint, Node*> PickElem;
 
 /**
  * main glut and glui functions
@@ -50,6 +51,7 @@ private:
 	AppearanceElem appearances;
 	AnimationElem animations;
 	GraphElem graph;
+	PickElem pickingObjs
 	vector<string> animation_index;
 	bool doublesided;
 	bool local;
@@ -107,6 +109,7 @@ public:
 	int getSceneSize();
 	void setDepth(int depth);
 	int getDepth();
+	Node *getPickedElem(GLuint name);
 };
 
 #endif /* SCENE_H_ */

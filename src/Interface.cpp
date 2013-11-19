@@ -172,56 +172,31 @@ void Interface::processMouse(int button, int state, int x, int y) {
 }
 
 void Interface::performPicking(int x, int y) {
-	// Sets the buffer to be used for selection and activate selection mode
+
 	glSelectBuffer((Scene::getInstance()->getDepth() + 3) * Scene::getInstance()->getSceneSize(), selectBuf);
 	glRenderMode(GL_SELECT);
-
-	// Initialize the picking name stack
 	glInitNames();
-
-	// The process of picking manipulates the projection matrix
-	// so we will be activating, saving and manipulating it
 	glMatrixMode(GL_PROJECTION);
-
-	//store current projmatrix to restore easily in the end with a pop
 	glPushMatrix();
-
-	//get the actual projection matrix values on an array of our own to multiply with pick matrix later
 	GLfloat projmat[16];
 	glGetFloatv(GL_PROJECTION_MATRIX, projmat);
-
-	// reset projection matrix
 	glLoadIdentity();
-
-	// get current viewport and use it as reference for
-	// setting a small picking window of 5x5 pixels around mouse coordinates for picking
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	// this is multiplied in the projection matrix
 	gluPickMatrix((GLdouble) x, (GLdouble) (Scene::HEIGHT - y), 5.0, 5.0, viewport);
-
-	// multiply the projection matrix stored in our array to ensure same conditions as in normal render
 	glMultMatrixf(projmat);
-
-	// force scene drawing under this mode
-	// only the names of objects that fall in the 5x5 window will actually be stored in the buffer
 	display();
-
-	// restore original projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-
 	glFlush();
 
-	// revert to render mode, get the picking results and process them
 	GLint hits;
 	hits = glRenderMode(GL_RENDER);
 	processHits(hits, selectBuf);
 }
 
 void Interface::processHits(GLint hits, GLuint buffer[]) {
-	GLuint *ptr = buffer;
+/*	GLuint *ptr = buffer;
 	GLuint mindepth = 0xFFFFFFFF;
 	GLuint *selected = NULL;
 	GLuint nselected;
@@ -251,7 +226,7 @@ void Interface::processHits(GLint hits, GLuint buffer[]) {
 			printf("%d ", selected[i]);
 		printf("\n");
 	} else
-		printf("Nothing selected while picking \n");
+		printf("Nothing selected while picking \n");*/
 }
 
 void Interface::processMouseMoved(int x, int y) {

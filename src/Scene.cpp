@@ -133,6 +133,7 @@ void Scene::addAnimation(string key, Animation* animation) {
 
 void Scene::addNode(string key, Node* node) {
 	graph.insert(GraphElem::value_type(key, node));
+	pickingObjs.insert(PickElem::value_type(node->getName(), node));
 }
 
 void Scene::setGlobalLights(bool doublesided, bool local, bool enabled) {
@@ -385,4 +386,12 @@ void Scene::setDepth(int depth) {
 
 int Scene::getDepth() {
 	return depth;
+}
+
+Node *Scene::getPickedElem(GLuint name) {
+	Node *ret;
+	if ((ret = pickingObjs.find(name)) == pickingObjs.end()) {
+		return NULL;
+	}
+	return ret;
 }
