@@ -25,6 +25,9 @@ protected:
 	string nodeAppearance;
 	string nodeAnimation;
 	vector<MyPrimitive *> prims;
+	static int node_name_index;
+	int node_name;
+
 
 public:
 	Node();
@@ -50,6 +53,7 @@ public:
 	virtual void closeDefinition(stack<string> apps_stack);
 	virtual int getType();
 	vector<MyPrimitive *> getPrims();
+	int getName();
 };
 
 #endif /* NODE_H_ */
