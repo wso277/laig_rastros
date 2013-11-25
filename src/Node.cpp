@@ -9,22 +9,23 @@
 
 using namespace std;
 
-int Node::node_name = 0;
+int Node::node_name_index = 0;
+extern bool inSelectMode;
 
 Node::Node() {
-
+	is_selectable = false;
+	node_name = -1;
 	id = "";
 	nodeAppearance = "default";
 	nodeAnimation = "default";
-	node_name = node_name_index++;
 }
 
 Node::Node(string id) {
-
+	is_selectable = false;
+	node_name = -1;
 	this->id = id;
 	nodeAppearance = "default";
 	nodeAnimation = "default";
-	node_name = node_name_index++;
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -34,12 +35,12 @@ Node::Node(string id) {
 }
 
 Node::Node(string id, float transforms[16]) {
-
+	is_selectable = false;
+	node_name = -1;
 	this->id = id;
 	copy(&transforms[0], &transforms[16], this->transforms);
 	nodeAppearance = "default";
 	nodeAnimation = "default";
-	node_name = node_name_index++;
 }
 
 void Node::addRef(string ref) {
@@ -161,10 +162,21 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 
 	glPushMatrix();
 	if (ani_stack.top() != "default") {
-		Point pt = Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
+		Point pt =
+				Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
 		glTranslatef(pt.getX(), pt.getY(), pt.getZ());
-		glRotatef(Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(), 0, 1, 0);
+		glRotatef(
+				Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(),
+				0, 1, 0);
 	}
+
+	if (inSelectMode) {
+		if (isSelectable()) {
+			glPushName(getName());
+			printf("push done\n");
+		}
+	}
+
 	if (prims.size() != 0)
 		drawPrims(apps_stack.top());
 
@@ -176,6 +188,12 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 	}
 	apps_stack.pop();
 	ani_stack.pop();
+
+	if (inSelectMode) {
+		if (isSelectable()) {
+			glPopName();
+		}
+	}
 	glPopMatrix();
 }
 
@@ -208,4 +226,28 @@ void Node::closeDefinition(stack<string> apps_stack) {
 
 int Node::getName() {
 	return node_name;
+}
+
+void Node::setName(int name) {
+	node_name = name;
+}
+
+int Node::getNextName() {
+	return node_name_index++;
+}
+
+bool Node::isSelectable() {
+	return is_selectable;
+}
+
+void Node::setSelectable(bool sel) {
+	is_selectable = sel;
+
+	if (is_selectable) {
+		setName(getNextName());
+	}
+}
+
+void Node::processPick() {
+	cout << "I (" << id << ")have been picked... YUPIIII" << endl;
 }

@@ -27,7 +27,7 @@ protected:
 	vector<MyPrimitive *> prims;
 	static int node_name_index;
 	int node_name;
-
+	bool is_selectable;
 
 public:
 	Node();
@@ -54,6 +54,11 @@ public:
 	virtual int getType();
 	vector<MyPrimitive *> getPrims();
 	int getName();
+	void setName(int name);
+	static int getNextName();
+	bool isSelectable();
+	virtual void setSelectable(bool sel);
+	void processPick();
 };
 
 #endif /* NODE_H_ */

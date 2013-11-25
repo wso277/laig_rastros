@@ -1,11 +1,16 @@
 #include "Interface.h"
 #include "Scene.h"
+#include <limits>
+#include <iostream>
+#include <unistd.h>
 
 extern int main_window;
 
 using namespace std;
 
 extern float view_rotate[16];
+
+bool inSelectMode = false;
 
 extern float obj_pos[3];
 
@@ -26,7 +31,8 @@ bool Interface::pressing_middle = 0;
 bool Interface::pressing_right = 0;
 float Interface::prev_X = 0;
 float Interface::prev_Y = 0;
-GLuint* Interface::selectBuf = new GLuint[(Scene::getInstance()->getDepth() + 3) * Scene::getInstance()->getSceneSize()];
+GLuint *Interface::selectBuf = NULL;
+int Interface::selectBufSize = 0;
 
 Interface::Interface() {
 }
@@ -53,6 +59,10 @@ void Interface::init(int parent) {
 
 	prev_X = 0;
 	prev_Y = 0;
+
+	selectBufSize = (Scene::getInstance()->getDepth() + 3)
+			* Scene::getInstance()->getSceneSize();
+	Interface::selectBuf = new GLuint[selectBufSize];
 }
 
 void Interface::initGUI() {
@@ -61,7 +71,8 @@ void Interface::initGUI() {
 	CameraElem::iterator cam_it;
 	int i = 0;
 	int init_camera_pos = 0;
-	for (cam_it = Scene::getInstance()->cameras.begin(); cam_it != Scene::getInstance()->cameras.end(); cam_it++) {
+	for (cam_it = Scene::getInstance()->cameras.begin();
+			cam_it != Scene::getInstance()->cameras.end(); cam_it++) {
 		int live_var = 0;
 		int id = id_counter++;
 		if (cam_it->first == Scene::getInstance()->getInitCamera()) {
@@ -77,7 +88,8 @@ void Interface::initGUI() {
 
 	GLUI_Panel *camsPanel = glui_window->add_panel("Cameras");
 	radio_id = id_counter++;
-	cams_group = glui_window->add_radiogroup_to_panel(camsPanel, cams_vars, radio_id, Interface::processGUI);
+	cams_group = glui_window->add_radiogroup_to_panel(camsPanel, cams_vars,
+			radio_id, Interface::processGUI);
 
 	map<string, int*>::iterator cb_it;
 	for (cb_it = cams_rb.begin(); cb_it != cams_rb.end(); cb_it++) {
@@ -90,7 +102,8 @@ void Interface::initGUI() {
 
 	// create lights panel
 	vector<Light *>::iterator light_it;
-	for (light_it = Scene::getInstance()->lights.begin(); light_it != Scene::getInstance()->lights.end(); light_it++) {
+	for (light_it = Scene::getInstance()->lights.begin();
+			light_it != Scene::getInstance()->lights.end(); light_it++) {
 		int live_var = 0;
 		int id = id_counter++;
 		if ((*light_it)->isEnabled())
@@ -99,15 +112,16 @@ void Interface::initGUI() {
 		int* ptrL = new int[2];
 		ptrL[0] = live_var;
 		ptrL[1] = id;
-		lights_cb.insert(map<string, int*>::value_type((*light_it)->getId(), ptrL));
+		lights_cb.insert(
+				map<string, int*>::value_type((*light_it)->getId(), ptrL));
 	}
 
 	GLUI_Panel *lightsPanel = glui_window->add_panel("Lights");
 
 	map<string, int*>::iterator rb_it;
 	for (rb_it = lights_cb.begin(); rb_it != lights_cb.end(); rb_it++) {
-		glui_window->add_checkbox_to_panel(lightsPanel, rb_it->first.c_str(), &rb_it->second[0], rb_it->second[1],
-				Interface::processGUI);
+		glui_window->add_checkbox_to_panel(lightsPanel, rb_it->first.c_str(),
+				&rb_it->second[0], rb_it->second[1], Interface::processGUI);
 	}
 
 	glui_window->add_column(true);
@@ -134,7 +148,8 @@ void Interface::initGUI() {
 
 	GLUI_Panel *drawmodePanel = glui_window->add_panel("Drawmode");
 	drawmd_id = id_counter++;
-	drawmd_grp = glui_window->add_radiogroup_to_panel(drawmodePanel, drawmode_vars, drawmd_id, Interface::processGUI);
+	drawmd_grp = glui_window->add_radiogroup_to_panel(drawmodePanel,
+			drawmode_vars, drawmd_id, Interface::processGUI);
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Fill");
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Wireframe");
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Points");
@@ -144,7 +159,8 @@ void Interface::initGUI() {
 	GLUI_Rotation *view_rot = glui_window->add_rotation("Rotacao", view_rotate);
 	view_rot->set_spin(1.0);
 
-	GLUI_Translation *trans_z = glui_window->add_translation("Zoom", GLUI_TRANSLATION_Z, &obj_pos[2]);
+	GLUI_Translation *trans_z = glui_window->add_translation("Zoom",
+	GLUI_TRANSLATION_Z, &obj_pos[2]);
 	trans_z->set_speed(.02);
 
 }
@@ -173,7 +189,9 @@ void Interface::processMouse(int button, int state, int x, int y) {
 
 void Interface::performPicking(int x, int y) {
 
-	glSelectBuffer((Scene::getInstance()->getDepth() + 3) * Scene::getInstance()->getSceneSize(), selectBuf);
+	Scene::getInstance()->initCamera();
+
+	glSelectBuffer(selectBufSize, selectBuf);
 	glRenderMode(GL_SELECT);
 	glInitNames();
 	glMatrixMode(GL_PROJECTION);
@@ -183,9 +201,14 @@ void Interface::performPicking(int x, int y) {
 	glLoadIdentity();
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	gluPickMatrix((GLdouble) x, (GLdouble) (Scene::HEIGHT - y), 5.0, 5.0, viewport);
+	gluPickMatrix((GLdouble) x, (GLdouble) (Scene::HEIGHT - y), 5.0, 5.0,
+			viewport);
 	glMultMatrixf(projmat);
+	inSelectMode = true;
+	glLoadName(-1);
+	glMatrixMode(GL_MODELVIEW);
 	display();
+	inSelectMode = false;
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glFlush();
@@ -196,37 +219,38 @@ void Interface::performPicking(int x, int y) {
 }
 
 void Interface::processHits(GLint hits, GLuint buffer[]) {
-/*	GLuint *ptr = buffer;
-	GLuint mindepth = 0xFFFFFFFF;
+	GLuint *ptr = buffer;
+	GLuint mindepth = numeric_limits<GLuint>::max();
 	GLuint *selected = NULL;
 	GLuint nselected;
+
+	vector<GLuint> selected_names;
+
 
 	// iterate over the list of hits, and choosing the one closer to the viewer (lower depth)
 	for (int i = 0; i < hits; i++) {
 		int num = *ptr;
+
 		ptr++;
 		GLuint z1 = *ptr;
-		ptr++;
-		ptr++;
+		ptr += 2;
 		if (z1 < mindepth && num > 0) {
 			mindepth = z1;
 			selected = ptr;
 			nselected = num;
 		}
-		for (int j = 0; j < num; j++)
-			ptr++;
+		ptr += num;
 	}
 
-	// if there were hits, the one selected is in "selected", and it consist of nselected "names" (integer ID's)
 	if (selected != NULL) {
-		// this should be replaced by code handling the picked object's ID's (stored in "selected"),
-		// possibly invoking a method on the scene class and passing "selected" and "nselected"
-		printf("Picked ID's: ");
-		for (int i = 0; i < nselected; i++)
-			printf("%d ", selected[i]);
-		printf("\n");
-	} else
-		printf("Nothing selected while picking \n");*/
+		for (unsigned int i = 0; i < nselected; i++) {
+			selected_names.push_back(selected[i]);
+		}
+		Scene::getInstance()->processPickedNodes(selected_names);
+	} else {
+		printf("Nothing selected while picking \n");
+	}
+
 }
 
 void Interface::processMouseMoved(int x, int y) {

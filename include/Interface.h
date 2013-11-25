@@ -36,6 +36,7 @@ private:
 	static int id_counter;
 
 	static GLuint *selectBuf;
+	static int selectBufSize;
 
 public:
 	Interface();

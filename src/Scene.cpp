@@ -17,6 +17,7 @@ unsigned int Scene::HEIGHT = 768;
 unsigned int Scene::WIDTH = 1024;
 
 extern int main_window;
+extern bool inSelectMode;
 float view_rotate[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
 float obj_pos[] = { 0.0, 0.0, 0.0 };
@@ -41,7 +42,8 @@ Scene::Scene() {
 	appearances.insert(AppearanceElem::value_type("default", new Appearance()));
 }
 
-void Scene::setBackground(float bckg_r, float bckg_g, float bckg_b, float bckg_a) {
+void Scene::setBackground(float bckg_r, float bckg_g, float bckg_b,
+		float bckg_a) {
 	this->bckg_r = bckg_r;
 	this->bckg_g = bckg_g;
 	this->bckg_b = bckg_b;
@@ -133,7 +135,9 @@ void Scene::addAnimation(string key, Animation* animation) {
 
 void Scene::addNode(string key, Node* node) {
 	graph.insert(GraphElem::value_type(key, node));
-	pickingObjs.insert(PickElem::value_type(node->getName(), node));
+	if (node->isSelectable()) {
+		pickingObjs.insert(PickElem::value_type(node->getName(), node));
+	}
 }
 
 void Scene::setGlobalLights(bool doublesided, bool local, bool enabled) {
@@ -211,11 +215,9 @@ void Scene::applyLights() {
 		for (unsigned int i = 0; i < lights.size(); i++) {
 			lights[i]->displayLight();
 		}
-
 	} else {
 		glDisable(GL_LIGHTING);
 	}
-
 }
 
 void Scene::initCamera() {
@@ -271,6 +273,8 @@ void Scene::drawScene() {
 	ptr->processNode(apps_stack, ani_stack);
 }
 
+#include <unistd.h>
+
 void display() {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -278,12 +282,14 @@ void display() {
 
 	glPolygonMode(GL_FRONT_AND_BACK, Scene::getInstance()->getDrawmode());
 
-	Scene::getInstance()->initCamera();
+	if (!inSelectMode)
+		Scene::getInstance()->initCamera();
 	glTranslatef(obj_pos[0], obj_pos[1], -obj_pos[2]);
 	glMultMatrixf(view_rotate);
 
 	glPushMatrix();
-	glMultMatrixf(Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
+	glMultMatrixf(
+			Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
 	Scene::getInstance()->applyLights();
 	glPopMatrix();
 
@@ -389,9 +395,19 @@ int Scene::getDepth() {
 }
 
 Node *Scene::getPickedElem(GLuint name) {
-	Node *ret;
-	if ((ret = pickingObjs.find(name)) == pickingObjs.end()) {
+	PickElem::iterator it;
+	if ((it = pickingObjs.find(name)) == pickingObjs.end()) {
 		return NULL;
 	}
-	return ret;
+	return it->second;
+}
+
+void Scene::processPickedNodes(vector<GLuint> names) {
+	PickElem::iterator it;
+	vector<GLuint>::iterator picks_it;
+	for (picks_it = names.begin(); picks_it != names.end(); picks_it++) {
+		if ((it = pickingObjs.find(*picks_it)) != pickingObjs.end()) {
+			it->second->processPick();
+		}
+	}
 }

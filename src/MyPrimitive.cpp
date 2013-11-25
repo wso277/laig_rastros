@@ -16,3 +16,6 @@ void MyPrimitive::setAppearance(string appearance) {
 void MyPrimitive::clearAppearance() {
 	this->nodeAppearance = "default";
 }
+
+void MyPrimitive::setSelectable(bool sel) {
+}

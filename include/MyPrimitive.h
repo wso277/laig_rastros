@@ -14,6 +14,7 @@ public:
 	virtual ~MyPrimitive();
 	virtual void setAppearance(string appearance);
 	void clearAppearance();
+	void setSelectable(bool sel);
 };
 
 #endif /* MYPRIMITIVE_H_ */

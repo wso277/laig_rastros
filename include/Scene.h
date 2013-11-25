@@ -9,6 +9,7 @@
 #include "Node.h"
 #include "CGFtexture.h"
 #include "Animation.h"
+#include "GL/gl.h"
 
 using namespace std;
 
@@ -51,7 +52,7 @@ private:
 	AppearanceElem appearances;
 	AnimationElem animations;
 	GraphElem graph;
-	PickElem pickingObjs
+	PickElem pickingObjs;
 	vector<string> animation_index;
 	bool doublesided;
 	bool local;
@@ -110,6 +111,7 @@ public:
 	void setDepth(int depth);
 	int getDepth();
 	Node *getPickedElem(GLuint name);
+	void processPickedNodes(vector<GLuint> names);
 };
 
 #endif /* SCENE_H_ */
