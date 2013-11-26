@@ -1,7 +1,13 @@
+
+/*******************************************************
+ * Libraries
+ *******************************************************/
+
+:- use_module(library(random)), use_module(library(socket)).
+
 /*******************************************************
  * Auxiliary predicates
  *******************************************************/
-:- use_module(library(random)).
 
 nthElem(1, [X | _Xs], X).
 nthElem(N, [_X | Xs], _Y) :- N1 is N - 1, nthElem(N1, Xs, _Y).
@@ -132,7 +138,7 @@ printChoices([10 | Ls]) :- write('(10) - Climb one level\n'), printChoices(Ls).
 printChoices([11 | Ls]) :- write('(11) - Descend one level\n'), printChoices(Ls).
 printChoices([12 | Ls]) :- write('(12) - End turn\n'), printChoices(Ls).
 
-receiveChoice(Move) :- repeatI, read(Move).
+receiveChoice(Move) :- repeatI, read(Move), get_char(_).
 
 validateChoice(_List, 12, 1, 2).
 validateChoice(List, Move, 0, 1) :- Move < 10, member(Move, List).
@@ -314,7 +320,7 @@ declareWinner(Player) :- write('CONGRATULATIONS PLAYER '), write(Player), write(
 				retractall(player(_,_)), retractall(level(_)),
 				setGameMode(Mode).
 
-receiveGameMode(Mode) :- repeatI, read(Mode).
+receiveGameMode(Mode) :- repeatI, read(Mode), get_char(_).
 
 validateGameMode(1).
 validateGameMode(2).
@@ -337,7 +343,7 @@ playerPrefMoves(2, 10, [6, 1, 4, 9, 8, 5, 2, 3, 7]).
 moveAuto(Player, Board, NextBoard) :- findMoves(Board, Avail, 0),
 									playerPrefMoves(Player, Dir, Pref),
 									moveAuto(Player, Board, Avail, Dir, Pref, NextBoard),
-									printBoard(NextBoard), write('Press [Enter] to continue\n'), get_char(_), get_char(_).
+									printBoard(NextBoard), write('Press [Enter] to continue\n'), get_char(_).
 
 moveAuto(_Player, Board, AvailMoves, _Dir, [_P | _Ps], NextBoard) :- 
 			level(X), random(0, 100, Y), Y =< X, random_member(Z, AvailMoves), updateBoard(Board, Z, NextBoard).
@@ -381,7 +387,7 @@ moveAuto(Player, Board, AvailMoves, Dir, [P | Ps], NextBoard) :-
 				validateDifficultyLevel(Level),
 				setDifficultyLevel(Level).
 
-receiveDifficultyLevel(Level) :- repeatI, read(Level).
+receiveDifficultyLevel(Level) :- repeatI, read(Level), get_char(_).
 
 validateDifficultyLevel(1).
 validateDifficultyLevel(2).
@@ -392,3 +398,34 @@ setDifficultyLevel(1) :- asserta(level(75)).
 setDifficultyLevel(2) :- asserta(level(50)).
 setDifficultyLevel(3) :- asserta(level(25)).
 setDifficultyLevel(4) :- asserta(level(0)).
+
+
+ /*******************************************************
+ * Socket Interface
+ *******************************************************/
+
+openSocket :- tcp_socket(InitSocket), tcp_bind(InitSocket, SocketPort),
+			retractall(socketInUse),
+			retractall(socketStream), 
+			write('Port in use: localhost:'), write(SocketPort),
+			write('\nPress any key to continue\n'),
+			get_char(_),
+			connectToClient(InitSocket).
+
+connectToClient(InitSocket) :- write('Waiting for connection\n'),
+						tcp_listen(InitSocket, 1),
+						tcp_open_socket(InitSocket, AcceptFd, _),
+						tcp_accept(AcceptFd, SocketID, _Peer),
+						tcp_open_socket(SocketID, IStream, OStream),
+						write('Connected.\n'),
+						asserta(socketInputStream(IStream)),
+						asserta(socketOutputStream(OStream)).
+
+receiveInputFromSocketStream :- socketInputStream(IStream), socketOutputStream(OStream), receiveInputFromStream(IStream, OStream), close(IStream), close(OStream).
+
+receiveInputFromStream(IStream, OStream) :- read(IStream, Messg),
+								write('Message received: '), write(Messg), write('\n'),
+								format(OStream, 'Message received!.~n', []).
+
+closeSocket :- socketStream(Stream), close(Stream, [force(true)]).
+closeSocket :- write('None socket opened yet\n').
