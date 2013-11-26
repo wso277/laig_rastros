@@ -1,0 +1,718 @@
+<yaf>
+
+	<globals background="0.25 0.73 0.92 1.0" drawmode="fill" shading="gouraud" cullface="back" cullorder="CCW" />
+	<cameras initial="frontView" >
+		<perspective id="frontView" near="0.0001" far="1000.0" angle="45.0" pos="0.0 15.0 20.0" target="0.0 0.0 0.0" />
+	</cameras>
+	<lighting doublesided="true" local="true" enabled="true" ambient="0.1 0.1 0.1 1.0" >
+		<omni id="light2" enabled="true"
+		location="0.0 10.0 0.0"
+		ambient="0.1 0.1 0.1 1.0"
+		diffuse="2.0 2.0 2.0 1.0"
+		specular="2.0 2.0 2.0 1.0"
+		/>
+		<omni id="light3" enabled="true"
+		location="0.0 15.0 22.0"
+		ambient="0.1 0.1 0.1 1.0"
+		diffuse="2.0 2.0 2.0 1.0"
+		specular="2.0 2.0 2.0 1.0"
+		/>
+	</lighting>
+	<textures>
+		<texture id="board" file="board.jpg" />
+	</textures>
+	<appearances>
+		<appearance id="default"
+		emissive="0.0 0.0 0.0 0.0"
+		ambient="1.0 1.0 1.0 1.0"
+		diffuse="1.0 1.0 1.0 1.0"
+		specular="1.0 1.0 1.0 1.0"
+		shininess="10.0"  />
+		<appearance id="board_top"
+		emissive="0.0 0.0 0.0 0.0"
+		ambient="0.8 0.8 0.8 1.0"
+		diffuse="0.8 0.8 0.8 1.0"
+		specular="0.1 0.1 0.1 1.0"
+		shininess="100.0"
+		textureref="board"
+		texlength_s="1"
+		texlength_t="1" />
+	</appearances>
+	<animations>
+		<animation id="vehicle" span="20.0" type="linear">
+
+			<controlpoint xx="0" yy="5" zz="0" />
+			<controlpoint xx="10" yy="5" zz="20" />
+			<controlpoint xx="10" yy="0" zz="20" />
+			<controlpoint xx="-30" yy="20" zz="-5" />
+
+		</animation>
+	</animations>
+	<graph rootid="scene">
+
+		<node id="scene">
+			<transforms>
+			</transforms>
+			<!-- <vehicle /> -->
+			<!-- <noderef id="water" /> -->
+			<children>
+				<noderef id="board" />
+			</children>
+		</node>
+		<node id="board">
+			<transforms>
+				<translate to="0.0 1.0 5.0" />
+				<scale factor="5 1 5" />
+			</transforms>
+
+			<children>
+				<noderef id="top" />
+				<noderef id="bottom" />
+				<noderef id="front" />
+				<noderef id="back" />
+				<noderef id="left" />
+				<noderef id="right" />
+			</children>
+		</node>
+		<node id="top">
+			<transforms>
+				<translate to="0.0 0.125 0.0" />
+			</transforms>
+
+			<appearanceref id="board_top"/>
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+		<node id="bottom">
+			<transforms>
+				<translate to="0.0 -0.125 0.0" />
+				<rotate axis="x" angle="180" />
+			</transforms>
+
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+		<node id="front">
+			<transforms>
+				<translate to="0.0 0.0 0.5" />
+				<scale factor="1.0 0.25 1.0" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+				<node id="back">
+			<transforms>
+				<translate to="0.0 0.0 -0.5" />
+				<scale factor="1.0 0.25 1.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+		<node id="left">
+			<transforms>
+				<translate to="-0.5 0.0 0.0" />
+				<scale factor="1.0 0.25 1.0" />
+				<rotate axis="z" angle="90" />
+			</transforms>
+
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+		<node id="right">
+			<transforms>
+				<translate to="0.5 0.0 0.0" />
+				<scale factor="1.0 0.25 1.0" />
+				<rotate axis="z" angle="-90" />
+			</transforms>
+
+			<children>
+				<plane parts="30"/>
+			</children>
+		</node>
+
+
+
+
+
+
+
+
+
+
+
+		<node id="home" displaylist="true" >
+			<transforms></transforms>
+			<children>
+				<noderef id="wall" />
+				<noderef id="door" />
+				<noderef id="roof" />
+			</children>
+		</node>
+		<node id="wall" >
+			<transforms></transforms>
+			<appearanceref id="house_walls_appearence" />
+			<children>
+				<noderef id="section1" />
+				<noderef id="section2" />
+				<noderef id="section3" />
+				<noderef id="section4" />
+				<noderef id="section5" />
+				<noderef id="section6" />
+				<noderef id="section7" />
+				<noderef id="section8" />
+				<noderef id="section9" />
+			</children>
+
+		</node>
+		<node id="section1">
+			<transforms>
+				<translate to="5.5 2.5 1.0" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare1" />
+
+			</children>
+
+		</node>
+		<node id="section2">
+			<transforms>
+				<translate to="14.5 2.5 1.0" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare1" />
+
+			</children>
+
+		</node>
+		<node id="wallSquare1" >
+			<transforms></transforms>
+			<children>
+
+				<rectangle xy1="-2.5 -2.5" xy2="2.5 2.5" />
+
+			</children>
+
+		</node>
+		<node id="section3">
+			<transforms>
+				<translate to="5.5 6.5 1.0" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare2" />
+
+			</children>
+
+		</node>
+		<node id="section4">
+			<transforms>
+				<translate to="10.5 6.5 1.0" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare2" />
+
+			</children>
+
+		</node>
+		<node id="section5">
+			<transforms>
+				<translate to="14.5 6.5 1.0" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare2" />
+
+			</children>
+
+		</node>
+		<node id="wallSquare2">
+			<transforms></transforms>
+			<children>
+
+				<rectangle xy1="-2.5 -1.5" xy2="2.5 1.5" />
+
+			</children>
+
+		</node>
+		<node id="section6">
+
+			<transforms>
+				<translate to="17.0 4.0 0.5" />
+				<rotate axis="y" angle="90" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare3" />
+
+			</children>
+
+		</node>
+		<node id="section7">
+
+			<transforms>
+				<translate to="3.0 4.0 0.5" />
+				<rotate axis="y" angle="-90" />
+			</transforms>
+			<children>
+
+				<noderef id="wallSquare3" />
+
+			</children>
+
+		</node>
+		<node id="wallSquare3">
+
+			<transforms></transforms>
+			<children>
+
+				<rectangle xy1="-0.5 -4.0" xy2="0.5 4.0" />
+
+			</children>
+
+		</node>
+		<node id="section8">
+
+			<transforms>
+				<translate to="17.0 8.3 0.5" />
+				<scale factor="1.0 0.6 1.0" />
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="90" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+
+				<noderef id="wallTriangle" />
+
+			</children>
+
+		</node>
+		<node id="section9">
+
+			<transforms>
+				<translate to="3.0 8.3 0.5" />
+				<scale factor="1.0 0.6 1.0" />
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+
+				<noderef id="wallTriangle" />
+
+			</children>
+
+		</node>
+		<node id="wallTriangle">
+
+			<transforms></transforms>
+			<children>
+
+				<triangle xyz1="-0.5 0.0 -0.5" xyz2="-0.5 0.0 0.5" xyz3="0.5 0.0 0.5" />
+
+			</children>
+
+		</node>
+		<node id="door">
+
+			<transforms>
+				<translate to="10.0 2.5 1.0" />
+				<scale factor="4.0 5.0 1.0" />
+			</transforms>
+			<appearanceref id="door_appearence" />
+			<children>
+
+				<rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+
+			</children>
+
+		</node>
+		<node id="roof">
+
+			<transforms>
+				<translate to="10.0 9.1 0.0" />
+				<rotate axis="x" angle="30" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<appearanceref id="roof_appearence" />
+			<children>
+
+				<rectangle xy1="-7.5 -2.5" xy2="7.5 2.5" />
+
+			</children>
+
+		</node>
+		<node id="garden">
+
+			<transforms></transforms>
+			<children>
+
+				<noderef id="brush" />
+				<noderef id="grass" />
+
+			</children>
+
+		</node>
+		<node id="brush">
+
+			<transforms></transforms>
+			<appearanceref id="fence_appearence" />
+			<children>
+
+				<noderef id="brush1" />
+				<noderef id="brush2" />
+				<noderef id="brush3" />
+				<noderef id="brush4" />
+
+			</children>
+
+		</node>
+		<node id="brush1">
+
+			<transforms>
+				<translate to="1.5 1.5 0.0" />
+				<scale factor="3 3 1"/>
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+				<noderef id="brushSquare1" />
+			</children>
+
+		</node>
+		<node id="brush2">
+
+			<transforms>
+				<translate to="18.5 1.5 0.0" />
+				<scale factor="3 3 1"/>
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+				<noderef id="brushSquare1" />
+			</children>
+
+		</node>
+		<node id="brushSquare1">
+
+			<transforms></transforms>
+			<children>
+				<plane parts="5"/>
+			</children>
+
+		</node>
+		<node id="brush3">
+
+			<transforms>
+				<translate to="0.0 1.5 10.0" />
+				<scale factor="1 3 20"/>
+				<rotate axis="y" angle="90" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+				<noderef id="brushSquare2" />
+			</children>
+
+		</node>
+		<node id="brush4">
+
+			<transforms>
+				<translate to="20.0 1.5 10.0" />
+				<scale factor="1 3 20"/>
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<children>
+				<noderef id="brushSquare2" />
+			</children>
+
+		</node>
+		<node id="brushSquare2">
+
+			<transforms></transforms>
+			<children>
+				<plane parts="10"/>
+			</children>
+
+		</node>
+		<node id="grass">
+
+			<transforms></transforms>
+			<children>
+
+				<noderef id="table" />
+				<noderef id="tree" />
+				<noderef id="grassSquare" />
+
+			</children>
+
+		</node>
+		<node id="grassSquare">
+
+			<transforms>
+				<translate to="10.0 0.0 10.0" />
+				<scale factor="20 1 20"/>
+			</transforms>
+			<appearanceref id="floor_appearence" />
+			<!--<patch order="3" partsU="20" partsV="20" compute="fill">
+
+			<controlpoint x="-1.0" y="0" z="-1.0" />
+			<controlpoint x="-0.5" y="1" z="-1.0" />
+			<controlpoint x="0.5" y="1" z="-1.0" />
+			<controlpoint x="1.0" y="0" z="-1.0" />
+
+			<controlpoint x="-1.0" y="0" z="1.0" />
+			<controlpoint x="-1.0" y="1" z="0.5" />
+			<controlpoint x="-1.0" y="1" z="-0.5" />
+			<controlpoint x="-1.0" y="0" z="-1.0" />
+
+			<controlpoint x="1.0" y="0" z="-1.0" />
+			<controlpoint x="1.0" y="1" z="-0.5" />
+			<controlpoint x="1.0" y="1" z="0.5" />
+			<controlpoint x="1.0" y="0" z="1.0" />
+
+			<controlpoint x="1.0" y="0" z="-1.0" />
+			<controlpoint x="0.5" y="1" z="1.0" />
+			<controlpoint x="-0.5" y="1" z="1.0" />
+			<controlpoint x="-1.0" y="0" z="1.0" />
+			</patch> -->
+			<children>
+				<patch order="1" partsU="20" partsV="20" compute="fill">
+					<controlpoint x="0.5" y="0" z="-0.5" />
+					<controlpoint x="-0.5" y="0" z="-0.5" />
+					<controlpoint x="0.5" y="0" z="0.5" />
+					<controlpoint x="-0.5" y="0" z="0.5" />
+				</patch>
+
+			</children>
+
+		</node>
+		<node id="table">
+
+			<transforms></transforms>
+			<children>
+
+				<noderef id="tableTop" />
+				<noderef id="tableLeg" />
+
+			</children>
+
+		</node>
+		<node id="tableTop">
+
+			<transforms>
+				<translate to="4.0 2.0 10.0" />
+				<scale factor="5.0 0.25 5.0" />
+				<translate to="0.0 -0.5 0.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<appearanceref id="table_top_appearence" />
+			<children>
+				<cylinder base="0.5" top="0.5" height="1" slices="10" stacks="10" />
+			</children>
+
+		</node>
+		<node id="tableLeg">
+
+			<transforms>
+				<translate to="4.0 0.86 10.0" />
+				<scale factor="1.5 2.0 1.5" />
+				<translate to="0.0 -0.5 0.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<appearanceref id="table_leg_appearence" />
+			<children>
+				<cylinder base="0.5" top="0.5" height="1" slices="10" stacks="10" />
+			</children>
+
+		</node>
+		<node id="tree">
+
+			<transforms></transforms>
+			<children>
+				<noderef id="treeTop" />
+				<noderef id="log" />
+				<noderef id="swing" />
+			</children>
+
+		</node>
+		<node id="treeTop">
+
+			<transforms>
+				<translate to="16.0 6.2 13.0" />
+				<scale factor="9.0 3.0 9.0" />
+			</transforms>
+			<appearanceref id="tree_leafs_appearence" />
+			<children>
+				<sphere radius="0.5" slices="10" stacks="10" />
+			</children>
+
+		</node>
+		<node id="log">
+
+			<transforms>
+				<translate to="16.0 2.5 13.0" />
+				<scale factor="2.0 5.0 2.0" />
+				<translate to="0.0 -0.5 0.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<appearanceref id="tree_trunk_appearence" />
+			<children>
+				<cylinder base="0.5" top="0.5" height="1" slices="10" stacks="10" />
+			</children>
+
+		</node>
+		<node id="swing">
+
+			<transforms></transforms>
+			<children>
+				<noderef id="seat" />
+				<noderef id="rope" />
+			</children>
+
+		</node>
+		<node id="seat">
+
+			<transforms>
+				<translate to="13.25 1.7 13.0" />
+				<scale factor="0.8 0.8 0.8" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<appearanceref id="swing_appearence" />
+			<children>
+				<torus inner="0.5" outer="1.0" slices="10" loops="10" />
+			</children>
+
+		</node>
+		<node id="rope">
+
+			<transforms></transforms>
+			<appearanceref id="rope_appearence" />
+			<children>
+				<noderef id="rope1" />
+				<noderef id="rope2" />
+			</children>
+
+		</node>
+		<node id="rope1">
+
+			<transforms>
+				<translate to="12.5 4.0 13.0" />
+			</transforms>
+			<children>
+				<noderef id="ropeCyl" />
+			</children>
+
+		</node>
+		<node id="rope2">
+
+			<transforms>
+				<translate to="14.0 4.0 13.0" />
+			</transforms>
+			<children>
+				<noderef id="ropeCyl" />
+			</children>
+
+		</node>
+		<node id="ropeCyl">
+
+			<transforms>
+				<scale factor="0.08 5.0 0.08" />
+				<translate to="0.0 -0.5 0.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<children>
+				<cylinder base="0.5" top="0.5" height="1" slices="10" stacks="10" />
+			</children>
+
+		</node>
+		<node id="street">
+
+			<transforms></transforms>
+			<children>
+				<noderef id="lamp1" />
+				<noderef id="lamp2" />
+			</children>
+
+		</node>
+		<node id="lamp1">
+
+			<transforms>
+				<translate to="6.5 0.0 22.0" />
+			</transforms>
+			<children>
+				<noderef id="lamp" />
+			</children>
+
+		</node>
+		<node id="lamp2">
+
+			<transforms>
+				<translate to="13.5 0.0 22.0" />
+			</transforms>
+			<children>
+				<noderef id="lamp" />
+			</children>
+
+		</node>
+		<node id="lamp">
+
+			<transforms></transforms>
+			<children>
+				<noderef id="bulb" />
+				<noderef id="post" />
+			</children>
+
+		</node>
+		<node id="bulb">
+
+			<transforms>
+				<translate to="0.0 8.0 0.0" />
+				<scale factor="0.4 0.4 0.4" />
+				<rotate axis="x" angle="90" />
+			</transforms>
+			<appearanceref id="light_bulb_appearence" />
+			<children>
+				<torus inner="0.5" outer="1.0" slices="10" loops="10" />
+			</children>
+
+		</node>
+		<node id="post">
+
+			<transforms>
+				<translate to="0.0 4.0 0.0" />
+				<scale factor="0.4 8.0 0.4" />
+				<translate to="0.0 -0.5 0.0" />
+				<rotate axis="x" angle="-90" />
+			</transforms>
+			<appearanceref id="light_body_appearence" />
+			<children>
+				<cylinder base="0.5" top="0.5" height="1" slices="10" stacks="10" />
+			</children>
+		</node>
+		<node id="water">
+			<transforms>
+				<translate to="10.0 0.2 30.0" />
+				<scale factor="20 1 15" />
+			</transforms>
+			<children>
+				<waterline heightmap="../data/watermap.jpg" texturemap="../data/water.jpg" fragmentshader="../shaders/wl.frag" vertexshader="../shaders/wl.vert" />
+			</children>
+		</node>
+		<node id="vehicle">
+			<transforms></transforms>
+			<animationref id="vehicle" />
+			<children>
+				<vehicle />
+			</children>
+		</node>
+	</graph>
+</yaf> 
