@@ -18,6 +18,7 @@ Node::Node() {
 	id = "";
 	nodeAppearance = "default";
 	nodeAnimation = "default";
+	is_visible = false;
 }
 
 Node::Node(string id) {
@@ -32,6 +33,7 @@ Node::Node(string id) {
 	glLoadIdentity();
 	glGetFloatv(GL_MODELVIEW_MATRIX, transforms);
 	glPopMatrix();
+	is_visible = false;
 }
 
 Node::Node(string id, float transforms[16]) {
@@ -41,15 +43,14 @@ Node::Node(string id, float transforms[16]) {
 	copy(&transforms[0], &transforms[16], this->transforms);
 	nodeAppearance = "default";
 	nodeAnimation = "default";
+	is_visible = false;
 }
 
 void Node::addRef(string ref) {
-
 	refs.push_back(ref);
 }
 
 void Node::setAppearance(string appearance) {
-
 	nodeAppearance = appearance;
 }
 
@@ -177,6 +178,10 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 		}
 	}
 
+	if (!is_visible) {
+		glCullFace(GL_FRONT_AND_BACK);
+	}
+
 	if (prims.size() != 0)
 		drawPrims(apps_stack.top());
 
@@ -186,6 +191,12 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 		Node *ptr = Scene::getInstance()->getNode((*it));
 		ptr->processNode(apps_stack, ani_stack);
 	}
+
+
+	if (!is_visible) {
+		glCullFace(Scene::getInstance()->getCullface());
+	}
+
 	apps_stack.pop();
 	ani_stack.pop();
 
@@ -250,4 +261,8 @@ void Node::setSelectable(bool sel) {
 
 void Node::processPick() {
 	cout << "I (" << id << ")have been picked... YUPIIII" << endl;
+}
+
+void Node::setVisibility(bool is_visible) {
+	this->is_visible = is_visible;
 }

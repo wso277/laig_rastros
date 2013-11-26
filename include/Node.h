@@ -28,6 +28,7 @@ protected:
 	static int node_name_index;
 	int node_name;
 	bool is_selectable;
+	bool is_visible;
 
 public:
 	Node();
@@ -59,6 +60,7 @@ public:
 	bool isSelectable();
 	virtual void setSelectable(bool sel);
 	void processPick();
+	void setVisibility(bool is_visible);
 };
 
 #endif /* NODE_H_ */

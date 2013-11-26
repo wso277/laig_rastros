@@ -974,10 +974,31 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 	}
 
 	if (is_selectable) {
+		if (is_inside_dl) {
+			printf(
+					"Impossible to define node \"%s\" as selectable inside display list\n",
+					node_id);
+			throw InvalidXMLException();
+		}
 		printf("Node \"%s\" is selectable\n", node_id);
 	}
 
 	n->setSelectable(is_selectable);
+
+	bool is_visible = true;
+
+	if (curr_node->QueryBoolAttribute("isvisible", &is_visible)
+			!= TIXML_SUCCESS) {
+		printf("No \"isvisible\" attribute\n");
+	}
+
+	if (is_visible) {
+		printf("Node \"%s\" is visible\n", node_id);
+	} else {
+		printf("Node \"%s\" is invisible\n", node_id);
+	}
+
+	n->setVisibility(is_visible);
 
 	printf("Processing transformations...\n");
 

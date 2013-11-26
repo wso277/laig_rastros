@@ -19,7 +19,7 @@
 		/>
 	</lighting>
 	<textures>
-		<texture id="board" file="board.jpg" />
+		<texture id="board" file="board.png" />
 	</textures>
 	<appearances>
 		<appearance id="default"
@@ -35,8 +35,8 @@
 		specular="0.1 0.1 0.1 1.0"
 		shininess="100.0"
 		textureref="board"
-		texlength_s="1"
-		texlength_t="1" />
+		texlength_s="2"
+		texlength_t="2" />
 	</appearances>
 	<animations>
 		<animation id="vehicle" span="20.0" type="linear">
@@ -53,8 +53,6 @@
 		<node id="scene">
 			<transforms>
 			</transforms>
-			<!-- <vehicle /> -->
-			<!-- <noderef id="water" /> -->
 			<children>
 				<noderef id="board" />
 			</children>
@@ -78,7 +76,6 @@
 			<transforms>
 				<translate to="0.0 0.125 0.0" />
 			</transforms>
-
 			<appearanceref id="board_top"/>
 			<children>
 				<plane parts="30"/>
