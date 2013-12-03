@@ -93,6 +93,30 @@
 				<noderef id="big_sides" />
 			</children>
 		</node>
+		<node id="big_top">
+			<transforms>
+			</transforms>
+			<children>
+			 <patch order=”1” partsU=”10” partsV=”10” compute=”fill”>
+	            <controlpoint x=”ff” y=”ff” z=”ff” />
+    		</patch>
+			</children>
+		</node>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		<node id="sides">
 			<transforms></transforms>
 			<appearanceref id="sides"/>
