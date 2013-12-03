@@ -8,6 +8,8 @@
 #ifndef GAMELOGIC_H_
 #define GAMELOGIC_H_
 
+#include <vector>
+
 class GameLogic {
 public:
 	GameLogic();

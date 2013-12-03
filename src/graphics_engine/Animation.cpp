@@ -145,6 +145,19 @@ float Animation::updateValues() {
 
 	return 0;
 }
+
+void Animation::resetAnimation() {
+	vec_index = 0;
+	time_passed = 0;
+	time_line = 0;
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	time_last = t.tv_nsec * 0.000000001;
+	point.setX(points[0]->getX());
+	point.setY(points[0]->getY());
+	point.setZ(points[0]->getZ());
+}
+
 Animation::~Animation() {
 }
 

@@ -43,6 +43,7 @@ public:
 	float updateValues();
 	float getRotation();
 	Point getPoint();
+	void resetAnimation();
 	virtual ~Animation();
 };
 
