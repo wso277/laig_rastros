@@ -7,14 +7,14 @@
 
 #include "Piece.h"
 
-Piece::Piece() : Node("piece"){
+Piece::Piece() : MyPrimitive() {
 	col = 5;
 	line = 3;
 	level = 0;
 
 }
 
-Piece::Piece(int col, int line, int level, string id, bool select, bool visible, string appearance) : Node(id) {
+Piece::Piece(int col, int line, int level, bool select, bool visible, string appearance) : MyPrimitive() {
 
 	this->col = col;
 	this->line = line;
@@ -47,6 +47,13 @@ int Piece::getLine() {
 
 int Piece::getLevel() {
 	return level;
+}
+
+void Piece::draw() {
+	glPushMatrix();
+	piece->draw();
+	glPopMatrix();
+
 }
 
 Piece::~Piece() {

@@ -21,6 +21,7 @@ public:
 	CurrentPiece(int col, int line, int level, float side_diff, float level_diff);
 	int getSideDiff();
 	int getLevelDiff();
+	void updateCoords(int dir);
 	virtual ~CurrentPiece();
 };
 

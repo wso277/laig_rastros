@@ -8,29 +8,22 @@
 #include "CurrentPiece.h"
 #include "Animation.h"
 #include "Scene.h"
-#include "MyCylinder.h"
 
 CurrentPiece::CurrentPiece() :
 		Piece() {
-
 	side_diff = 1.0;
 	level_diff = 2;
 
+	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
 
 CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float level_diff) :
-		Piece(col, line, level, "piece", true, true, "default") {
+		Piece(col, line, level, true, true, "default") {
 
 	this->side_diff = side_diff;
 	this->level_diff = level_diff;
 
-	MyCylinder *piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
-	addPrimitive(piece);
-	addRotation(-90, 'x');
-
-	setAppearance("default");
-	setSelectable(true);
-	setVisibility(true);
+	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 
 	Animation *a;
 	a = new Animation("left", ANIMATION_SPAN, "linear");
@@ -111,6 +104,55 @@ int CurrentPiece::getSideDiff() {
 
 int CurrentPiece::getLevelDiff() {
 	return level_diff;
+}
+
+void CurrentPiece::updateCoords(int dir) {
+	switch (dir) {
+	//leftdown
+	case 1:
+		col -= side_diff;
+		line += side_diff;
+		break;
+		//down
+	case 2:
+		line += side_diff;
+		break;
+		//rightdown
+	case 3:
+		col += side_diff;
+		line += side_diff;
+		break;
+		//left
+	case 4:
+		col -= side_diff;
+		break;
+		//climb
+	case 5:
+		level += level_diff;
+		break;
+		//right
+	case 6:
+		col += side_diff;
+		break;
+		//leftup
+	case 7:
+		col -= side_diff;
+		line -= side_diff;
+		break;
+		//up
+	case 8:
+		col -= side_diff;
+		break;
+		//rightup
+	case 9:
+		col -= side_diff;
+		line += side_diff;
+		break;
+		//descend
+	case 0:
+		level -= level_diff;
+		break;
+	}
 }
 
 CurrentPiece::~CurrentPiece() {
