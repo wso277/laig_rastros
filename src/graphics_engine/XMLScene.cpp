@@ -25,6 +25,7 @@
 #include "MyPatch.h"
 #include "MyWaterLine.h"
 #include "MyVehicle.h"
+#include "Board.h"
 
 #define MAX_STRING_LEN 256
 
@@ -1418,6 +1419,11 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			scene_size++;
 			MyVehicle *v = new MyVehicle();
 			n->addPrimitive(v);
+
+		} else if (strcmp(child_type, "board")) {
+			scene_size++;
+			Board *b;
+			n->addPrimitive(b);
 
 		} else if (strcmp(child_type, "noderef") == 0) {
 			char next_node_id[MAX_STRING_LEN];

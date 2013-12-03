@@ -49,24 +49,29 @@ Plane::Plane(unsigned int parts) :
 	nrml_pts.push_back(0);
 	nrml_pts.push_back(1);
 	nrml_pts.push_back(0);
-
-	text_pts.push_back(0);
-	text_pts.push_back(1);
-
-	text_pts.push_back(1);
-	text_pts.push_back(1);
-
-	text_pts.push_back(0);
-	text_pts.push_back(0);
-
-	text_pts.push_back(1);
-	text_pts.push_back(0);
 }
 void Plane::draw() {
+	int deltas = 1.0 / getAppearance()->getSWrap();
+	int deltat = 1.0 / getAppearance()->getTWrap();
+
+	text_pts.clear();
+	text_pts.push_back(0);
+	text_pts.push_back(deltat);
+
+	text_pts.push_back(deltas);
+	text_pts.push_back(deltat);
+
+	text_pts.push_back(0);
+	text_pts.push_back(0);
+
+	text_pts.push_back(deltas);
+	text_pts.push_back(0);
+
 	glPushMatrix();
 	glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 2, 0.0, 1.0, 6, 2, &ctrl_pts[0]);
 	glMap2f(GL_MAP2_NORMAL, 0.0, 1.0, 3, 2, 0.0, 1.0, 6, 2, &nrml_pts[0]);
-	glMap2f(GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &text_pts[0]);
+	glMap2f(GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2,
+			&text_pts[0]);
 
 	glEnable(GL_MAP2_VERTEX_3);
 	glEnable(GL_MAP2_NORMAL);
@@ -87,4 +92,3 @@ void Plane::setAppearance(string appearance) {
 
 Plane::~Plane() {
 }
-

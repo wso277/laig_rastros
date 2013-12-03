@@ -50,115 +50,11 @@
 			<controlpoint xx="-30" yy="20" zz="-5" />
 		</animation>
 	</animations>
-	<graph rootid="boards">
-		<node id="boards">
+	<graph rootid="scene">
+		<node id="scene">
 			<transforms></transforms>
 			<children>
-				<noderef id="sup_board" />
-				<noderef id="mid_board" />
-				<noderef id="low_board" />
-			</children>
-		</node>
-		<node id="sup_board" >
-			<transforms>
-				<translate to="0 1.5 1" />
-			</transforms>
-			<children>
-				<noderef id="big_board" />
-			</children>
-		</node>
-		<node id="low_board" >
-			<transforms>
-				<translate to="0 -1.5 -1" />
-			</transforms>
-			<children>
-				<noderef id="big_board" />
-			</children>
-		</node>
-		<node id="mid_board" >
-			<transforms>
-				<translate to="0 1.5 0" />
-			</transforms>
-			<children>
-				<noderef id="small_board" />
-			</children>
-		</node>
-		<node id="big_board">
-			<transforms>
-				<translate to="0.0 1.0 5.0" />
-				<scale factor="5 1 5" />
-			</transforms>
-			<children>
-				<noderef id="big_top" />
-				<noderef id="big_sides" />
-			</children>
-		</node>
-		<node id="sides">
-			<transforms></transforms>
-			<appearanceref id="sides"/>
-			<children>
-				<noderef id="bottom" />
-				<noderef id="front" />
-				<noderef id="back" />
-				<noderef id="left" />
-				<noderef id="right" />
-			</children>
-		</node>
-		<node id="top">
-			<transforms>
-				<translate to="0.0 0.125 0.0" />
-			</transforms>
-			<children>
-				<plane parts="30" />
-			</children>
-		</node>
-		<node id="bottom">
-			<transforms>
-				<translate to="0.0 -0.125 0.0" />
-				<rotate axis="x" angle="180" />
-			</transforms>
-			<children>
-				<plane parts="30"/>
-			</children>
-		</node>
-		<node id="front">
-			<transforms>
-				<translate to="0.0 0.0 0.5" />
-				<scale factor="1.0 0.25 1.0" />
-				<rotate axis="x" angle="90" />
-			</transforms>
-			<children>
-				<plane parts="30"/>
-			</children>
-		</node>
-		<node id="back">
-			<transforms>
-				<translate to="0.0 0.0 -0.5" />
-				<scale factor="1.0 0.25 1.0" />
-				<rotate axis="x" angle="-90" />
-			</transforms>
-			<children>
-				<plane parts="30"/>
-			</children>
-		</node>
-		<node id="left">
-			<transforms>
-				<translate to="-0.5 0.0 0.0" />
-				<scale factor="1.0 0.25 1.0" />
-				<rotate axis="z" angle="90" />
-			</transforms>
-			<children>
-				<plane parts="30"/>
-			</children>
-		</node>
-		<node id="right">
-			<transforms>
-				<translate to="0.5 0.0 0.0" />
-				<scale factor="1.0 0.25 1.0" />
-				<rotate axis="z" angle="-90" />
-			</transforms>
-			<children>
-				<plane parts="30"/>
+				<board />
 			</children>
 		</node>
 	</graph>
