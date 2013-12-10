@@ -2,6 +2,9 @@
 #define UTILS_H
 #include <vector>
 #include "Point.h"
+#include <string>
+
+using namespace std;
 
 float DegToRad(float i);
 
@@ -23,5 +26,9 @@ float distanceTwoPoints(Point* p1, Point* p2);
 float crossProduct(Point* p1, Point* p2);
 
 float vectorSize(Point* p1);
+
+int askPort();
+
+string askHost();
 
 #endif

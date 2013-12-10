@@ -8,6 +8,8 @@
 #include "Client.h"
 #include "SocketError.h"
 
+Client * Client::client = NULL;
+
 Client::Client() {
 	portNo = 0;
 	sockFd = 0;
@@ -59,7 +61,7 @@ char* Client::sendRequest(string request) {
 	}
 
 	char *reply;
-	reply = malloc(MAX_REPLY_SIZE);
+	reply = (char *) malloc(MAX_REPLY_SIZE);
 	memset(reply, '0', MAX_REPLY_SIZE);
 
 	n = 0;

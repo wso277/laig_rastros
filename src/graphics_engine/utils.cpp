@@ -4,6 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
+
+using namespace std;
 
 float DegToRad(float i) {
 	float pi = 3.14159265359;
@@ -151,4 +154,27 @@ float crossProduct(Point* p1, Point* p2) {
 
 float vectorSize(Point* p1) {
 	return sqrt(pow(p1->getX(), 1) + pow(p1->getY(), 2) + pow(p1->getZ(), 2));
+}
+
+int askPort() {
+	string port_str;
+	cout << "Insert Port Number: " << endl;
+	getline(cin, port_str);
+
+	while (!isdigit(port_str[0])) {
+		cout << "Not a number. Please insert a number: " << endl;
+		getline(cin, port_str);
+	}
+
+	int port = atoi(port_str.c_str());
+
+	return port;
+}
+
+string askHost() {
+	string host;
+	cout << "Insert Host Name: " << endl;
+	cin >> host;
+
+	return host;
 }
