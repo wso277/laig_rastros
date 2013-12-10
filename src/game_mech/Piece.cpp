@@ -12,6 +12,7 @@ Piece::Piece() : MyPrimitive() {
 	line = 3;
 	level = 0;
 
+	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
 
 Piece::Piece(int col, int line, int level, bool select, bool visible, string appearance) : MyPrimitive() {
@@ -19,6 +20,8 @@ Piece::Piece(int col, int line, int level, bool select, bool visible, string app
 	this->col = col;
 	this->line = line;
 	this->level = level;
+
+	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 
 	setAppearance(appearance);
 	setSelectable(select);

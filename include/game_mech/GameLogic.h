@@ -8,11 +8,15 @@
 #ifndef GAMELOGIC_H_
 #define GAMELOGIC_H_
 
-#include <vector>
+#include "CurrentPiece.h"
+#include "Board.h"
 
 class GameLogic {
+	CurrentPiece *piece;
+	Board *board;
 public:
 	GameLogic();
+	void initGame();
 	virtual ~GameLogic();
 };
 
