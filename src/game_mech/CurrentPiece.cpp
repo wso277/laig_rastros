@@ -23,8 +23,6 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 	this->side_diff = side_diff;
 	this->level_diff = level_diff;
 
-	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
-
 	Animation *a;
 	a = new Animation("left", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
