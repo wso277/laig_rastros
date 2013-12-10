@@ -1,5 +1,4 @@
 <yaf>
-
 	<globals background="0.25 0.73 0.92 1.0" drawmode="fill" shading="gouraud" cullface="back" cullorder="CCW" />
 	<cameras initial="frontView" >
 		<perspective id="frontView" near="0.0001" far="1000.0" angle="45.0" pos="0.0 15.0 20.0" target="0.0 0.0 0.0" />
@@ -19,8 +18,6 @@
 		/>
 	</lighting>
 	<textures>
-		<texture id="board_top" file="board.png" />
-		<texture id="board_sides" file="wood.png" />
 	</textures>
 	<appearances>
 		<appearance id="top"
@@ -28,19 +25,7 @@
 		ambient="0.8 0.8 0.8 1.0"
 		diffuse="0.8 0.8 0.8 1.0"
 		specular="0.1 0.1 0.1 1.0"
-		shininess="100.0"
-		textureref="board_top"
-		texlength_s="2"
-		texlength_t="2" />
-		<appearance id="sides"
-		emissive="0.0 0.0 0.0 0.0"
-		ambient="0.8 0.8 0.8 1.0"
-		diffuse="0.8 0.8 0.8 1.0"
-		specular="0.1 0.1 0.1 1.0"
-		shininess="100.0"
-		textureref="board_sides"
-		texlength_s="1"
-		texlength_t="1" />
+		shininess="100.0" />
 	</appearances>
 	<animations>
 		<animation id="vehicle" span="20.0" type="linear">

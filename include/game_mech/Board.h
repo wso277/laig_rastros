@@ -12,7 +12,7 @@
 #include "MyPrimitive.h"
 #include "Plane.h"
 
-class Board : MyPrimitive {
+class Board : public MyPrimitive {
 	MyParallelepiped topLevel, middleLevel, bottomLevel;
 	Plane topMatrix[4][7];
 	Plane middleMatrix[3][3];

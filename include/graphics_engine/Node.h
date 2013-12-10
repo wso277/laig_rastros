@@ -61,6 +61,7 @@ public:
 	virtual void setSelectable(bool sel);
 	void processPick();
 	void setVisibility(bool is_visible);
+	bool isVisible();
 };
 
 #endif /* NODE_H_ */

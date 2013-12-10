@@ -410,4 +410,5 @@ void Scene::processPickedNodes(vector<GLuint> names) {
 			it->second->processPick();
 		}
 	}
+
 }

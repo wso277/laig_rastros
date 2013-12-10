@@ -1420,9 +1420,9 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 			MyVehicle *v = new MyVehicle();
 			n->addPrimitive(v);
 
-		} else if (strcmp(child_type, "board")) {
+		} else if (strcmp(child_type, "board") == 0) {
 			scene_size++;
-			Board *b;
+			Board *b = new Board();
 			n->addPrimitive(b);
 
 		} else if (strcmp(child_type, "noderef") == 0) {
@@ -1507,12 +1507,14 @@ bool XMLScene::parseNode(TiXmlElement *curr_node, bool is_inside_dl) {
 }
 
 void XMLScene::setPaths() {
-	cout << "Insert path to yaf file: ";
+	/*cout << "Insert path to yaf file: ";
 	cin >> yaf_path;
 	cout << endl << "Insert path to texture folder: ";
 	cin >> texture_base_path;
 	if (texture_base_path[texture_base_path.size() - 1] == '/') {
 		texture_base_path = texture_base_path.substr(0,
 				texture_base_path.size() - 1);
-	}
+	}*/
+	yaf_path = "../game.yaf";
+	texture_base_path = "../data";
 }

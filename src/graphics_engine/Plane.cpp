@@ -8,51 +8,26 @@
 #include "Plane.h"
 #include "GL/glut.h"
 #include "Scene.h"
+#include <iostream>
 
 Plane::Plane() :
 		MyPrimitive() {
-
+	setParts(1);
+	initPointsVector();
 }
 
 Plane::Plane(unsigned int parts) :
 		MyPrimitive() {
-	this->parts = parts;
-
-	ctrl_pts.push_back(-0.5);
-	ctrl_pts.push_back(0.0);
-	ctrl_pts.push_back(-0.5);
-
-	ctrl_pts.push_back(0.5);
-	ctrl_pts.push_back(0.0);
-	ctrl_pts.push_back(-0.5);
-
-	ctrl_pts.push_back(-0.5);
-	ctrl_pts.push_back(0.0);
-	ctrl_pts.push_back(0.5);
-
-	ctrl_pts.push_back(0.5);
-	ctrl_pts.push_back(0.0);
-	ctrl_pts.push_back(0.5);
-
-	nrml_pts.push_back(0);
-	nrml_pts.push_back(1);
-	nrml_pts.push_back(0);
-
-	nrml_pts.push_back(0);
-	nrml_pts.push_back(1);
-	nrml_pts.push_back(0);
-
-	nrml_pts.push_back(0);
-	nrml_pts.push_back(1);
-	nrml_pts.push_back(0);
-
-	nrml_pts.push_back(0);
-	nrml_pts.push_back(1);
-	nrml_pts.push_back(0);
+	setParts(parts);
+	initPointsVector();
 }
 void Plane::draw() {
-	int deltas = 1.0 / getAppearance()->getSWrap();
-	int deltat = 1.0 / getAppearance()->getTWrap();
+	if (!isVisible()) {
+		glCullFace(GL_FRONT_AND_BACK);
+	}
+
+	float deltas = 1.0 / getAppearance()->getSWrap();
+	float deltat = 1.0 / getAppearance()->getTWrap();
 
 	text_pts.clear();
 	text_pts.push_back(0);
@@ -85,10 +60,52 @@ void Plane::draw() {
 	glDisable(GL_MAP2_NORMAL);
 	glDisable(GL_MAP2_TEXTURE_COORD_2);
 	glPopMatrix();
+
+	if (!isVisible()) {
+		glCullFace(Scene::getInstance()->getCullface());
+	}
 }
 void Plane::setAppearance(string appearance) {
 	MyPrimitive::setAppearance(appearance);
 }
 
 Plane::~Plane() {
+}
+
+void Plane::setParts(unsigned int parts) {
+	this->parts = parts;
+}
+
+void Plane::initPointsVector() {
+	ctrl_pts.push_back(-0.5);
+	ctrl_pts.push_back(0.0);
+	ctrl_pts.push_back(-0.5);
+
+	ctrl_pts.push_back(0.5);
+	ctrl_pts.push_back(0.0);
+	ctrl_pts.push_back(-0.5);
+
+	ctrl_pts.push_back(-0.5);
+	ctrl_pts.push_back(0.0);
+	ctrl_pts.push_back(0.5);
+
+	ctrl_pts.push_back(0.5);
+	ctrl_pts.push_back(0.0);
+	ctrl_pts.push_back(0.5);
+
+	nrml_pts.push_back(0);
+	nrml_pts.push_back(1);
+	nrml_pts.push_back(0);
+
+	nrml_pts.push_back(0);
+	nrml_pts.push_back(1);
+	nrml_pts.push_back(0);
+
+	nrml_pts.push_back(0);
+	nrml_pts.push_back(1);
+	nrml_pts.push_back(0);
+
+	nrml_pts.push_back(0);
+	nrml_pts.push_back(1);
+	nrml_pts.push_back(0);
 }

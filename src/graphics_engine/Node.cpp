@@ -18,7 +18,7 @@ Node::Node() {
 	id = "";
 	nodeAppearance = "default";
 	nodeAnimation = "default";
-	is_visible = false;
+	is_visible = true;
 }
 
 Node::Node(string id) {
@@ -33,7 +33,7 @@ Node::Node(string id) {
 	glLoadIdentity();
 	glGetFloatv(GL_MODELVIEW_MATRIX, transforms);
 	glPopMatrix();
-	is_visible = false;
+	is_visible = true;
 }
 
 Node::Node(string id, float transforms[16]) {
@@ -174,7 +174,6 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 	if (inSelectMode) {
 		if (isSelectable()) {
 			glPushName(getName());
-			printf("push done\n");
 		}
 	}
 
@@ -191,7 +190,6 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 		Node *ptr = Scene::getInstance()->getNode((*it));
 		ptr->processNode(apps_stack, ani_stack);
 	}
-
 
 	if (!is_visible) {
 		glCullFace(Scene::getInstance()->getCullface());
@@ -217,9 +215,15 @@ void Node::drawPrims(string appearance) {
 	for (it = prims.begin(); it != prims.end(); it++) {
 		Appearance *app = Scene::getInstance()->getAppearance(appearance);
 		app->apply();
+		if (!(*it)->isVisible()) {
+			glCullFace(GL_FRONT_AND_BACK);
+		}
 		(*it)->setAppearance(appearance);
 		(*it)->draw();
 		(*it)->clearAppearance();
+		if (!(*it)->isVisible()) {
+			glCullFace(Scene::getInstance()->getCullface());
+		}
 	}
 }
 
@@ -265,4 +269,8 @@ void Node::processPick() {
 
 void Node::setVisibility(bool is_visible) {
 	this->is_visible = is_visible;
+}
+
+bool Node::isVisible() {
+	return is_visible;
 }

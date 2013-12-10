@@ -19,6 +19,8 @@ class Plane: public MyPrimitive {
 public:
 	Plane();
 	Plane(unsigned int parts);
+	void setParts(unsigned int parts);
+	void initPointsVector();
 	virtual void draw();
 	virtual void setAppearance(string appearance);
 	virtual ~Plane();

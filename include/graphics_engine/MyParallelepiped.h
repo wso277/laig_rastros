@@ -25,6 +25,7 @@ public:
 	MyParallelepiped();
 	MyParallelepiped(float x_dim, float y_dim, float z_dim);
 	virtual ~MyParallelepiped();
+	void initPlanes();
 	void setDims(float x_dim, float y_dim, float z_dim);
 	void setAppearances(string topAppearance, string bottomAppearance,
 			string sidesAppearance);

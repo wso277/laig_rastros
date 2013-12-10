@@ -215,6 +215,7 @@ void Interface::performPicking(int x, int y) {
 
 	GLint hits;
 	hits = glRenderMode(GL_RENDER);
+	cout << "hits: " << hits << endl;
 	processHits(hits, selectBuf);
 }
 
