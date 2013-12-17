@@ -146,7 +146,8 @@ validateChoice(List, Move, 0, 0) :- member(Move, List).
 validateChoice(List, Move, 1, 1) :- member(Move, List).
 
 updateBoard(Board, 12, Board).
-updateBoard(Board, N, IntermBoard) :- moves(MovesList), nthElem(N, MovesList, M), X =.. [M, Board, IntermBoard], X.
+updateBoard(Board, N, IntermBoard) :- moves(MovesList), nthElem(N, MovesList, M), X =.. [M, Board, IntermBoard], X,
+	.
 
 /*******************************************************
  * Moves testing
@@ -161,6 +162,8 @@ iteratePossibleMoves(Board, [N | Ls], N) :- tests(TestList), nthElem(N, TestList
 									!, iteratePossibleMoves(Board, Ls, N1).
 iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
 									!, iteratePossibleMoves(Board, Ls, N1).
+
+testMove(Move, )
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
 					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X).
@@ -404,12 +407,11 @@ setDifficultyLevel(4) :- asserta(level(0)).
  * Socket Interface
  *******************************************************/
 
-openSocket :- tcp_socket(InitSocket), tcp_bind(InitSocket, SocketPort),
-			retractall(socketInUse(_)),
-			retractall(socketStream(_)), 
-			write('Port in use: localhost:'), write(SocketPort),
-			write('\nPress any key to continue\n'),
-			get_char(_),
+port(30075).
+
+openSocket :- port(SocketPort), tcp_socket(InitSocket), tcp_bind(InitSocket, SocketPort),
+			retractall(socketStream(_)),
+			asserta(socketStream(SocketPort)),
 			connectToClient(InitSocket).
 
 connectToClient(InitSocket) :- write('Waiting for connection\n'),
@@ -421,11 +423,21 @@ connectToClient(InitSocket) :- write('Waiting for connection\n'),
 						asserta(socketInputStream(IStream)),
 						asserta(socketOutputStream(OStream)).
 
-receiveInputFromSocketStream :- socketInputStream(IStream), socketOutputStream(OStream), receiveInputFromStream(IStream, OStream), close(IStream), close(OStream).
+receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), socketOutputStream(OStream), receiveInputFromStream(IStream, Messg).
 
-receiveInputFromStream(IStream, OStream) :- read(IStream, Messg),
-								write('Message received: '), write(Messg), write('\n'),
-								format(OStream, 'Message received!.~n', []).
+receiveInputFromStream(IStream, Messg) :- read(IStream, Messg).
 
-closeSocket :- socketStream(Stream), close(Stream, [force(true)]).
+writeResponseToStream(OStream, Messg) :- format(OStream, Messg, []).
+
+closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream), socketStream(Stream), close(Stream, [force(true)]).
 closeSocket :- write('None socket opened yet\n').
+
+run :- 
+	openSocket,
+	loop.
+
+loop :- 
+	receiveInputFromSocketStream(Messg),
+	Messg,
+	loop.
+loop :- loop.

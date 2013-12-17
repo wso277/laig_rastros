@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include <iostream>
 #include "Interface.h"
+#include "text3d.h"
 
 #define LEV1_TOP_APP "lev1_board_top"
 #define LEV1_SIDES_APP "lev1_board_sides"
@@ -11,10 +12,16 @@
 #define LEV2_SIDES_APP "lev2_board_sides"
 #define LEV2_BOTTOM_APP "lev2_board_bottom"
 
+#define ROT_FACTOR 0.01667
+
 extern bool inSelectMode;
+
+float Board::rotation = 0.0;
+float time_last = 0.0;
 
 Board::Board() :
 		MyPrimitive() {
+
 	Scene::getInstance()->addTexture("board_body", "../data/wood.png");
 	Scene::getInstance()->addTexture("board_top", "../data/board.png");
 
@@ -75,13 +82,18 @@ Board::Board() :
 			middleMatrix[i][j].setName(middle_name);
 		}
 	}
+	t3dInit();
+	glutTimerFunc(ROT_FACTOR, updateRotation, 0);
+
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	time_last = t.tv_nsec * 0.000000001;
 }
 
 Board::~Board() {
 }
 
 void Board::draw() {
-
 	// draw top level
 	glPushMatrix();
 	glTranslatef(0, 2, -1.5);
@@ -104,6 +116,12 @@ void Board::draw() {
 			}
 		}
 	} else {
+		glPushMatrix();
+		glTranslatef(3.0, 0.8, -1.5);
+		Scene::getInstance()->getAppearance("goal_homes")->apply();
+		glRotatef(-rotation, 0, 1, 0);
+		t3dDraw3D("2", 0, 0, 0.2f);
+		glPopMatrix();
 		topLevel.draw();
 	}
 	glPopMatrix();
@@ -123,6 +141,12 @@ void Board::draw() {
 			}
 		}
 	} else {
+		glPushMatrix();
+		glTranslatef(-3.0, 0.8, 1.5);
+		Scene::getInstance()->getAppearance("goal_homes")->apply();
+		glRotatef(rotation, 0, 1, 0);
+		t3dDraw3D("1", 0, 0, 0.2f);
+		glPopMatrix();
 		bottomLevel.draw();
 	}
 	glPopMatrix();
@@ -144,4 +168,33 @@ void Board::draw() {
 		middleLevel.draw();
 	}
 	glPopMatrix();
+}
+
+float Board::incrementRotation(float inc) {
+	rotation += inc;
+	if (rotation >= 360.0) {
+		rotation -= 360.0;
+	}
+	cout << rotation << endl;
+	return rotation;
+}
+
+void updateRotation(int index) {
+
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	float timer = t.tv_nsec * 0.000000001;
+	float sub = 0;
+
+	if (timer < time_last) {
+		sub = (1 - time_last) + timer;
+	} else {
+		sub = timer - time_last;
+	}
+
+	float ratio = sub / ROT_FACTOR;
+	time_last = timer;
+
+	Board::incrementRotation(ratio * 2);
+	glutTimerFunc(ROT_FACTOR, updateRotation, 0);
 }

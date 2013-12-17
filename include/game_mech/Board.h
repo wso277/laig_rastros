@@ -12,7 +12,10 @@
 #include "MyPrimitive.h"
 #include "Plane.h"
 
+void updateRotation(int index);
+
 class Board : public MyPrimitive {
+	static float rotation;
 	MyParallelepiped topLevel, middleLevel, bottomLevel;
 	Plane topMatrix[4][7];
 	Plane middleMatrix[3][3];
@@ -21,6 +24,7 @@ public:
 	Board();
 	virtual ~Board();
 	void draw();
+	static float incrementRotation(float inc);
 };
 
 #endif /* BOARD_H_ */
