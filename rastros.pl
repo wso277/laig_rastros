@@ -405,8 +405,8 @@ setDifficultyLevel(4) :- asserta(level(0)).
  *******************************************************/
 
 openSocket :- tcp_socket(InitSocket), tcp_bind(InitSocket, SocketPort),
-			retractall(socketInUse),
-			retractall(socketStream), 
+			retractall(socketInUse(_)),
+			retractall(socketStream(_)), 
 			write('Port in use: localhost:'), write(SocketPort),
 			write('\nPress any key to continue\n'),
 			get_char(_),
