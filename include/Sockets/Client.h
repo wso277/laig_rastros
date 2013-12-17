@@ -33,9 +33,6 @@ public:
 	Client(string host, int portNo);
 	static Client* getInstance();
 	char* sendRequest(string request);
-	void setHost(string host);
-	void setPort(int port);
-	void startConnection();
 	void closeConnection();
 	virtual ~Client();
 };

@@ -17,6 +17,8 @@ class GameLogic {
 public:
 	GameLogic();
 	void initGame();
+	Board* getBoard();
+	CurrentPiece* getPiece();
 	virtual ~GameLogic();
 };
 

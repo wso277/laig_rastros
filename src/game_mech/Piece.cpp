@@ -6,6 +6,7 @@
  */
 
 #include "Piece.h"
+#include "Scene.h"
 
 Piece::Piece() : MyPrimitive() {
 	col = 5;
@@ -53,7 +54,15 @@ int Piece::getLevel() {
 }
 
 void Piece::draw() {
+	Scene::getInstance()->getAppearance("piece_texture")->apply();
+	drawPiece();
+}
+
+void Piece::drawPiece() {
 	glPushMatrix();
+	glTranslatef(col - 4, -(level * 2) + 4  , line - 4);
+	glScalef(0.9,0.5,0.9);
+	glRotatef(-90, 1,0,0);
 	piece->draw();
 	glPopMatrix();
 

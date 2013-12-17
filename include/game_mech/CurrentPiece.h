@@ -22,6 +22,7 @@ public:
 	int getSideDiff();
 	int getLevelDiff();
 	void updateCoords(int dir);
+	void draw();
 	virtual ~CurrentPiece();
 };
 

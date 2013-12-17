@@ -8,38 +8,24 @@
 #include "Client.h"
 #include "SocketError.h"
 
+using namespace std;
+
 Client * Client::client = NULL;
 
 Client::Client() {
-	portNo = 0;
+	portNo = 30075;
 	sockFd = 0;
 	server = NULL;
-}
 
-void Client::setHost(string host) {
-	server = gethostbyname(host.c_str());
-	if (server == NULL) {
-		throw SocketError("Server doesn't  exist!");
-	}
-}
-void Client::setPort(int port) {
-	this->portNo = portNo;
 	sockFd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockFd < 0) {
+	if (sockFd <= 0) {
 		throw SocketError("Error opening Socket!");
 	}
-}
 
-Client* Client::getInstance() {
-	if (client == NULL) {
-		client = new Client();
-	}
-	return client;
-}
+	string host = "localhost";
+	server = gethostbyname(host.c_str());
 
-void Client::startConnection() {
-
-	if (portNo == 0 || sockFd == 0 || server == NULL) {
+	if (portNo == 0 || server == NULL) {
 		throw SocketError("Socket variables not started");
 	}
 
@@ -51,6 +37,13 @@ void Client::startConnection() {
 	if (connect(sockFd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		throw SocketError("Error connecting!");
 	}
+}
+
+Client* Client::getInstance() {
+	if (client == NULL) {
+		client = new Client();
+	}
+	return client;
 }
 
 char* Client::sendRequest(string request) {

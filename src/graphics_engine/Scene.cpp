@@ -274,7 +274,6 @@ void Scene::drawScene() {
 }
 
 #include <unistd.h>
-
 void display() {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -289,7 +288,7 @@ void display() {
 
 	glPushMatrix();
 	glMultMatrixf(
-			Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
+	Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
 	Scene::getInstance()->applyLights();
 	glPopMatrix();
 

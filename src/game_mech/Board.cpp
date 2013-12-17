@@ -175,7 +175,6 @@ float Board::incrementRotation(float inc) {
 	if (rotation >= 360.0) {
 		rotation -= 360.0;
 	}
-	cout << rotation << endl;
 	return rotation;
 }
 

@@ -29,7 +29,8 @@ public:
 	int getCol();
 	int getLine();
 	int getLevel();
-	void draw();
+	virtual void draw();
+	void drawPiece();
 	virtual ~Piece();
 };
 

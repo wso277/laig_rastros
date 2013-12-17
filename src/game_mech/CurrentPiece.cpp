@@ -96,6 +96,11 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 
 }
 
+void CurrentPiece::draw() {
+	Scene::getInstance()->getAppearance("goal_homes")->apply();
+	drawPiece();
+}
+
 int CurrentPiece::getSideDiff() {
 	return side_diff;
 }
@@ -154,6 +159,5 @@ void CurrentPiece::updateCoords(int dir) {
 }
 
 CurrentPiece::~CurrentPiece() {
-	// TODO Auto-generated destructor stub
 }
 

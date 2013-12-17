@@ -10,6 +10,7 @@
 #include "InvalidTexRef.h"
 #include "Interface.h"
 #include "InvalidNumLights.h"
+#include "GameLogic.h"
 
 using std::cout;
 using std::exception;
@@ -52,6 +53,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	Scene::getInstance()->initScene();
+
+	GameLogic *new_game = new GameLogic();
 
 	Interface interface;
 
