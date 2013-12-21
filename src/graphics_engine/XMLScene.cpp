@@ -110,7 +110,6 @@ void XMLScene::loadFile() {
 	printf("Scene Size: %d\n", scene_size);
 	printf("Depth: %d\n", max_val);
 	Scene::getInstance()->setSceneSize(scene_size);
-	Scene::getInstance()->setDepth(max_val);
 	printf("\n\n");
 }
 

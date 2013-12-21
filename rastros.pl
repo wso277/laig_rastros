@@ -146,8 +146,7 @@ validateChoice(List, Move, 0, 0) :- member(Move, List).
 validateChoice(List, Move, 1, 1) :- member(Move, List).
 
 updateBoard(Board, 12, Board).
-updateBoard(Board, N, IntermBoard) :- moves(MovesList), nthElem(N, MovesList, M), X =.. [M, Board, IntermBoard], X,
-	.
+updateBoard(Board, N, IntermBoard) :- moves(MovesList), nthElem(N, MovesList, M), X =.. [M, Board, IntermBoard], X.
 
 /*******************************************************
  * Moves testing
@@ -162,8 +161,34 @@ iteratePossibleMoves(Board, [N | Ls], N) :- tests(TestList), nthElem(N, TestList
 									!, iteratePossibleMoves(Board, Ls, N1).
 iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
 									!, iteratePossibleMoves(Board, Ls, N1).
-
-testMove(Move, )
+/*******************************************************
+ * Player actions
+ 
+  1 - moveUp
+  2 - moveDown
+  3 - moveLeft
+  4 - moveRight
+  5 - moveDiagUpLeft
+  6 - moveDiagUpRight
+  7 - moveDiagDownLeft
+  8 - moveDiagDownRight
+  9 - rotateCenter
+ 10 - climb
+ 11 - descend
+ 12 - exit
+ *******************************************************/
+testMove(1, Board) :- testMoveUp(Board), writeResponseToStream("Success.").
+testMove(2, Board) :- testMoveDown(Board), writeResponseToStream("Success.").
+testMove(3, Board) :- testMoveLeft(Board), writeResponseToStream("Success.").
+testMove(4, Board) :- testMoveRight(Board), writeResponseToStream("Success.").
+testMove(5, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream("Success.").
+testMove(6, Board) :- testMoveDiagUpRight(Board), writeResponseToStream("Success.").
+testMove(7, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream("Success.").
+testMove(8, Board) :- testMoveDiagDownRight(Board), writeResponseToStream("Success.").
+testMove(9, Board) :- testRotateCenter(Board), writeResponseToStream("Success.").
+testMove(10, Board) :- testClimb(Board), writeResponseToStream("Success.").
+testMove(11, Board) :- testDescend(Board), writeResponseToStream("Success.").
+testMove(_, _) :- writeResponseToStream("Failure.").
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
 					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X).
@@ -423,11 +448,9 @@ connectToClient(InitSocket) :- write('Waiting for connection\n'),
 						asserta(socketInputStream(IStream)),
 						asserta(socketOutputStream(OStream)).
 
-receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), socketOutputStream(OStream), receiveInputFromStream(IStream, Messg).
+receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), receiveInputFromStream(IStream, Messg), read(IStream, Messg).
 
-receiveInputFromStream(IStream, Messg) :- read(IStream, Messg).
-
-writeResponseToStream(OStream, Messg) :- format(OStream, Messg, []).
+writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, Messg, []).
 
 closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream), socketStream(Stream), close(Stream, [force(true)]).
 closeSocket :- write('None socket opened yet\n').
@@ -440,4 +463,4 @@ loop :-
 	receiveInputFromSocketStream(Messg),
 	Messg,
 	loop.
-loop :- loop.
+loop :- writeResponseToSocketStream("Failure."), loop.

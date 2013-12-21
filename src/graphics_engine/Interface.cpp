@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 
+#define DEFAULT_GRAPH_DEPTH 100
+
 extern int main_window;
 
 using namespace std;
@@ -60,7 +62,7 @@ void Interface::init(int parent) {
 	prev_X = 0;
 	prev_Y = 0;
 
-	selectBufSize = (Scene::getInstance()->getDepth() + 3)
+	selectBufSize = (DEFAULT_GRAPH_DEPTH + 3)
 			* Scene::getInstance()->getSceneSize();
 	Interface::selectBuf = new GLuint[selectBufSize];
 }

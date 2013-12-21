@@ -146,6 +146,12 @@ void Node::addPrimitive(MyPrimitive *prim) {
  * function that processes a node's children
  */
 void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
+	if (inSelectMode) {
+		if (isSelectable()) {
+			glPushName(getName());
+		}
+	}
+
 	glPushMatrix();
 
 	glMultMatrixf(transforms);
@@ -169,12 +175,6 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 		glRotatef(
 				Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(),
 				0, 1, 0);
-	}
-
-	if (inSelectMode) {
-		if (isSelectable()) {
-			glPushName(getName());
-		}
 	}
 
 	if (!is_visible) {
@@ -213,6 +213,11 @@ void Node::drawPrims(string appearance) {
 	vector<MyPrimitive *>::const_iterator it;
 
 	for (it = prims.begin(); it != prims.end(); it++) {
+		if (inSelectMode) {
+			if (!(*it)->isSelectable()) {
+				continue;
+			}
+		}
 		Appearance *app = Scene::getInstance()->getAppearance(appearance);
 		app->apply();
 		if (!(*it)->isVisible()) {

@@ -18,4 +18,5 @@ void MyPrimitive::clearAppearance() {
 }
 
 void MyPrimitive::setSelectable(bool sel) {
+	this->is_selectable = sel;
 }

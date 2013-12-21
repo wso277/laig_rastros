@@ -19,13 +19,8 @@ GameLogic::GameLogic() {
 	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
 
-	/*Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
-
-	Scene::getInstance()->getNode("scene")->addPrimitive(test_piece);
-
-	Piece *test_piece1 = new Piece(5, 3, 3, false, true, "default");
-
-	Scene::getInstance()->getNode("scene")->addPrimitive(test_piece1);*/
+	// used piece example
+	//Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
 
 	Scene::getInstance()->getNode("scene")->addPrimitive(piece);
 	Scene::getInstance()->getNode("scene")->addPrimitive(board);
@@ -41,9 +36,7 @@ CurrentPiece* GameLogic::getPiece() {
 }
 
 void GameLogic::initGame() {
-
 	system("../rastros");
-
 }
 
 GameLogic::~GameLogic() {

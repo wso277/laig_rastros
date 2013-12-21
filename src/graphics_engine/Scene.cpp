@@ -382,15 +382,7 @@ void Scene::setSceneSize(int scene_size) {
 }
 
 int Scene::getSceneSize() {
-	return scene_size;
-}
-
-void Scene::setDepth(int depth) {
-	this->depth = depth;
-}
-
-int Scene::getDepth() {
-	return depth;
+	return graph.size();
 }
 
 Node *Scene::getPickedElem(GLuint name) {

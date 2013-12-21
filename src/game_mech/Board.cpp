@@ -21,7 +21,7 @@ float time_last = 0.0;
 
 Board::Board() :
 		MyPrimitive() {
-
+	is_selectable = true;
 	Scene::getInstance()->addTexture("board_body", "../data/wood.png");
 	Scene::getInstance()->addTexture("board_top", "../data/board.png");
 
