@@ -16,8 +16,18 @@
 
 using namespace std;
 
+GameLogic* GameLogic::game = NULL;
+
+GameLogic* GameLogic::getInstance() {
+	if (game == NULL) {
+		game = new GameLogic();
+	}
+
+	return game;
+}
+
 GameLogic::GameLogic() {
-	piece = new CurrentPiece(5, 3, 2, 1, 2);
+	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
 
 	// used piece example
@@ -46,8 +56,6 @@ GameLogic::GameLogic() {
 		}
 	}
 
-	Scene::getInstance()->getNode("piece")->setAnimation("left");
-	//glutTimerFunc(ANIMATION_TIME, updateValues, 4);
 }
 
 Board* GameLogic::getBoard() {
@@ -59,7 +67,79 @@ CurrentPiece* GameLogic::getPiece() {
 }
 
 void GameLogic::initGame() {
-	system("../rastros");
+	//system("../rastros");
+
+	executeMove(4);
+}
+
+void GameLogic::executeMove(int dir) {
+
+	Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
+	//trailPieces.push_back(p);
+	Scene::getInstance()->getNode("scene")->addPrimitive(p);
+
+	switch (dir) {
+	case 0:
+		Scene::getInstance()->getNode("piece")->setAnimation("0descend");
+		piece->setDir(0);
+		Scene::getInstance()->getAnimation("0descend")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 0);
+		break;
+	case 1:
+		Scene::getInstance()->getNode("piece")->setAnimation("1leftdown");
+		piece->setDir(1);
+		Scene::getInstance()->getAnimation("1leftdown")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 1);
+		break;
+	case 2:
+		Scene::getInstance()->getNode("piece")->setAnimation("2down");
+		piece->setDir(2);
+		Scene::getInstance()->getAnimation("2down")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 2);
+		break;
+	case 3:
+		Scene::getInstance()->getNode("piece")->setAnimation("3rightdown");
+		piece->setDir(3);
+		Scene::getInstance()->getAnimation("3rightdown")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 3);
+		break;
+	case 4:
+		Scene::getInstance()->getNode("piece")->setAnimation("4left");
+		piece->setDir(4);
+		Scene::getInstance()->getAnimation("4left")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 4);
+		break;
+	case 5:
+		Scene::getInstance()->getNode("piece")->setAnimation("5climb");
+		piece->setDir(5);
+		Scene::getInstance()->getAnimation("5climb")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 5);
+		break;
+	case 6:
+		Scene::getInstance()->getNode("piece")->setAnimation("6right");
+		piece->setDir(6);
+		Scene::getInstance()->getAnimation("6right")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 6);
+		break;
+	case 7:
+		Scene::getInstance()->getNode("piece")->setAnimation("7leftup");
+		piece->setDir(7);
+		Scene::getInstance()->getAnimation("7leftup")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 7);
+		break;
+	case 8:
+		Scene::getInstance()->getNode("piece")->setAnimation("8up");
+		piece->setDir(8);
+		Scene::getInstance()->getAnimation("8up")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 8);
+		break;
+	case 9:
+		Scene::getInstance()->getNode("piece")->setAnimation("9rightup");
+		piece->setDir(9);
+		Scene::getInstance()->getAnimation("9rightup")->resetTime();
+		glutTimerFunc(ANIMATION_TIME, updateValues, 9);
+		break;
+	}
 }
 
 string GameLogic::getEncodedCharBoard() {
@@ -170,7 +250,7 @@ string GameLogic::getTestPredicate(int index) {
 		break;
 	}
 
-	predicate = predicate +"," + getEncodedCharBoard() + ").";
+	predicate = predicate + "," + getEncodedCharBoard() + ").";
 	return predicate;
 }
 

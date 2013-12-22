@@ -52,9 +52,13 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 
+
+
+	GameLogic::getInstance();
+
 	Scene::getInstance()->initScene();
 
-	GameLogic *new_game = new GameLogic();
+	//GameLogic::getInstance()->initGame();
 
 	Interface interface;
 

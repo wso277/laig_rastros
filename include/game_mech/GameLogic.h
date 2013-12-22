@@ -20,6 +20,8 @@ class GameLogic {
 	char midBoard[3][3];
 	char botBoard[4][7];
 public:
+	static GameLogic *game;
+	static GameLogic* getInstance();
 	GameLogic();
 	virtual ~GameLogic();
 	void initGame();
@@ -27,6 +29,7 @@ public:
 	CurrentPiece* getPiece();
 	string getEncodedCharBoard();
 	string getTestPredicate(int index);
+	void executeMove(int dir);
 
 };
 

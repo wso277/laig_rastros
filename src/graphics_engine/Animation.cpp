@@ -134,6 +134,7 @@ float Animation::updateAnimation(int index) {
 	time_passed += sub;
 	time_line += sub;
 	if (time_passed < span) {
+
 		point.setX(point.getX() + (delta[vec_index]->getX() * ratio));
 		point.setY(point.getY() + (delta[vec_index]->getY() * ratio));
 		point.setZ(point.getZ() + (delta[vec_index]->getZ() * ratio));
@@ -142,12 +143,12 @@ float Animation::updateAnimation(int index) {
 			time_line = 0;
 			vec_index++;
 		}
-		//glutTimerFunc(ANIMATION_TIME,updateValues,index);
+		glutTimerFunc(ANIMATION_TIME,updateValues,index);
 		return ratio;
 	} else {
-		//resetAnimation();
-		//CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
-		//p->updateCoords();
+		resetAnimation();
+		CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
+		p->updateCoords();
 		return 0;
 	}
 
@@ -158,12 +159,15 @@ void Animation::resetAnimation() {
 	vec_index = 0;
 	time_passed = 0;
 	time_line = 0;
-	struct timespec t;
-	clock_gettime(CLOCK_MONOTONIC, &t);
-	time_last = t.tv_nsec * 0.000000001;
 	point.setX(points[0]->getX());
 	point.setY(points[0]->getY());
 	point.setZ(points[0]->getZ());
+}
+
+void Animation::resetTime() {
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	time_last = t.tv_nsec * 0.000000001;
 }
 
 Animation::~Animation() {

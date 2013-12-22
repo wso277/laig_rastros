@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <string.h>
+#include "GameLogic.h"
 
 using namespace std;
 
@@ -244,14 +245,14 @@ void Scene::initScene() {
 
 	initCamera();
 
-	/*AnimationElem::iterator it = animations.begin();
+	AnimationElem::iterator it = animations.begin();
 	int i = 0;
 	string id;
 	for (; it != animations.end(); it++) {
 		animation_index.push_back(it->first);
-		glutTimerFunc(ANIMATION_TIME, updateValues, i);
+		//glutTimerFunc(ANIMATION_TIME, updateValues, i);
 		i++;
-	}*/
+	}
 
 }
 
@@ -400,6 +401,9 @@ void Scene::processPickedNodes(vector<GLuint> names) {
 		}
 	}
 
+	int n = random() % 9;
+
+	GameLogic::getInstance()->executeMove(n);
 }
 
 

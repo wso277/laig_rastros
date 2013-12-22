@@ -14,12 +14,12 @@
 
 class CurrentPiece: public Piece {
 private:
-	float side_diff;
-	float level_diff;
+	int side_diff;
+	int level_diff;
 	int dir;
 public:
 	CurrentPiece();
-	CurrentPiece(int col, int line, int level, float side_diff, float level_diff);
+	CurrentPiece(int col, int line, int level, int side_diff, int level_diff);
 	int getSideDiff();
 	int getLevelDiff();
 	void updateCoords();

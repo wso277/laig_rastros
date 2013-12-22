@@ -44,6 +44,7 @@ public:
 	float getRotation();
 	Point getPoint();
 	void resetAnimation();
+	void resetTime();
 	virtual ~Animation();
 };
 

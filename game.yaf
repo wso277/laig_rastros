@@ -51,12 +51,6 @@
 
 	</appearances>
 	<animations>
-		<animation id="vehicle" span="20.0" type="linear">
-			<controlpoint xx="0" yy="5" zz="0" />
-			<controlpoint xx="10" yy="5" zz="20" />
-			<controlpoint xx="10" yy="0" zz="20" />
-			<controlpoint xx="-30" yy="20" zz="-5" />
-		</animation>
 	</animations>
 	<graph rootid="scene">
 		<node id="scene">

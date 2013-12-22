@@ -8,16 +8,17 @@
 #include "CurrentPiece.h"
 #include "Animation.h"
 #include "Scene.h"
+#include <iostream>
 
 CurrentPiece::CurrentPiece() :
 		Piece() {
-	side_diff = 1.0;
+	side_diff = 1;
 	level_diff = 2;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
 
-CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float level_diff) :
+CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff, int level_diff) :
 		Piece(col, line, level, true, true, "default") {
 
 	this->side_diff = side_diff;
@@ -25,83 +26,75 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 
 	Animation *a;
 
-	a = new Animation("descend", ANIMATION_SPAN, "linear");
+	a = new Animation("0descend", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(0, -level_diff, 0);
+	a->addPoint(0, -(level_diff+1), 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("descend", a);
+	Scene::getInstance()->addAnimation("0descend", a);
 
-	a = new Animation("leftdown", ANIMATION_SPAN, "linear");
+	a = new Animation("1leftdown", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(-side_diff, 0, side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("leftdown", a);
+	Scene::getInstance()->addAnimation("1leftdown", a);
 
-	a = new Animation("down", ANIMATION_SPAN, "linear");
+	a = new Animation("2down", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(0, 0, side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("down", a);
+	Scene::getInstance()->addAnimation("2down", a);
 
-	a = new Animation("rightdown", ANIMATION_SPAN, "linear");
+	a = new Animation("3rightdown", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(side_diff, 0, side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("rightdown", a);
+	Scene::getInstance()->addAnimation("3rightdown", a);
 
-	a = new Animation("left", ANIMATION_SPAN, "linear");
+	a = new Animation("4left", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(-side_diff, 0, 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("left", a);
+	Scene::getInstance()->addAnimation("4left", a);
 
-	a = new Animation("climb", ANIMATION_SPAN, "linear");
+	a = new Animation("5climb", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(0, level_diff, 0);
+	a->addPoint(0, level_diff+1, 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("climb", a);
+	Scene::getInstance()->addAnimation("5climb", a);
 
-	a = new Animation("right", ANIMATION_SPAN, "linear");
+	a = new Animation("6right", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(side_diff, 0, 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("right", a);
+	Scene::getInstance()->addAnimation("6right", a);
 
-	a = new Animation("leftup", ANIMATION_SPAN, "linear");
+	a = new Animation("7leftup", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(-side_diff, 0, -side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("leftup", a);
+	Scene::getInstance()->addAnimation("7leftup", a);
 
-	a = new Animation("up", ANIMATION_SPAN, "linear");
+	a = new Animation("8up", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(0, 0, -side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("up", a);
+	Scene::getInstance()->addAnimation("8up", a);
 
-	a = new Animation("rightup", ANIMATION_SPAN, "linear");
+	a = new Animation("9rightup", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(side_diff, 0, -side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("rightup", a);
-
-	AnimationElem::iterator it = Scene::getInstance()->getAnimations().begin();
-	int i = 0;
-	string id;
-	for (; it != Scene::getInstance()->getAnimations().end(); it++) {
-		Scene::getInstance()->getAnimationsIndex().push_back(it->first);
-		i++;
-	}
+	Scene::getInstance()->addAnimation("9rightup", a);
 
 }
 
@@ -140,7 +133,7 @@ void CurrentPiece::updateCoords() {
 		break;
 		//climb
 	case 5:
-		level += level_diff;
+		level -= level_diff;
 		break;
 		//right
 	case 6:
@@ -153,18 +146,26 @@ void CurrentPiece::updateCoords() {
 		break;
 		//up
 	case 8:
-		col -= side_diff;
+		line -= side_diff;
 		break;
 		//rightup
 	case 9:
-		col -= side_diff;
-		line += side_diff;
+		col += side_diff;
+		line -= side_diff;
 		break;
 		//descend
 	case 0:
-		level -= level_diff;
+		level += level_diff;
 		break;
 	}
+}
+
+
+void CurrentPiece::setDir(int dir) {
+	this->dir = dir;
+}
+int CurrentPiece::getDir() {
+	return dir;
 }
 
 CurrentPiece::~CurrentPiece() {
