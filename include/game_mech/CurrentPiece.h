@@ -16,13 +16,16 @@ class CurrentPiece: public Piece {
 private:
 	float side_diff;
 	float level_diff;
+	int dir;
 public:
 	CurrentPiece();
 	CurrentPiece(int col, int line, int level, float side_diff, float level_diff);
 	int getSideDiff();
 	int getLevelDiff();
-	void updateCoords(int dir);
+	void updateCoords();
 	void draw();
+	void setDir(int dir);
+	int getDir();
 	virtual ~CurrentPiece();
 };
 

@@ -11,6 +11,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
+#include "Scene.h"
+#include "CurrentPiece.h"
+#include <iostream>
 
 Animation::Animation() {
 
@@ -43,6 +46,7 @@ void Animation::addPoint(float x, float y, float z) {
 		point.setX(x);
 		point.setY(y);
 		point.setZ(z);
+		direction.push_back(new Point(0,0,1));
 	}
 
 }
@@ -109,7 +113,7 @@ Point Animation::getPoint() {
 	return point;
 }
 
-float Animation::updateValues() {
+float Animation::updateAnimation(int index) {
 
 	struct timespec t;
 	float timer;
@@ -138,8 +142,12 @@ float Animation::updateValues() {
 			time_line = 0;
 			vec_index++;
 		}
+		//glutTimerFunc(ANIMATION_TIME,updateValues,index);
 		return ratio;
 	} else {
+		//resetAnimation();
+		//CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
+		//p->updateCoords();
 		return 0;
 	}
 

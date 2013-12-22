@@ -40,7 +40,7 @@ public:
 	Point* getDelta();
 	void calculateDelta();
 	int getTime();
-	float updateValues();
+	float updateAnimation(int index);
 	float getRotation();
 	Point getPoint();
 	void resetAnimation();

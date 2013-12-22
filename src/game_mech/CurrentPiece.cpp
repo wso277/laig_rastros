@@ -118,7 +118,7 @@ int CurrentPiece::getLevelDiff() {
 	return level_diff;
 }
 
-void CurrentPiece::updateCoords(int dir) {
+void CurrentPiece::updateCoords() {
 	switch (dir) {
 	//leftdown
 	case 1:

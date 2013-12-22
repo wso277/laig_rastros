@@ -17,7 +17,7 @@
 using namespace std;
 
 GameLogic::GameLogic() {
-	piece = new CurrentPiece(5, 3, 2, 1, 1);
+	piece = new CurrentPiece(5, 3, 2, 1, 2);
 	board = new Board();
 
 	// used piece example
@@ -46,6 +46,8 @@ GameLogic::GameLogic() {
 		}
 	}
 
+	Scene::getInstance()->getNode("piece")->setAnimation("left");
+	//glutTimerFunc(ANIMATION_TIME, updateValues, 4);
 }
 
 Board* GameLogic::getBoard() {

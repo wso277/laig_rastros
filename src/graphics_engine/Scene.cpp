@@ -338,9 +338,7 @@ string Scene::getAnimationIndex(int index) {
 void updateValues(int index) {
 	string id = Scene::getInstance()->getAnimationIndex(index);
 	Animation *ani = Scene::getInstance()->getAnimation(id);
-	ani->updateValues();
-	glutTimerFunc(ANIMATION_TIME, updateValues, index);
-
+	ani->updateAnimation(index);
 }
 
 string Scene::findNextNameAvail(string id) {
