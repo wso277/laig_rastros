@@ -16,13 +16,17 @@ class GameLogic {
 	CurrentPiece *piece;
 	vector<Piece> trailPieces;
 	Board *board;
+	char topBoard[4][7];
+	char midBoard[3][3];
+	char botBoard[4][7];
 public:
 	GameLogic();
 	virtual ~GameLogic();
 	void initGame();
 	Board* getBoard();
 	CurrentPiece* getPiece();
-	void getEncodedCharBoard
+	string getEncodedCharBoard();
+	string getTestPredicate(int index);
 
 };
 

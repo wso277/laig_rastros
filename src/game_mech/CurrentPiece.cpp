@@ -24,40 +24,13 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 	this->level_diff = level_diff;
 
 	Animation *a;
-	a = new Animation("left", ANIMATION_SPAN, "linear");
+
+	a = new Animation("descend", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(-side_diff, 0, 0);
+	a->addPoint(0, -level_diff, 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("left", a);
-
-	a = new Animation("right", ANIMATION_SPAN, "linear");
-	a->addPoint(0, 0, 0);
-	a->addPoint(side_diff, 0, 0);
-	a->calculateDelta();
-
-	Scene::getInstance()->addAnimation("right", a);
-
-	a = new Animation("up", ANIMATION_SPAN, "linear");
-	a->addPoint(0, 0, 0);
-	a->addPoint(0, 0, -side_diff);
-	a->calculateDelta();
-
-	Scene::getInstance()->addAnimation("up", a);
-
-	a = new Animation("down", ANIMATION_SPAN, "linear");
-	a->addPoint(0, 0, 0);
-	a->addPoint(0, 0, side_diff);
-	a->calculateDelta();
-
-	Scene::getInstance()->addAnimation("down", a);
-
-	a = new Animation("leftup", ANIMATION_SPAN, "linear");
-	a->addPoint(0, 0, 0);
-	a->addPoint(-side_diff, 0, -side_diff);
-	a->calculateDelta();
-
-	Scene::getInstance()->addAnimation("leftup", a);
+	Scene::getInstance()->addAnimation("descend", a);
 
 	a = new Animation("leftdown", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
@@ -66,12 +39,12 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 
 	Scene::getInstance()->addAnimation("leftdown", a);
 
-	a = new Animation("rightup", ANIMATION_SPAN, "linear");
+	a = new Animation("down", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(side_diff, 0, -side_diff);
+	a->addPoint(0, 0, side_diff);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("rightup", a);
+	Scene::getInstance()->addAnimation("down", a);
 
 	a = new Animation("rightdown", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
@@ -80,6 +53,13 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 
 	Scene::getInstance()->addAnimation("rightdown", a);
 
+	a = new Animation("left", ANIMATION_SPAN, "linear");
+	a->addPoint(0, 0, 0);
+	a->addPoint(-side_diff, 0, 0);
+	a->calculateDelta();
+
+	Scene::getInstance()->addAnimation("left", a);
+
 	a = new Animation("climb", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
 	a->addPoint(0, level_diff, 0);
@@ -87,12 +67,41 @@ CurrentPiece::CurrentPiece(int col, int line, int level, float side_diff, float 
 
 	Scene::getInstance()->addAnimation("climb", a);
 
-	a = new Animation("descend", ANIMATION_SPAN, "linear");
+	a = new Animation("right", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(0, -level_diff, 0);
+	a->addPoint(side_diff, 0, 0);
 	a->calculateDelta();
 
-	Scene::getInstance()->addAnimation("descend", a);
+	Scene::getInstance()->addAnimation("right", a);
+
+	a = new Animation("leftup", ANIMATION_SPAN, "linear");
+	a->addPoint(0, 0, 0);
+	a->addPoint(-side_diff, 0, -side_diff);
+	a->calculateDelta();
+
+	Scene::getInstance()->addAnimation("leftup", a);
+
+	a = new Animation("up", ANIMATION_SPAN, "linear");
+	a->addPoint(0, 0, 0);
+	a->addPoint(0, 0, -side_diff);
+	a->calculateDelta();
+
+	Scene::getInstance()->addAnimation("up", a);
+
+	a = new Animation("rightup", ANIMATION_SPAN, "linear");
+	a->addPoint(0, 0, 0);
+	a->addPoint(side_diff, 0, -side_diff);
+	a->calculateDelta();
+
+	Scene::getInstance()->addAnimation("rightup", a);
+
+	AnimationElem::iterator it = Scene::getInstance()->getAnimations().begin();
+	int i = 0;
+	string id;
+	for (; it != Scene::getInstance()->getAnimations().end(); it++) {
+		Scene::getInstance()->getAnimationsIndex().push_back(it->first);
+		i++;
+	}
 
 }
 

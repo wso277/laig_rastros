@@ -177,17 +177,17 @@ iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
  11 - descend
  12 - exit
  *******************************************************/
-testMove(1, Board) :- testMoveUp(Board), writeResponseToStream("Success.").
+testMove(8, Board) :- testMoveUp(Board), writeResponseToStream("Success.").
 testMove(2, Board) :- testMoveDown(Board), writeResponseToStream("Success.").
-testMove(3, Board) :- testMoveLeft(Board), writeResponseToStream("Success.").
-testMove(4, Board) :- testMoveRight(Board), writeResponseToStream("Success.").
-testMove(5, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream("Success.").
-testMove(6, Board) :- testMoveDiagUpRight(Board), writeResponseToStream("Success.").
-testMove(7, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream("Success.").
-testMove(8, Board) :- testMoveDiagDownRight(Board), writeResponseToStream("Success.").
-testMove(9, Board) :- testRotateCenter(Board), writeResponseToStream("Success.").
-testMove(10, Board) :- testClimb(Board), writeResponseToStream("Success.").
-testMove(11, Board) :- testDescend(Board), writeResponseToStream("Success.").
+testMove(4, Board) :- testMoveLeft(Board), writeResponseToStream("Success.").
+testMove(6, Board) :- testMoveRight(Board), writeResponseToStream("Success.").
+testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream("Success.").
+testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToStream("Success.").
+testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream("Success.").
+testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToStream("Success.").
+testMove(10, Board) :- testRotateCenter(Board), writeResponseToStream("Success.").
+testMove(5, Board) :- testClimb(Board), writeResponseToStream("Success.").
+testMove(0, Board) :- testDescend(Board), writeResponseToStream("Success.").
 testMove(_, _) :- writeResponseToStream("Failure.").
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 

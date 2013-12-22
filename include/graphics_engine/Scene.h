@@ -112,6 +112,8 @@ public:
 	int getDepth();
 	Node *getPickedElem(GLuint name);
 	void processPickedNodes(vector<GLuint> names);
+	AnimationElem getAnimations();
+	vector<string> getAnimationsIndex();
 };
 
 #endif /* SCENE_H_ */
