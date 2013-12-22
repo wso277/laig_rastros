@@ -403,7 +403,11 @@ void Scene::processPickedNodes(vector<GLuint> names) {
 
 	int n = random() % 9;
 
+
+	cout << GameLogic::getInstance()->getEncodedCharBoard() << endl;
+
 	GameLogic::getInstance()->executeMove(n);
+
 }
 
 

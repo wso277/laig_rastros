@@ -69,14 +69,20 @@ CurrentPiece* GameLogic::getPiece() {
 void GameLogic::initGame() {
 	//system("../rastros");
 
-	executeMove(4);
 }
 
 void GameLogic::executeMove(int dir) {
 
 	Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
-	//trailPieces.push_back(p);
 	Scene::getInstance()->getNode("scene")->addPrimitive(p);
+
+	if (piece->getLevel() == 1) {
+		topBoard[piece->getLine()][piece->getCol()] = '#';
+	} else if (piece->getLevel() == 2) {
+		midBoard[piece->getLine()-3][piece->getCol()-3] = '#';
+	} else {
+		botBoard[piece->getLine()-3][piece->getCol()] = '#';
+	}
 
 	switch (dir) {
 	case 0:
@@ -143,6 +149,15 @@ void GameLogic::executeMove(int dir) {
 }
 
 string GameLogic::getEncodedCharBoard() {
+
+	if (piece->getLevel() == 1) {
+		topBoard[piece->getLine()][piece->getCol()] = 'O';
+	} else if (piece->getLevel() == 2) {
+		midBoard[piece->getLine()-3][piece->getCol()-3] = 'O';
+	} else {
+		botBoard[piece->getLine()-3][piece->getCol()] = 'O';
+	}
+
 	string enc_board = "[[";
 	int i = 0;
 	for (i; i < 2; i++) {
