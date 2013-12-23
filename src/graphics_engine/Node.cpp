@@ -269,7 +269,7 @@ void Node::setSelectable(bool sel) {
 void Node::processPick(vector<unsigned int> names) {
 	if (names[0] == 0) {
 		GameLogic::getInstance()->setPieceSelected(true);
-	} else if(GameLogic::getInstance()->getPieceSelected()) {
+	} else if (GameLogic::getInstance()->getPieceSelected()) {
 		cout << names[0];
 		int level, line, col;
 		int pLevel, pLine, pCol;
@@ -287,6 +287,30 @@ void Node::processPick(vector<unsigned int> names) {
 		} else {
 			int ldiff = pLine - line;
 			int cdiff = pCol - col;
+
+			if (ldiff == -1) {
+				if (cdiff == -1) {
+					GameLogic::getInstance()->executeMove(3);
+				} else if (cdiff == 1) {
+					GameLogic::getInstance()->executeMove(1);
+				} else {
+					GameLogic::getInstance()->executeMove(2);
+				}
+			} else if (ldiff == 1) {
+				if (cdiff == -1) {
+					GameLogic::getInstance()->executeMove(9);
+				} else if (cdiff == 1) {
+					GameLogic::getInstance()->executeMove(7);
+				} else {
+					GameLogic::getInstance()->executeMove(8);
+				}
+			} else if (ldiff == 0) {
+				if (cdiff == -1) {
+					GameLogic::getInstance()->executeMove(6);
+				} else if (cdiff == 1) {
+					GameLogic::getInstance()->executeMove(4);
+				}
+			}
 		}
 
 		GameLogic::getInstance()->setPieceSelected(false);
