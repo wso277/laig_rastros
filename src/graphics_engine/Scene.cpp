@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string.h>
 #include "GameLogic.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -393,21 +394,18 @@ Node *Scene::getPickedElem(GLuint name) {
 }
 
 void Scene::processPickedNodes(vector<GLuint> names) {
-	PickElem::iterator it;
-	vector<GLuint>::iterator picks_it;
-	for (picks_it = names.begin(); picks_it != names.end(); picks_it++) {
+	reverse(names.begin(), names.end());
+	//PickElem::iterator it;
+	//vector<GLuint>::iterator picks_it;
+	/*for (picks_it = names.begin(); picks_it != names.end(); picks_it++) {
+		cout << "Name:" << *picks_it << endl;
 		if ((it = pickingObjs.find(*picks_it)) != pickingObjs.end()) {
+			cout << "Name:" << *picks_it << endl;
 			it->second->processPick();
+			printf("Found\n");
 		}
-	}
-
-	int n = random() % 9;
-
-
-	cout << GameLogic::getInstance()->getEncodedCharBoard() << endl;
-
-	GameLogic::getInstance()->executeMove(n);
-
+	}*/
+	getNode(rootId)->processPick(names);
 }
 
 

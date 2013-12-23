@@ -53,7 +53,7 @@
 	<animations>
 	</animations>
 	<graph rootid="scene">
-		<node id="scene">
+		<node id="scene" isselectable="true">
 			<transforms></transforms>
 			<children>
 				

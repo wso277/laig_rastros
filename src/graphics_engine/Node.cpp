@@ -6,6 +6,7 @@
 #include <stack>
 #include <stdio.h>
 #include <iostream>
+#include "GameLogic.h"
 
 using namespace std;
 
@@ -169,12 +170,9 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 
 	glPushMatrix();
 	if (ani_stack.top() != "default") {
-		Point pt =
-				Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
+		Point pt = Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
 		glTranslatef(pt.getX(), pt.getY(), pt.getZ());
-		glRotatef(
-				Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(),
-				0, 1, 0);
+		glRotatef(Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(), 0, 1, 0);
 	}
 
 	if (!is_visible) {
@@ -268,8 +266,31 @@ void Node::setSelectable(bool sel) {
 	}
 }
 
-void Node::processPick() {
-	cout << "I (" << id << ")have been picked... YUPIIII" << endl;
+void Node::processPick(vector<unsigned int> names) {
+	if (names[0] == 0) {
+		GameLogic::getInstance()->setPieceSelected(true);
+	} else if(GameLogic::getInstance()->getPieceSelected()) {
+		cout << names[0];
+		int level, line, col;
+		int pLevel, pLine, pCol;
+		pLevel = GameLogic::getInstance()->getPiece()->getLevel();
+		pLine = GameLogic::getInstance()->getPiece()->getLine();
+		pCol = GameLogic::getInstance()->getPiece()->getCol();
+		line = names[0] % 10;
+		col = names[0] / 10 % 10;
+		level = names[0] / 100 % 10;
+
+		if (pLevel > level) {
+			GameLogic::getInstance()->executeMove(5);
+		} else if (pLevel < level) {
+			GameLogic::getInstance()->executeMove(0);
+		} else {
+			int ldiff = pLine - line;
+			int cdiff = pCol - col;
+		}
+
+		GameLogic::getInstance()->setPieceSelected(false);
+	}
 }
 
 void Node::setVisibility(bool is_visible) {

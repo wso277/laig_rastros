@@ -59,7 +59,7 @@ public:
 	static int getNextName();
 	bool isSelectable();
 	virtual void setSelectable(bool sel);
-	void processPick();
+	void processPick(vector<unsigned int> names);
 	void setVisibility(bool is_visible);
 	bool isVisible();
 };

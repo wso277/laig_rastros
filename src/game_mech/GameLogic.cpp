@@ -29,11 +29,12 @@ GameLogic* GameLogic::getInstance() {
 GameLogic::GameLogic() {
 	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
-
+	piece_selected = false;
 	// used piece example
 	//Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
 
 	Node *n = new Node("piece");
+	n->setSelectable(true);
 	n->addPrimitive(piece);
 	Scene::getInstance()->getNode("scene")->addRef("piece");
 	Scene::getInstance()->addNode("piece", n);
@@ -69,6 +70,14 @@ CurrentPiece* GameLogic::getPiece() {
 void GameLogic::initGame() {
 	//system("../rastros");
 
+}
+
+bool GameLogic::getPieceSelected() {
+	return piece_selected;
+}
+
+void GameLogic::setPieceSelected(bool selected) {
+	this->piece_selected = selected;
 }
 
 void GameLogic::executeMove(int dir) {
@@ -146,6 +155,7 @@ void GameLogic::executeMove(int dir) {
 		glutTimerFunc(ANIMATION_TIME, updateValues, 9);
 		break;
 	}
+
 }
 
 string GameLogic::getEncodedCharBoard() {

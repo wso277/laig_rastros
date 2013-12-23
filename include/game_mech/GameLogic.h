@@ -19,6 +19,7 @@ class GameLogic {
 	char topBoard[4][7];
 	char midBoard[3][3];
 	char botBoard[4][7];
+	bool piece_selected;
 public:
 	static GameLogic *game;
 	static GameLogic* getInstance();
@@ -30,6 +31,8 @@ public:
 	string getEncodedCharBoard();
 	string getTestPredicate(int index);
 	void executeMove(int dir);
+	bool getPieceSelected();
+	void setPieceSelected(bool selected);
 
 };
 
