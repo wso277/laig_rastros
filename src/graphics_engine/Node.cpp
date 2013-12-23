@@ -270,30 +270,31 @@ void Node::processPick(vector<unsigned int> names) {
 	if (names[0] == 0) {
 		GameLogic::getInstance()->setPieceSelected(true);
 	} else if (GameLogic::getInstance()->getPieceSelected()) {
-		cout << names[0];
 		int level, line, col;
 		int pLevel, pLine, pCol;
 		pLevel = GameLogic::getInstance()->getPiece()->getLevel();
 		pLine = GameLogic::getInstance()->getPiece()->getLine();
 		pCol = GameLogic::getInstance()->getPiece()->getCol();
-		line = names[0] % 10;
-		col = names[0] / 10 % 10;
+		col = names[0] % 10;
+		line = names[0] / 10 % 10;
 		level = names[0] / 100 % 10;
 
-		if (pLevel > level) {
+		int ldiff = pLine - line;
+		int cdiff = pCol - col;
+		if (pLevel > level && ldiff == 0 && cdiff == 0) {
 			GameLogic::getInstance()->executeMove(5);
-		} else if (pLevel < level) {
+		} else if (pLevel < level && ldiff == 0 && cdiff == 0) {
 			GameLogic::getInstance()->executeMove(0);
-		} else {
-			int ldiff = pLine - line;
-			int cdiff = pCol - col;
+		} else if (pLevel == level){
 
+			cout << "name " << names[0]<<endl;
+			cout << "diff " << ldiff << " " << cdiff << endl;
 			if (ldiff == -1) {
 				if (cdiff == -1) {
 					GameLogic::getInstance()->executeMove(3);
 				} else if (cdiff == 1) {
 					GameLogic::getInstance()->executeMove(1);
-				} else {
+				} else if (cdiff == 0) {
 					GameLogic::getInstance()->executeMove(2);
 				}
 			} else if (ldiff == 1) {
@@ -301,7 +302,7 @@ void Node::processPick(vector<unsigned int> names) {
 					GameLogic::getInstance()->executeMove(9);
 				} else if (cdiff == 1) {
 					GameLogic::getInstance()->executeMove(7);
-				} else {
+				} else if (cdiff == 0) {
 					GameLogic::getInstance()->executeMove(8);
 				}
 			} else if (ldiff == 0) {
