@@ -78,7 +78,7 @@ Board::Board() :
 		for (unsigned int j = 0; j < 3; j++) {
 			middleMatrix[i][j].setSelectable(true);
 			middleMatrix[i][j].setVisibility(true);
-			int middle_name = 200 + 10 * (i + 3) + (j + 3);
+			int middle_name = 200 + (10 * (i + 3)) + (j + 3);
 			middleMatrix[i][j].setName(middle_name);
 		}
 	}
@@ -158,7 +158,7 @@ void Board::draw() {
 			for (unsigned int j = 0; j < 3; j++) {
 				glPushName(middleMatrix[i][j].getName());
 				glPushMatrix();
-				glTranslatef(-1.0 + i, 0, -1.0 + j);
+				glTranslatef(-1.0 + j, 0, -1.0 + i);
 				middleMatrix[i][j].draw();
 				glPopMatrix();
 				glPopName();

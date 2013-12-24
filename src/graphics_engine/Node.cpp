@@ -281,14 +281,13 @@ void Node::processPick(vector<unsigned int> names) {
 
 		int ldiff = pLine - line;
 		int cdiff = pCol - col;
+		cout << "name " << names[0] << endl;
+		cout << "lined " << ldiff << " cold " << cdiff << endl;
 		if (pLevel > level && ldiff == 0 && cdiff == 0) {
 			GameLogic::getInstance()->executeMove(5);
 		} else if (pLevel < level && ldiff == 0 && cdiff == 0) {
 			GameLogic::getInstance()->executeMove(0);
 		} else if (pLevel == level){
-
-			cout << "name " << names[0]<<endl;
-			cout << "diff " << ldiff << " " << cdiff << endl;
 			if (ldiff == -1) {
 				if (cdiff == -1) {
 					GameLogic::getInstance()->executeMove(3);
