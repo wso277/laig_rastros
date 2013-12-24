@@ -312,6 +312,16 @@ void GameLogic::undo() {
 	trailPieces.pop_back();
 }
 
+void GameLogic::repeat() {
+	list<Piece*> trail = new list<Piece*>(trailPieces);
+	trailPieces.clear();
+	repeatAux(trail);
+}
+
+void GameLogic::repeatAux(list<Piece*> trail) {
+
+}
+
 GameLogic::~GameLogic() {
 }
 
