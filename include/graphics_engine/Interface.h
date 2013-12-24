@@ -31,7 +31,10 @@ private:
 	static GLUI_RadioGroup *cams_group;
 	static int drawmd_id;
 	static GLUI_RadioGroup *drawmd_grp;
+	static int difficulty_id;
+	static GLUI_RadioGroup *difficulty_grp;
 	static int *drawmode_vars;
+	static int *difficulty_vars;
 
 	static int id_counter;
 

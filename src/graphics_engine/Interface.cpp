@@ -25,7 +25,10 @@ int Interface::radio_id = 0;
 GLUI_RadioGroup *Interface::cams_group = NULL;
 int Interface::drawmd_id = 0;
 GLUI_RadioGroup *Interface::drawmd_grp = NULL;
+int Interface::difficulty_id = 0;
+GLUI_RadioGroup *Interface::difficulty_grp = NULL;
 int *Interface::drawmode_vars = new int[3];
+int *Interface::difficulty_vars = new int[5];
 float Interface::displacementX = 0;
 float Interface::displacementY = 0;
 bool Interface::pressing_left = 0;
@@ -156,6 +159,18 @@ void Interface::initGUI() {
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Wireframe");
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Points");
 	drawmd_grp->set_int_val(0);
+
+	glui_window->add_column(true);
+
+	GLUI_Panel *difficultyPanel = glui_window->add_panel("Difficulty Level");
+	difficulty_id = id_counter++;
+	difficulty_grp = glui_window->add_radiogroup_to_panel(difficultyPanel,
+			difficulty_vars, difficulty_id, Interface::processGUI);
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 1");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 2");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 3");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 4");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 5");
 
 	glui_window->add_column(true);
 	GLUI_Rotation *view_rot = glui_window->add_rotation("Rotacao", view_rotate);
