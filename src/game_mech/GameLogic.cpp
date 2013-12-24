@@ -84,13 +84,14 @@ void GameLogic::executeMove(int dir) {
 
 	Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
 	Scene::getInstance()->getNode("scene")->addPrimitive(p);
+	trailPieces.push_back(p);
 
 	if (piece->getLevel() == 1) {
 		topBoard[piece->getLine()][piece->getCol()] = '#';
 	} else if (piece->getLevel() == 2) {
-		midBoard[piece->getLine()-3][piece->getCol()-3] = '#';
+		midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
 	} else {
-		botBoard[piece->getLine()-3][piece->getCol()] = '#';
+		botBoard[piece->getLine() - 3][piece->getCol()] = '#';
 	}
 
 	switch (dir) {
@@ -163,9 +164,9 @@ string GameLogic::getEncodedCharBoard() {
 	if (piece->getLevel() == 1) {
 		topBoard[piece->getLine()][piece->getCol()] = 'O';
 	} else if (piece->getLevel() == 2) {
-		midBoard[piece->getLine()-3][piece->getCol()-3] = 'O';
+		midBoard[piece->getLine() - 3][piece->getCol() - 3] = 'O';
 	} else {
-		botBoard[piece->getLine()-3][piece->getCol()] = 'O';
+		botBoard[piece->getLine() - 3][piece->getCol()] = 'O';
 	}
 
 	string enc_board = "[[";
@@ -277,6 +278,38 @@ string GameLogic::getTestPredicate(int index) {
 
 	predicate = predicate + "," + getEncodedCharBoard() + ").";
 	return predicate;
+}
+
+void GameLogic::undo() {
+	switch (piece->getLevel()) {
+	case 1:
+		topBoard[piece->getLine()][piece->getCol()] = '_';
+		break;
+	case 2:
+			midBoard[piece->getLine()][piece->getCol()] = '_';
+			break;
+	case 3:
+			botBoard[piece->getLine()][piece->getCol()] = '_';
+			break;
+	}
+
+	piece->setLevel(trailPieces.back()->getLevel());
+	piece->setLine(trailPieces.back()->getLine());
+	piece->setCol(trailPieces.back()->getCol());
+
+	switch (piece->getLevel()) {
+	case 1:
+		topBoard[piece->getLine()][piece->getCol()] = 'O';
+		break;
+	case 2:
+			midBoard[piece->getLine()][piece->getCol()] = 'O';
+			break;
+	case 3:
+			botBoard[piece->getLine()][piece->getCol()] = 'O';
+			break;
+	}
+
+	trailPieces.pop_back();
 }
 
 GameLogic::~GameLogic() {

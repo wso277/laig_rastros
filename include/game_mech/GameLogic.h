@@ -11,10 +11,11 @@
 #include "CurrentPiece.h"
 #include "Piece.h"
 #include "Board.h"
+#include <list>
 
 class GameLogic {
 	CurrentPiece *piece;
-	vector<Piece> trailPieces;
+	list<Piece*> trailPieces;
 	Board *board;
 	char topBoard[4][7];
 	char midBoard[3][3];
@@ -33,6 +34,7 @@ public:
 	void executeMove(int dir);
 	bool getPieceSelected();
 	void setPieceSelected(bool selected);
+	void undo();
 
 };
 
