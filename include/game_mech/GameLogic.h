@@ -37,6 +37,8 @@ public:
 	void undo();
 	void repeat();
 	void repeatAux(list<Piece*> trail);
+	void deletePieceFromScene(Piece* piece);
+	void resetGame();
 
 };
 

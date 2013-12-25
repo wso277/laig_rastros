@@ -40,6 +40,11 @@ GameLogic::GameLogic() {
 	Scene::getInstance()->addNode("piece", n);
 	Scene::getInstance()->getNode("scene")->addPrimitive(board);
 
+	n = new Node("trail");
+	n->setSelectable(false);
+	Scene::getInstance()->getNode("scene")->addRef("trail");
+	Scene::getInstance()->addNode("trail", n);
+
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 7; j++) {
 			topBoard[i][j] = '_';
@@ -83,7 +88,7 @@ void GameLogic::setPieceSelected(bool selected) {
 void GameLogic::executeMove(int dir) {
 
 	Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
-	Scene::getInstance()->getNode("scene")->addPrimitive(p);
+	Scene::getInstance()->getNode("trail")->addPrimitive(p);
 	trailPieces.push_back(p);
 
 	if (piece->getLevel() == 1) {
@@ -286,11 +291,11 @@ void GameLogic::undo() {
 		topBoard[piece->getLine()][piece->getCol()] = '_';
 		break;
 	case 2:
-			midBoard[piece->getLine()][piece->getCol()] = '_';
-			break;
+		midBoard[piece->getLine()][piece->getCol()] = '_';
+		break;
 	case 3:
-			botBoard[piece->getLine()][piece->getCol()] = '_';
-			break;
+		botBoard[piece->getLine()][piece->getCol()] = '_';
+		break;
 	}
 
 	piece->setLevel(trailPieces.back()->getLevel());
@@ -302,24 +307,112 @@ void GameLogic::undo() {
 		topBoard[piece->getLine()][piece->getCol()] = 'O';
 		break;
 	case 2:
-			midBoard[piece->getLine()][piece->getCol()] = 'O';
-			break;
+		midBoard[piece->getLine()][piece->getCol()] = 'O';
+		break;
 	case 3:
-			botBoard[piece->getLine()][piece->getCol()] = 'O';
-			break;
+		botBoard[piece->getLine()][piece->getCol()] = 'O';
+		break;
 	}
 
+	deletePieceFromScene(trailPieces.back());
 	trailPieces.pop_back();
 }
 
 void GameLogic::repeat() {
-	list<Piece*> trail = new list<Piece*>(trailPieces);
+	list<Piece*> trail(trailPieces);
 	trailPieces.clear();
+	deletePieceFromScene(NULL);
+	resetGame();
+	trail.pop_front();
 	repeatAux(trail);
 }
 
 void GameLogic::repeatAux(list<Piece*> trail) {
 
+	int col = trail.front()->getCol();
+	int line = trail.front()->getLine();
+	int level = trail.front()->getLevel();
+
+	int ldiff = piece->getLine() - line;
+	int cdiff = piece->getCol() - col;
+
+	if (piece->getLevel() > level && ldiff == 0 && cdiff == 0) {
+		executeMove(5);
+	} else if (piece->getLevel() < level && ldiff == 0 && cdiff == 0) {
+		executeMove(0);
+	} else if (piece->getLevel() == level) {
+		if (ldiff == -1) {
+			if (cdiff == -1) {
+				executeMove(3);
+			} else if (cdiff == 1) {
+				executeMove(1);
+			} else if (cdiff == 0) {
+				executeMove(2);
+			}
+		} else if (ldiff == 1) {
+			if (cdiff == -1) {
+				executeMove(9);
+			} else if (cdiff == 1) {
+				executeMove(7);
+			} else if (cdiff == 0) {
+				executeMove(8);
+			}
+		} else if (ldiff == 0) {
+			if (cdiff == -1) {
+				executeMove(6);
+			} else if (cdiff == 1) {
+				executeMove(4);
+			}
+		}
+	}
+
+	trail.pop_front();
+	if (!trail.empty()) {
+		repeatAux(trail);
+	}
+}
+
+void GameLogic::deletePieceFromScene(Piece* piece) {
+
+	if (piece == NULL) {
+		Scene::getInstance()->getNode("trail")->getPrims().clear();
+	} else {
+		for (int i = 0; i < Scene::getInstance()->getNode("trail")->getPrims().size(); i++) {
+			if (((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLevel() == piece->getLevel()
+					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getCol() == piece->getCol()
+					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLine()
+							== piece->getLine()) {
+
+				Scene::getInstance()->getNode("trail")->getPrims().erase(
+						Scene::getInstance()->getNode("trail")->getPrims().begin() + i);
+				break;
+			}
+		}
+	}
+
+}
+
+void GameLogic::resetGame() {
+	piece->setCol(5);
+	piece->setLine(3);
+	piece->setLevel(2);
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 7; j++) {
+			topBoard[i][j] = '_';
+			botBoard[i][j] = '_';
+		}
+	}
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (i == 0 && j == 2) {
+				midBoard[i][j] = 'O';
+			} else {
+				midBoard[i][j] = '_';
+			}
+		}
+	}
 }
 
 GameLogic::~GameLogic() {
