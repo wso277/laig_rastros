@@ -183,18 +183,6 @@ iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
  11 - descend
  12 - exit
  *******************************************************/
-testMove(8, Board) :- testMoveUp(Board), writeResponseToSocketStream('Success.').
-testMove(2, Board) :- testMoveDown(Board), writeResponseToSocketStream('Success.').
-testMove(4, Board) :- testMoveLeft(Board), writeResponseToSocketStream('Success.').
-testMove(6, Board) :- testMoveRight(Board), writeResponseToSocketStream('Success.').
-testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToSocketStream('Success.').
-testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToSocketStream('Success.').
-testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToSocketStream('Success.').
-testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToSocketStream('Success.').
-testMove(10, Board) :- testRotateCenter(Board), writeResponseToSocketStream('Success.').
-testMove(5, Board) :- testClimb(Board), writeResponseToSocketStream('Success.').
-testMove(0, Board) :- testDescend(Board), writeResponseToSocketStream('Success.').
-testMove(_, _) :- writeResponseToSocketStream('Failure.').
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
 					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X).
@@ -478,3 +466,46 @@ loop :-
 	loop.
 
 loop :- writeResponseToSocketStream('Failure.'), closeSocket.
+
+testMove(8, Board) :- testExtMoveUp(Board).
+testMove(2, Board) :- testExtMoveDown(Board).
+testMove(4, Board) :- testExtMoveLeft(Board).
+testMove(6, Board) :- testExtMoveRight(Board).
+testMove(7, Board) :- testExtMoveDiagUpLeft(Board).
+testMove(9, Board) :- testExtMoveDiagUpRight(Board).
+testMove(1, Board) :- testExtMoveDiagDownLeft(Board).
+testMove(3, Board) :- testExtMoveDiagDownRight(Board).
+testMove(10, Board) :- testExtRotateCenter(Board).
+testMove(5, Board) :- testExtClimb(Board).
+testMove(0, Board) :- testExtDescend(Board).
+testMove(_, _) :- writeResponseToSocketStream('Failure.').
+
+testExtMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
+					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Board, Level).
+testExtMoveDown(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, 
+					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Board, Level).
+testExtMoveLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nc1 is Nc - 1, 
+					getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Board, Level). 
+testExtMoveRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nc1 is Nc + 1, 
+						getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Board, Level).
+testExtMoveDiagUpLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, Nc1 is Nc - 1,
+							getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level).
+testExtMoveDiagUpRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, Nc1 is Nc + 1,
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+testExtMoveDiagDownLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, Nc1 is Nc - 1,
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+testExtMoveDiagDownRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, Nc1 is Nc + 1,
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+
+testExtRotateCenter(Board) :- getCurrPos(Board, Nr, Nc, _Level),
+						Nr < 6 , Nr > 2, Nc < 6, Nc > 2, writeResponseToSocketStream('Success.').
+
+testExtClimb(Board) :- getCurrPos(Board, Nr, Nc, Level), Level1 is Level - 1,
+					getElemInPos(Nr, Nc, Board, Level1, '_'), writeResponseToSocketStream('Success.').
+
+testExtDescend(Board) :- getCurrPos(Board, Nr, Nc, Level), Level1 is Level + 1,
+					getElemInPos(Nr, Nc, Board, Level1, '_'), writeResponseToSocketStream('Success.').
+
+testVictory(Row, Col, Level, Board) :- getElemInPos(Row, Col, Board, Level, '1'), writeResponseToSocketStream('Victory1.').
+testVictory(Row, Col, Level, Board) :- getElemInPos(Row, Col, Board, Level, '2'), writeResponseToSocketStream('Victory2.').
+testVictory(_,_,_,_) :- writeResponseToSocketStream('Success.').

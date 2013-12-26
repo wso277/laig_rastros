@@ -21,6 +21,8 @@
 #include "PointsHud.h"
 
 #define SUCCESS_MESSG "Success.\n"
+#define VICTORY1_MESSG "Victory1.\n"
+#define VICTORY2_MESSG "Victory2.\n"
 #define FAILURE_MESSG "Failure.\n"
 
 using namespace std;
@@ -103,7 +105,8 @@ void GameLogic::executeMove(int dir) {
 
 	string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
 	cout << response << endl;
-	if (response.compare(SUCCESS_MESSG) == 0) {
+	if (response.compare(SUCCESS_MESSG) == 0 || response.compare(VICTORY1_MESSG) == 0
+			|| response.compare(VICTORY2_MESSG) == 0) {
 
 		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown", "4left", "5climb", "6right", "7leftup",
 				"8up", "9rightup" };
@@ -126,6 +129,11 @@ void GameLogic::executeMove(int dir) {
 		glutTimerFunc(ANIMATION_TIME, updateValues, dir);
 		piece_moving = true;
 		assignPoints(dir);
+		if (response.compare(VICTORY1_MESSG) == 0) {
+			cout << "Victory player 1" << endl;
+		} else if (response.compare(VICTORY1_MESSG) == 0) {
+			cout << "Victory player2" << endl;
+		}
 	}
 }
 
