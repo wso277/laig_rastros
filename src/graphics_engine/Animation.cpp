@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "CurrentPiece.h"
 #include <iostream>
+#include "GameLogic.h"
 
 extern bool piece_moving;
 
@@ -151,6 +152,11 @@ float Animation::updateAnimation(int index) {
 		resetAnimation();
 		CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
 		p->updateCoords();
+		if (GameLogic::getInstance()->getCurrentPlayer() == 1) {
+			Scene::getInstance()->setInitCamera("player1");
+		} else {
+			Scene::getInstance()->setInitCamera("player2");
+		}
 		piece_moving = false;
 		return 0;
 	}

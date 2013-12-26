@@ -410,6 +410,10 @@ int GameLogic::getPlayer2() {
 	return player2;
 }
 
+int GameLogic::getCurrentPlayer() {
+	return current_player;
+}
+
 GameLogic::~GameLogic() {
 }
 

@@ -45,6 +45,7 @@ public:
 	void resetGame();
 	int getPlayer1();
 	int getPlayer2();
+	int getCurrentPlayer();
 	void assignPoints(int dir);
 
 };
