@@ -12,6 +12,7 @@ using namespace std;
 
 int Node::node_name_index = 0;
 extern bool inSelectMode;
+extern bool piece_moving;
 
 Node::Node() {
 	is_selectable = false;
@@ -267,7 +268,7 @@ void Node::setSelectable(bool sel) {
 }
 
 void Node::processPick(vector<unsigned int> names) {
-	if (names[0] == 0) {
+	if (names[0] == 0 && ! piece_moving) {
 		GameLogic::getInstance()->setPieceSelected(true);
 	} else if (GameLogic::getInstance()->getPieceSelected()) {
 		int level, line, col;

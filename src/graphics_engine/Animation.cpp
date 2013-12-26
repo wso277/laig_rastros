@@ -15,6 +15,8 @@
 #include "CurrentPiece.h"
 #include <iostream>
 
+extern bool piece_moving;
+
 Animation::Animation() {
 
 }
@@ -149,6 +151,7 @@ float Animation::updateAnimation(int index) {
 		resetAnimation();
 		CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
 		p->updateCoords();
+		piece_moving = false;
 		return 0;
 	}
 

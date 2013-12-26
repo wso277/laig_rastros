@@ -24,6 +24,8 @@
 
 using namespace std;
 
+bool piece_moving = false;
+
 GameLogic* GameLogic::game = NULL;
 
 GameLogic* GameLogic::getInstance() {
@@ -107,17 +109,18 @@ void GameLogic::executeMove(int dir) {
 		trailPieces.push_back(p);
 
 		if (piece->getLevel() == 1) {
-			topBoard[piece->getLine()][piece->getCol()] = '#';
+			topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
 		} else if (piece->getLevel() == 2) {
 			midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
 		} else {
-			botBoard[piece->getLine() - 3][piece->getCol()] = '#';
+			botBoard[piece->getLine() - 4][piece->getCol() - 1] = '#';
 		}
 
 		Scene::getInstance()->getNode("piece")->setAnimation(animations[dir]);
 		piece->setDir(dir);
 		Scene::getInstance()->getAnimation(animations[dir])->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, dir);
+		piece_moving = true;
 	}
 }
 
@@ -140,7 +143,7 @@ string GameLogic::getEncodedCharBoard() {
 			if (i == 0 && j == 6) {
 				enc_board = enc_board + "'2','X','X'";
 			} else if (i == 6 && j == 0) {
-				enc_board = enc_board + "'1','X','X'";
+				enc_board = enc_board + "'X','X','1'";
 			} else if (i < 2 || (i == 2 && j < 2) || (i == 2 && j >= 5)) {
 				enc_board = enc_board + "'" + topBoard[i][j] + "','X','X'";
 			} else if (i > 4 || (i == 4 && j < 2) || (i == 4 && j >= 5)) {
@@ -230,13 +233,13 @@ string GameLogic::getTestPredicate(int index) {
 void GameLogic::undo() {
 	switch (piece->getLevel()) {
 	case 1:
-		topBoard[piece->getLine()][piece->getCol()] = '_';
+		topBoard[piece->getLine() - 1][piece->getCol() - 1] = '_';
 		break;
 	case 2:
-		midBoard[piece->getLine()][piece->getCol()] = '_';
+		midBoard[piece->getLine() - 3][piece->getCol() - 3] = '_';
 		break;
 	case 3:
-		botBoard[piece->getLine()][piece->getCol()] = '_';
+		botBoard[piece->getLine() - 4][piece->getCol() - 1] = '_';
 		break;
 	}
 
@@ -251,18 +254,6 @@ void GameLogic::undo() {
 	piece->setLevel(trailPieces.back()->getLevel());
 	piece->setLine(trailPieces.back()->getLine());
 	piece->setCol(trailPieces.back()->getCol());
-
-	switch (piece->getLevel()) {
-	case 1:
-		topBoard[piece->getLine()][piece->getCol()] = 'O';
-		break;
-	case 2:
-		midBoard[piece->getLine()][piece->getCol()] = 'O';
-		break;
-	case 3:
-		botBoard[piece->getLine()][piece->getCol()] = 'O';
-		break;
-	}
 
 	Scene::getInstance()->getNode("trail")->removePiece(trailPieces.back());
 	trailPieces.pop_back();
