@@ -15,7 +15,7 @@ Piece::Piece() :
 		MyPrimitive() {
 	col = 5;
 	line = 3;
-	level = 0;
+	level = 2;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }

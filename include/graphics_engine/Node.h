@@ -12,7 +12,7 @@ using namespace std;
 enum nodeTypes { NONE, DISPLAY_LIST};
 
 class MyPrimitive;
-
+class Piece;
 /**
  * super class containing all the information about one node, including appearance, children, and primitives
  */
@@ -62,6 +62,7 @@ public:
 	void processPick(vector<unsigned int> names);
 	void setVisibility(bool is_visible);
 	bool isVisible();
+	void removePiece(Piece* piece);
 };
 
 #endif /* NODE_H_ */

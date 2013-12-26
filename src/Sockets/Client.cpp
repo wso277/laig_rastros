@@ -61,7 +61,6 @@ char* Client::sendRequest(string request) {
 	n = 0;
 	do {
 		read(sockFd, &reply[n++], 1);
-		cout << reply[n - 1] << endl;
 		if (n > MAX_REPLY_SIZE) {
 			throw SocketError("Message Incomplete!");
 		}
