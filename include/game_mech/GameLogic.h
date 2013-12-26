@@ -24,7 +24,7 @@ class GameLogic {
 	int current_player;
 	int player1;
 	int player2;
-	int last_point;
+	vector<int> last_point;
 	static GameLogic *game;
 
 	void startupCommunication();

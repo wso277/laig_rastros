@@ -54,7 +54,6 @@ GameLogic::GameLogic() {
 	current_player = 1;
 	player1 = 0;
 	player2 = 0;
-	last_point = 0;
 	// used piece example
 	//Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
 
@@ -146,79 +145,79 @@ void GameLogic::assignPoints(int dir) {
 	case 0:
 		if (current_player == 1) {
 			player1 += 2;
-			last_point = 2;
+			last_point.push_back(2);
 		} else {
 			player2 -= 2;
-			last_point = -2;
+			last_point.push_back(-2);
 		}
 		break;
 	case 1:
 		if (current_player == 1) {
 			player1 += 2;
-			last_point = 2;
+			last_point.push_back(2);
 		} else {
 			player2 -= 2;
-			last_point = -2;
+			last_point.push_back(-2);
 		}
 		break;
 	case 2:
 		if (current_player == 1) {
 			player1 += 1;
-			last_point = 1;
+			last_point.push_back(1);
 		} else {
 			player2 -= 1;
-			last_point = -1;
+			last_point.push_back(-1);
 		}
 		break;
 	case 3:
-		last_point = 0;
+		last_point.push_back(0);
 		break;
 	case 4:
 		if (current_player == 1) {
 			player1 += 1;
-			last_point = 1;
+			last_point.push_back(1);
 		} else {
 			player2 -= 1;
-			last_point = -1;
+			last_point.push_back(-1);
 		}
 		break;
 	case 5:
 		if (current_player == 1) {
 			player1 -= 2;
-			last_point = -2;
+			last_point.push_back(-2);
 		} else {
 			player2 += 2;
-			last_point = +2;
+			last_point.push_back(2);
 		}
 		break;
 	case 6:
 		if (current_player == 1) {
 			player1 -= 1;
-			last_point = -1;
+			last_point.push_back(-1);
 		} else {
 			player2 += 1;
-			last_point = 1;
+			last_point.push_back(1);
 		}
 		break;
 	case 7:
-		last_point = 0;
+		last_point.push_back(0);
 		break;
 	case 8:
 		if (current_player == 1) {
 			player1 -= 1;
-			last_point = -1;
+			last_point.push_back(-1);
 		} else {
 			player2 += 1;
-			last_point = 1;
+			last_point.push_back(1);
 		}
 		break;
 	case 9:
 		if (current_player == 1) {
 			player1 -= 2;
-			last_point = -2;
+			last_point.push_back(-2);
 		} else {
 			player2 += 2;
-			last_point = 2;
+			last_point.push_back(2);
 		}
 		break;
 	}
@@ -346,10 +345,12 @@ void GameLogic::undo() {
 	}
 
 	if (current_player == 1) {
-		player1 -= last_point;
+		player2 -= last_point.back();
+		last_point.pop_back();
 		current_player = 2;
 	} else if (current_player == 2) {
-		player2 -= last_point;
+		player1 -= last_point.back();
+		last_point.pop_back();
 		current_player = 1;
 	}
 
@@ -377,7 +378,7 @@ void GameLogic::resetGame() {
 	current_player = 1;
 	player1 = 0;
 	player2 = 0;
-	last_point = 0;
+	last_point.clear();
 
 	piece->setCol(5);
 	piece->setLine(3);
