@@ -11,8 +11,6 @@ extern int main_window;
 
 using namespace std;
 
-extern float view_rotate[16];
-
 bool inSelectMode = false;
 
 extern float obj_pos[3];
@@ -106,6 +104,10 @@ void Interface::initGUI() {
 
 	cams_group->set_int_val(init_camera_pos);
 
+	GLUI_Translation *trans_x = glui_window->add_translation("Animation",
+	GLUI_TRANSLATION_X, &obj_pos[0]);
+	trans_x->set_speed(.01);
+
 	glui_window->add_column(true);
 
 	// create lights panel
@@ -182,12 +184,6 @@ void Interface::initGUI() {
 	glui_window->add_button_to_panel(Buttons, "Repeat", 2, button_handler);
 
 	glui_window->add_column(true);
-	GLUI_Rotation *view_rot = glui_window->add_rotation("Rotacao", view_rotate);
-	view_rot->set_spin(1.0);
-
-	GLUI_Translation *trans_z = glui_window->add_translation("Zoom",
-	GLUI_TRANSLATION_Z, &obj_pos[2]);
-	trans_z->set_speed(.02);
 
 }
 

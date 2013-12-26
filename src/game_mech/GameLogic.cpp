@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <string>
 #include "Repeat.h"
+#include "PointsHud.h"
 
 #define SUCCESS_MESSG "Success.\n"
 #define FAILURE_MESSG "Failure.\n"
@@ -39,6 +40,10 @@ GameLogic* GameLogic::getInstance() {
 GameLogic::GameLogic() {
 	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
+
+	PointsHud *points = new PointsHud();
+	Scene::getInstance()->getNode("UI")->addPrimitive(points);
+
 	piece_selected = false;
 	current_player = 1;
 	player1 = 0;
@@ -100,11 +105,10 @@ void GameLogic::executeMove(int dir) {
 	cout << response << endl;
 	if (response.compare(SUCCESS_MESSG) == 0) {
 
-		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown",
-				"4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
+		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown", "4left", "5climb", "6right", "7leftup",
+				"8up", "9rightup" };
 
-		Piece *p = new Piece(piece->getCol(), piece->getLine(),
-				piece->getLevel(), false, true, "default");
+		Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
 		Scene::getInstance()->getNode("trail")->addPrimitive(p);
 		trailPieces.push_back(p);
 
@@ -121,6 +125,96 @@ void GameLogic::executeMove(int dir) {
 		Scene::getInstance()->getAnimation(animations[dir])->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, dir);
 		piece_moving = true;
+		assignPoints(dir);
+	}
+}
+
+void GameLogic::assignPoints(int dir) {
+	switch (dir) {
+	case 0:
+		if (current_player == 1) {
+			player1 += 2;
+			last_point = 2;
+		} else {
+			player2 -= 2;
+			last_point = -2;
+		}
+		break;
+	case 1:
+		if (current_player == 1) {
+			player1 += 2;
+			last_point = 2;
+		} else {
+			player2 -= 2;
+			last_point = -2;
+		}
+		break;
+	case 2:
+		if (current_player == 1) {
+			player1 += 1;
+			last_point = 1;
+		} else {
+			player2 -= 1;
+			last_point = -1;
+		}
+		break;
+	case 3:
+		last_point = 0;
+		break;
+	case 4:
+		if (current_player == 1) {
+			player1 += 1;
+			last_point = 1;
+		} else {
+			player2 -= 1;
+			last_point = -1;
+		}
+		break;
+	case 5:
+		if (current_player == 1) {
+			player1 -= 2;
+			last_point = -2;
+		} else {
+			player2 += 2;
+			last_point = +2;
+		}
+		break;
+	case 6:
+		if (current_player == 1) {
+			player1 -= 1;
+			last_point = -1;
+		} else {
+			player2 += 1;
+			last_point = 1;
+		}
+		break;
+	case 7:
+		last_point = 0;
+		break;
+	case 8:
+		if (current_player == 1) {
+			player1 -= 1;
+			last_point = -1;
+		} else {
+			player2 += 1;
+			last_point = 1;
+		}
+		break;
+	case 9:
+		if (current_player == 1) {
+			player1 -= 2;
+			last_point = -2;
+		} else {
+			player2 += 2;
+			last_point = 2;
+		}
+		break;
+	}
+
+	if (current_player == 1) {
+		current_player = 2;
+	} else if (current_player == 2) {
+		current_player = 1;
 	}
 }
 
@@ -149,18 +243,14 @@ string GameLogic::getEncodedCharBoard() {
 			} else if (i > 4 || (i == 4 && j < 2) || (i == 4 && j >= 5)) {
 				enc_board = enc_board + "'X','X','" + botBoard[i - 3][j] + "'";
 			} else if (i == 2 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'" + topBoard[i][j] + "','"
-						+ midBoard[i - 2][j - 2] + "','X'";
+				enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','X'";
 			} else if (i == 4 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','"
-						+ botBoard[i - 3][j] + "'";
+				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','" + botBoard[i - 3][j] + "'";
 			} else if (i == 3) {
 				if (j < 2 || j >= 5) {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','X','"
-							+ botBoard[i - 3][j] + "'";
+					enc_board = enc_board + "'" + topBoard[i][j] + "','X','" + botBoard[i - 3][j] + "'";
 				} else {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','"
-							+ midBoard[i - 2][j - 2] + "','"
+					enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','"
 							+ botBoard[i - 3][j] + "'";
 				}
 			}
@@ -264,8 +354,7 @@ void GameLogic::repeat() {
 	trailPieces.clear();
 	Scene::getInstance()->getNode("trail")->removePiece(NULL);
 	Repeat::getInstance()->pushLastMove(
-			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(),
-					false, true, "default"));
+			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default"));
 	resetGame();
 
 	Repeat::getInstance()->popFirst();
@@ -298,6 +387,14 @@ void GameLogic::resetGame() {
 			}
 		}
 	}
+}
+
+int GameLogic::getPlayer1() {
+	return player1;
+}
+
+int GameLogic::getPlayer2() {
+	return player2;
 }
 
 GameLogic::~GameLogic() {

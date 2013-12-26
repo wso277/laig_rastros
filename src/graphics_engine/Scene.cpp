@@ -42,6 +42,9 @@ Scene::Scene() {
 	amb_a = 0;
 
 	appearances.insert(AppearanceElem::value_type("default", new Appearance()));
+
+	Node *n = new Node("UI");
+	addNode("UI", n);
 }
 
 void Scene::setBackground(float bckg_r, float bckg_g, float bckg_b,
@@ -244,7 +247,7 @@ void Scene::initScene() {
 	}
 	glFrontFace(cullorder);
 
-	initCamera();
+	//initCamera();
 
 	AnimationElem::iterator it = animations.begin();
 	int i = 0;
@@ -285,6 +288,7 @@ void display() {
 
 	if (!inSelectMode)
 		Scene::getInstance()->initCamera();
+
 	glTranslatef(obj_pos[0], obj_pos[1], -obj_pos[2]);
 	glMultMatrixf(view_rotate);
 
@@ -297,6 +301,26 @@ void display() {
 	glPushMatrix();
 	Scene::getInstance()->drawScene();
 	glPopMatrix();
+
+	//HUD
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0.0, Scene::WIDTH, Scene::HEIGHT, 0.0, -1.0, 10.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_CULL_FACE);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix();
+	Scene::getInstance()->getNode("UI")->drawPrims("goal_homes");
+	glPopMatrix();
+
+	// Making sure we can render 3d again
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 
 	glutSwapBuffers();
 

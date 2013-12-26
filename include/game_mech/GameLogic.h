@@ -43,6 +43,9 @@ public:
 	void undo();
 	void repeat();
 	void resetGame();
+	int getPlayer1();
+	int getPlayer2();
+	void assignPoints(int dir);
 
 };
 
