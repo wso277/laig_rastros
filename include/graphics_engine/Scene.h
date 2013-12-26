@@ -10,6 +10,7 @@
 #include "CGFtexture.h"
 #include "Animation.h"
 #include "GL/gl.h"
+#include "SkyBox.h"
 
 using namespace std;
 
@@ -39,8 +40,8 @@ class Scene {
 private:
 	static Scene *instance;
 
-	CGFtexture* SkyboxTexture[6];
-	int skybox_start;
+	vector<SkyBox*> skyboxes;
+	unsigned int skybox_num;
 	float bckg_r, bckg_g, bckg_b, bckg_a;
 	unsigned int drawmode;
 	unsigned int shading;
@@ -116,8 +117,10 @@ public:
 	void processPickedNodes(vector<GLuint> names);
 	AnimationElem getAnimations();
 	vector<string> getAnimationsIndex();
-	void loadSkybox();
-	void drawSkybox();
+	vector<SkyBox*> getSkyboxes();
+	SkyBox* getSkybox();
+	int getSkyboxNum();
+	void setSkyboxNum(int box);
 };
 
 #endif /* SCENE_H_ */

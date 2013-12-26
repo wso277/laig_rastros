@@ -22,7 +22,7 @@ extern int main_window;
 extern bool inSelectMode;
 
 Scene::Scene() {
-	skybox_start = 0;
+	skybox_num = 0;
 	bckg_r = 0;
 	bckg_g = 0;
 	bckg_b = 0;
@@ -255,7 +255,9 @@ void Scene::initScene() {
 		i++;
 	}
 
-	loadSkybox();
+	skyboxes.push_back(new SkyBox("alpine", "../data/"));
+	skyboxes.push_back(new SkyBox("desert", "../data/"));
+	skyboxes.push_back(new SkyBox("frozendusk", "../data/"));
 }
 
 Scene::~Scene() {
@@ -293,7 +295,7 @@ void display() {
 	glPopMatrix();
 
 	glPushMatrix();
-	Scene::getInstance()->drawSkybox();
+	Scene::getInstance()->getSkybox()->draw();
 	Scene::getInstance()->drawScene();
 	glPopMatrix();
 
@@ -434,104 +436,18 @@ vector<string> Scene::getAnimationsIndex() {
 	return animation_index;
 }
 
-void Scene::loadSkybox() {
-	SkyboxTexture[0] = new CGFtexture("../data/front.jpg");
-	SkyboxTexture[1] = new CGFtexture("../data/left.jpg");
-	SkyboxTexture[2] = new CGFtexture("../data/back.jpg");
-	SkyboxTexture[3] = new CGFtexture("../data/right.jpg");
-	SkyboxTexture[4] = new CGFtexture("../data/up.jpg");
-	SkyboxTexture[5] = new CGFtexture("../data/down.jpg");
+vector<SkyBox*> Scene::getSkyboxes() {
+	return skyboxes;
 }
 
-void Scene::drawSkybox() {
-	glPushAttrib(GL_ENABLE_BIT);
-	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	glDisable(GL_BLEND);
+SkyBox* Scene::getSkybox() {
+	return skyboxes[skybox_num];
+}
 
-	glColor4f(1, 1, 1, 1);
+int Scene::getSkyboxNum() {
+	return skybox_num;
+}
 
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	SkyboxTexture[skybox_start]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 0);
-	glVertex3f(20, -20, -20);
-	glTexCoord2f(0, 0);
-	glVertex3f(-20, -20, -20);
-	glTexCoord2f(0, 1);
-	glVertex3f(-20, 20, -20);
-	glTexCoord2f(1, 1);
-	glVertex3f(20, 20, -20);
-	glEnd();
-
-	// Render the left quad
-	SkyboxTexture[skybox_start + 1]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 0);
-	glVertex3f(20, -20, 20);
-	glTexCoord2f(0, 0);
-	glVertex3f(20, -20, -20);
-	glTexCoord2f(0, 1);
-	glVertex3f(20, 20, -20);
-	glTexCoord2f(1, 1);
-	glVertex3f(20, 20, 20);
-	glEnd();
-
-	// Render the back quad
-	SkyboxTexture[skybox_start + 2]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 0);
-	glVertex3f(-20, -20, 20);
-	glTexCoord2f(0, 0);
-	glVertex3f(20, -20, 20);
-	glTexCoord2f(0, 1);
-	glVertex3f(20, 20, 20);
-	glTexCoord2f(1, 1);
-	glVertex3f(-20, 20, 20);
-
-	glEnd();
-
-	// Render the right quad
-	SkyboxTexture[skybox_start + 3]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 0);
-	glVertex3f(-20, -20, -20);
-	glTexCoord2f(0, 0);
-	glVertex3f(-20, -20, 20);
-	glTexCoord2f(0, 1);
-	glVertex3f(-20, 20, 20);
-	glTexCoord2f(1, 1);
-	glVertex3f(-20, 20, -20);
-	glEnd();
-
-	// Render the top quad
-	SkyboxTexture[skybox_start + 4]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 1);
-	glVertex3f(-20, 20, -20);
-	glTexCoord2f(0, 1);
-	glVertex3f(-20, 20, 20);
-	glTexCoord2f(0, 0);
-	glVertex3f(20, 20, 20);
-	glTexCoord2f(1, 0);
-	glVertex3f(20, 20, -20);
-	glEnd();
-
-	// Render the bottom quad
-	SkyboxTexture[skybox_start + 5]->apply();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1, 1);
-	glVertex3f(-20, -20, -20);
-	glTexCoord2f(0, 1);
-	glVertex3f(-20, -20, 20);
-	glTexCoord2f(0, 0);
-	glVertex3f(20, -20, 20);
-	glTexCoord2f(1, 0);
-	glVertex3f(20, -20, -20);
-	glEnd();
-
-	glPopAttrib();
+void Scene::setSkyboxNum(int box) {
+	skybox_num = box;
 }

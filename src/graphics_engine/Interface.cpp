@@ -17,6 +17,8 @@ extern float obj_pos[3];
 
 GLUI_Panel *Buttons;
 
+int skybox_selected = 0;
+
 int Interface::modifiers = 0;
 map<string, int*> Interface::cams_rb;
 map<string, int*> Interface::lights_cb;
@@ -190,6 +192,18 @@ void Interface::initGUI() {
 
 	glui_window->add_column(true);
 
+	GLUI_Panel *Skybox = glui_window->add_panel("Skybox");
+	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox", &skybox_selected, 1, skybox_handler);
+	for (int i = 0; i < Scene::getInstance()->getSkyboxes().size(); i++) {
+		sky_list->add_item(i, Scene::getInstance()->getSkyboxes()[i]->getId().c_str());
+	}
+
+	glui_window->add_column(true);
+
+}
+
+void skybox_handler(int id) {
+	Scene::getInstance()->setSkyboxNum(skybox_selected);
 }
 
 void button_handler(int id) {

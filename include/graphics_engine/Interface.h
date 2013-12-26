@@ -10,6 +10,7 @@
 using namespace std;
 
 void button_handler(int id);
+void skybox_handler(int id);
 
 //Based on CGFinterface. Simpler version
 class Interface {
