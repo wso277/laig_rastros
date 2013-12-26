@@ -317,7 +317,6 @@ void display() {
 	Scene::getInstance()->getNode("UI")->drawPrims("goal_homes");
 	glPopMatrix();
 
-	// Making sure we can render 3d again
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);

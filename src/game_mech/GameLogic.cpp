@@ -365,7 +365,6 @@ void GameLogic::undo() {
 void GameLogic::repeat() {
 	Repeat::getInstance()->setTrail(trailPieces);
 	trailPieces.clear();
-	Scene::getInstance()->getNode("trail")->removePiece(NULL);
 	Repeat::getInstance()->pushLastMove(
 			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default"));
 	resetGame();
@@ -383,6 +382,8 @@ void GameLogic::resetGame() {
 	piece->setCol(5);
 	piece->setLine(3);
 	piece->setLevel(2);
+
+	Scene::getInstance()->getNode("trail")->removePiece(NULL);
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 7; j++) {

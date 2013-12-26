@@ -185,6 +185,11 @@ void Interface::initGUI() {
 
 	glui_window->add_column(true);
 
+	GLUI_Panel *Menu = glui_window->add_panel("Menu");
+	glui_window->add_button_to_panel(Menu, "New Game", 3, button_handler);
+
+	glui_window->add_column(true);
+
 }
 
 void button_handler(int id) {
@@ -195,6 +200,10 @@ void button_handler(int id) {
 	case 2:
 		Buttons->disable();
 		GameLogic::getInstance()->repeat();
+		break;
+	case 3:
+		Scene::getInstance()->setInitCamera("player1");
+		GameLogic::getInstance()->resetGame();
 		break;
 	}
 }
