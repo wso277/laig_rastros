@@ -19,6 +19,7 @@
 #include <string>
 #include "Repeat.h"
 #include "PointsHud.h"
+#include "TimeHud.h"
 
 #define SUCCESS_MESSG "Success.\n"
 #define VICTORY1_MESSG "Victory1.\n"
@@ -45,6 +46,9 @@ GameLogic::GameLogic() {
 
 	PointsHud *points = new PointsHud();
 	Scene::getInstance()->getNode("UI")->addPrimitive(points);
+
+	TimeHud *time = new TimeHud();
+	Scene::getInstance()->getNode("UI")->addPrimitive(time);
 
 	piece_selected = false;
 	current_player = 1;
