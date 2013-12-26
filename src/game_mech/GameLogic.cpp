@@ -429,5 +429,5 @@ void GameLogic::startupCommunication() {
 		execl("../rastros", NULL)
 		;
 	}*/
-	cout << Client::getInstance()->sendRequest("test.\n") << endl;
+	//cout << Client::getInstance()->sendRequest("test.\n") << endl;
 }
