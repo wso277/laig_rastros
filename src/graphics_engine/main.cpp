@@ -11,11 +11,16 @@
 #include "Interface.h"
 #include "InvalidNumLights.h"
 #include "GameLogic.h"
+#include "Client.h"
 
 using std::cout;
 using std::exception;
 
 int main_window;
+
+void exit_handler() {
+	delete Client::getInstance();
+}
 
 int main(int argc, char* argv[]) {
 
@@ -65,6 +70,7 @@ int main(int argc, char* argv[]) {
 	interface.init(main_window);
 	interface.initGUI();
 
+	atexit(exit_handler);
 	glutMainLoop();
 
 	return 0;
