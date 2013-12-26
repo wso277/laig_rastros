@@ -1,3 +1,9 @@
+/* compilation
+
+swipl --goal=<START-FUNC> --stand_alone=true -o rastros -c rastros.pl
+
+*/
+
 
 /*******************************************************
  * Libraries
@@ -177,18 +183,18 @@ iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
  11 - descend
  12 - exit
  *******************************************************/
-testMove(8, Board) :- testMoveUp(Board), writeResponseToStream("Success.").
-testMove(2, Board) :- testMoveDown(Board), writeResponseToStream("Success.").
-testMove(4, Board) :- testMoveLeft(Board), writeResponseToStream("Success.").
-testMove(6, Board) :- testMoveRight(Board), writeResponseToStream("Success.").
-testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream("Success.").
-testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToStream("Success.").
-testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream("Success.").
-testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToStream("Success.").
-testMove(10, Board) :- testRotateCenter(Board), writeResponseToStream("Success.").
-testMove(5, Board) :- testClimb(Board), writeResponseToStream("Success.").
-testMove(0, Board) :- testDescend(Board), writeResponseToStream("Success.").
-testMove(_, _) :- writeResponseToStream("Failure.").
+testMove(8, Board) :- testMoveUp(Board), writeResponseToStream('Success.').
+testMove(2, Board) :- testMoveDown(Board), writeResponseToStream('Success.').
+testMove(4, Board) :- testMoveLeft(Board), writeResponseToStream('Success.').
+testMove(6, Board) :- testMoveRight(Board), writeResponseToStream('Success.').
+testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream('Success.').
+testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToStream('Success.').
+testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream('Success.').
+testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToStream('Success.').
+testMove(10, Board) :- testRotateCenter(Board), writeResponseToStream('Success.').
+testMove(5, Board) :- testClimb(Board), writeResponseToStream('Success.').
+testMove(0, Board) :- testDescend(Board), writeResponseToStream('Success.').
+testMove(_, _) :- writeResponseToStream('Failure.').
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
 					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X).
@@ -436,6 +442,8 @@ port(30075).
 
 openSocket :- port(SocketPort), tcp_socket(InitSocket), tcp_bind(InitSocket, SocketPort),
 			retractall(socketStream(_)),
+			retractall(socketInputStream(_)),
+			retractall(socketOutputStream(_)),
 			asserta(socketStream(SocketPort)),
 			connectToClient(InitSocket).
 
@@ -448,19 +456,24 @@ connectToClient(InitSocket) :- write('Waiting for connection\n'),
 						asserta(socketInputStream(IStream)),
 						asserta(socketOutputStream(OStream)).
 
-receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), receiveInputFromStream(IStream, Messg), read(IStream, Messg).
+receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), read(IStream, Messg), write(Messg).
 
-writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, Messg, []).
+writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, '~q~n', [Messg]), flush_output(OStream).
 
 closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream), socketStream(Stream), close(Stream, [force(true)]).
 closeSocket :- write('None socket opened yet\n').
+
+test:- fail.
 
 run :- 
 	openSocket,
 	loop.
 
 loop :- 
+	repeat,
 	receiveInputFromSocketStream(Messg),
+	write(Messg),
+	Messg \= end_of_file,
 	Messg,
-	loop.
-loop :- writeResponseToSocketStream("Failure."), loop.
+	!.
+loop :- write(kkdkdkdkk), writeResponseToSocketStream('Failure.').

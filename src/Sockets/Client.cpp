@@ -7,6 +7,7 @@
 
 #include "Client.h"
 #include "SocketError.h"
+#include <iostream>
 
 using namespace std;
 
@@ -48,11 +49,11 @@ Client* Client::getInstance() {
 
 char* Client::sendRequest(string request) {
 	int n = 0;
-	n = write(sockFd, request.c_str(), request.size());
-	if (n != request.size()) {
+	n = write(sockFd, request.c_str(), request.size() - 1);
+	if (n != request.size() - 1) {
 		throw SocketError("Error writing to socket!");
 	}
-
+cout << "Waiting for reply" << endl;
 	char *reply;
 	reply = (char *) malloc(MAX_REPLY_SIZE);
 	memset(reply, '0', MAX_REPLY_SIZE);
@@ -60,6 +61,7 @@ char* Client::sendRequest(string request) {
 	n = 0;
 	do {
 		read(sockFd, &reply[n++], 1);
+		cout << reply[n - 1] << endl;
 		if (n > MAX_REPLY_SIZE) {
 			throw SocketError("Message Incomplete!");
 		}

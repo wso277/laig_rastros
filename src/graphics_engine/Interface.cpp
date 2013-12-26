@@ -232,7 +232,6 @@ void Interface::performPicking(int x, int y) {
 
 	GLint hits;
 	hits = glRenderMode(GL_RENDER);
-	cout << "hits: " << hits << endl;
 	processHits(hits, selectBuf);
 }
 
@@ -243,7 +242,6 @@ void Interface::processHits(GLint hits, GLuint buffer[]) {
 	GLuint nselected;
 
 	vector<GLuint> selected_names;
-
 
 	// iterate over the list of hits, and choosing the one closer to the viewer (lower depth)
 	for (int i = 0; i < hits; i++) {
@@ -265,8 +263,6 @@ void Interface::processHits(GLint hits, GLuint buffer[]) {
 			selected_names.push_back(selected[i]);
 		}
 		Scene::getInstance()->processPickedNodes(selected_names);
-	} else {
-		printf("Nothing selected while picking \n");
 	}
 
 }

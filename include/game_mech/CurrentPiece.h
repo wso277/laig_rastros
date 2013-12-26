@@ -10,7 +10,7 @@
 
 #include "Piece.h"
 
-#define ANIMATION_SPAN 3
+#define ANIMATION_SPAN 1
 
 class CurrentPiece: public Piece {
 private:

@@ -21,8 +21,10 @@ class GameLogic {
 	char midBoard[3][3];
 	char botBoard[4][7];
 	bool piece_selected;
-public:
 	static GameLogic *game;
+
+	void startupCommunication();
+public:
 	static GameLogic* getInstance();
 	GameLogic();
 	virtual ~GameLogic();

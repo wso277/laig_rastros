@@ -13,6 +13,9 @@
 #include "Scene.h"
 #include "Piece.h"
 #include "Node.h"
+#include <list>
+#include <sys/types.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -56,7 +59,7 @@ GameLogic::GameLogic() {
 			}
 		}
 	}
-
+	startupCommunication();
 }
 
 Board* GameLogic::getBoard() {
@@ -65,11 +68,6 @@ Board* GameLogic::getBoard() {
 
 CurrentPiece* GameLogic::getPiece() {
 	return piece;
-}
-
-void GameLogic::initGame() {
-	//system("../rastros");
-
 }
 
 bool GameLogic::getPieceSelected() {
@@ -313,7 +311,7 @@ void GameLogic::undo() {
 }
 
 void GameLogic::repeat() {
-	list<Piece*> trail = new list<Piece*>(trailPieces);
+	list<Piece*> trail(trailPieces);
 	trailPieces.clear();
 	repeatAux(trail);
 }
@@ -325,3 +323,18 @@ void GameLogic::repeatAux(list<Piece*> trail) {
 GameLogic::~GameLogic() {
 }
 
+void GameLogic::startupCommunication() {
+	/*pid_t pid = fork();
+	switch(pid) {
+	case -1:
+		cout << "Error starting Prolog's component." << endl;
+		exit(-1);
+	case 0:
+		sleep(1);
+		break;
+	default:
+		execl("../rastros", NULL)
+		;
+	}*/
+	cout << Client::getInstance()->sendRequest("test.\n") << endl;
+}
