@@ -39,6 +39,8 @@ class Scene {
 private:
 	static Scene *instance;
 
+	CGFtexture* SkyboxTexture[6];
+	int skybox_start;
 	float bckg_r, bckg_g, bckg_b, bckg_a;
 	unsigned int drawmode;
 	unsigned int shading;
@@ -114,6 +116,8 @@ public:
 	void processPickedNodes(vector<GLuint> names);
 	AnimationElem getAnimations();
 	vector<string> getAnimationsIndex();
+	void loadSkybox();
+	void drawSkybox();
 };
 
 #endif /* SCENE_H_ */

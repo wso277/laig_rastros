@@ -21,8 +21,8 @@ unsigned int Scene::WIDTH = 1024;
 extern int main_window;
 extern bool inSelectMode;
 
-
 Scene::Scene() {
+	skybox_start = 0;
 	bckg_r = 0;
 	bckg_g = 0;
 	bckg_b = 0;
@@ -45,8 +45,7 @@ Scene::Scene() {
 	addNode("UI", n);
 }
 
-void Scene::setBackground(float bckg_r, float bckg_g, float bckg_b,
-		float bckg_a) {
+void Scene::setBackground(float bckg_r, float bckg_g, float bckg_b, float bckg_a) {
 	this->bckg_r = bckg_r;
 	this->bckg_g = bckg_g;
 	this->bckg_b = bckg_b;
@@ -256,6 +255,7 @@ void Scene::initScene() {
 		i++;
 	}
 
+	loadSkybox();
 }
 
 Scene::~Scene() {
@@ -288,12 +288,12 @@ void display() {
 		Scene::getInstance()->initCamera();
 
 	glPushMatrix();
-	glMultMatrixf(
-	Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
+	glMultMatrixf(Scene::getInstance()->getNode(Scene::getInstance()->getRootId())->getTransform());
 	Scene::getInstance()->applyLights();
 	glPopMatrix();
 
 	glPushMatrix();
+	Scene::getInstance()->drawSkybox();
 	Scene::getInstance()->drawScene();
 	glPopMatrix();
 
@@ -416,16 +416,15 @@ void Scene::processPickedNodes(vector<GLuint> names) {
 	//PickElem::iterator it;
 	//vector<GLuint>::iterator picks_it;
 	/*for (picks_it = names.begin(); picks_it != names.end(); picks_it++) {
-		cout << "Name:" << *picks_it << endl;
-		if ((it = pickingObjs.find(*picks_it)) != pickingObjs.end()) {
-			cout << "Name:" << *picks_it << endl;
-			it->second->processPick();
-			printf("Found\n");
-		}
-	}*/
+	 cout << "Name:" << *picks_it << endl;
+	 if ((it = pickingObjs.find(*picks_it)) != pickingObjs.end()) {
+	 cout << "Name:" << *picks_it << endl;
+	 it->second->processPick();
+	 printf("Found\n");
+	 }
+	 }*/
 	getNode(rootId)->processPick(names);
 }
-
 
 AnimationElem Scene::getAnimations() {
 	return animations;
@@ -433,4 +432,106 @@ AnimationElem Scene::getAnimations() {
 
 vector<string> Scene::getAnimationsIndex() {
 	return animation_index;
+}
+
+void Scene::loadSkybox() {
+	SkyboxTexture[0] = new CGFtexture("../data/front.jpg");
+	SkyboxTexture[1] = new CGFtexture("../data/left.jpg");
+	SkyboxTexture[2] = new CGFtexture("../data/back.jpg");
+	SkyboxTexture[3] = new CGFtexture("../data/right.jpg");
+	SkyboxTexture[4] = new CGFtexture("../data/up.jpg");
+	SkyboxTexture[5] = new CGFtexture("../data/down.jpg");
+}
+
+void Scene::drawSkybox() {
+	glPushAttrib(GL_ENABLE_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_BLEND);
+
+	glColor4f(1, 1, 1, 1);
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	SkyboxTexture[skybox_start]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 0);
+	glVertex3f(20, -20, -20);
+	glTexCoord2f(0, 0);
+	glVertex3f(-20, -20, -20);
+	glTexCoord2f(0, 1);
+	glVertex3f(-20, 20, -20);
+	glTexCoord2f(1, 1);
+	glVertex3f(20, 20, -20);
+	glEnd();
+
+	// Render the left quad
+	SkyboxTexture[skybox_start + 1]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 0);
+	glVertex3f(20, -20, 20);
+	glTexCoord2f(0, 0);
+	glVertex3f(20, -20, -20);
+	glTexCoord2f(0, 1);
+	glVertex3f(20, 20, -20);
+	glTexCoord2f(1, 1);
+	glVertex3f(20, 20, 20);
+	glEnd();
+
+	// Render the back quad
+	SkyboxTexture[skybox_start + 2]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 0);
+	glVertex3f(-20, -20, 20);
+	glTexCoord2f(0, 0);
+	glVertex3f(20, -20, 20);
+	glTexCoord2f(0, 1);
+	glVertex3f(20, 20, 20);
+	glTexCoord2f(1, 1);
+	glVertex3f(-20, 20, 20);
+
+	glEnd();
+
+	// Render the right quad
+	SkyboxTexture[skybox_start + 3]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 0);
+	glVertex3f(-20, -20, -20);
+	glTexCoord2f(0, 0);
+	glVertex3f(-20, -20, 20);
+	glTexCoord2f(0, 1);
+	glVertex3f(-20, 20, 20);
+	glTexCoord2f(1, 1);
+	glVertex3f(-20, 20, -20);
+	glEnd();
+
+	// Render the top quad
+	SkyboxTexture[skybox_start + 4]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 1);
+	glVertex3f(-20, 20, -20);
+	glTexCoord2f(0, 1);
+	glVertex3f(-20, 20, 20);
+	glTexCoord2f(0, 0);
+	glVertex3f(20, 20, 20);
+	glTexCoord2f(1, 0);
+	glVertex3f(20, 20, -20);
+	glEnd();
+
+	// Render the bottom quad
+	SkyboxTexture[skybox_start + 5]->apply();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1, 1);
+	glVertex3f(-20, -20, -20);
+	glTexCoord2f(0, 1);
+	glVertex3f(-20, -20, 20);
+	glTexCoord2f(0, 0);
+	glVertex3f(20, -20, 20);
+	glTexCoord2f(1, 0);
+	glVertex3f(20, -20, -20);
+	glEnd();
+
+	glPopAttrib();
 }
