@@ -38,6 +38,10 @@ GameLogic::GameLogic() {
 	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
 	piece_selected = false;
+	current_player = 1;
+	player1 = 0;
+	player2 = 0;
+	last_point = 0;
 	// used piece example
 	//Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
 
@@ -236,6 +240,14 @@ void GameLogic::undo() {
 		break;
 	}
 
+	if (current_player == 1) {
+		player1 -= last_point;
+		current_player = 2;
+	} else if (current_player == 2) {
+		player2 -= last_point;
+		current_player = 1;
+	}
+
 	piece->setLevel(trailPieces.back()->getLevel());
 	piece->setLine(trailPieces.back()->getLine());
 	piece->setCol(trailPieces.back()->getCol());
@@ -270,6 +282,11 @@ void GameLogic::repeat() {
 }
 
 void GameLogic::resetGame() {
+	current_player = 1;
+	player1 = 0;
+	player2 = 0;
+	last_point = 0;
+
 	piece->setCol(5);
 	piece->setLine(3);
 	piece->setLevel(2);
