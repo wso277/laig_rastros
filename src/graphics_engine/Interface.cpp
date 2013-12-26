@@ -3,6 +3,7 @@
 #include <limits>
 #include <iostream>
 #include <unistd.h>
+#include "GameLogic.h"
 
 #define DEFAULT_GRAPH_DEPTH 100
 
@@ -15,6 +16,8 @@ extern float view_rotate[16];
 bool inSelectMode = false;
 
 extern float obj_pos[3];
+
+GLUI_Panel *Buttons;
 
 int Interface::modifiers = 0;
 map<string, int*> Interface::cams_rb;
@@ -173,6 +176,12 @@ void Interface::initGUI() {
 	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 5");
 
 	glui_window->add_column(true);
+
+	Buttons = glui_window->add_panel("Game Flow Controls");
+	glui_window->add_button_to_panel(Buttons, "Undo", 1, button_handler);
+	glui_window->add_button_to_panel(Buttons, "Repeat", 2, button_handler);
+
+	glui_window->add_column(true);
 	GLUI_Rotation *view_rot = glui_window->add_rotation("Rotacao", view_rotate);
 	view_rot->set_spin(1.0);
 
@@ -180,6 +189,18 @@ void Interface::initGUI() {
 	GLUI_TRANSLATION_Z, &obj_pos[2]);
 	trans_z->set_speed(.02);
 
+}
+
+void button_handler(int id) {
+	switch (id) {
+	case 1:
+		GameLogic::getInstance()->undo();
+		break;
+	case 2:
+		Buttons->disable();
+		GameLogic::getInstance()->repeat();
+		break;
+	}
 }
 
 void Interface::processKeyboard(unsigned char key, int x, int y) {

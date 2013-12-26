@@ -287,7 +287,7 @@ void Node::processPick(vector<unsigned int> names) {
 			GameLogic::getInstance()->executeMove(5);
 		} else if (pLevel < level && ldiff == 0 && cdiff == 0) {
 			GameLogic::getInstance()->executeMove(0);
-		} else if (pLevel == level){
+		} else if (pLevel == level) {
 			if (ldiff == -1) {
 				if (cdiff == -1) {
 					GameLogic::getInstance()->executeMove(3);
@@ -315,6 +315,23 @@ void Node::processPick(vector<unsigned int> names) {
 
 		GameLogic::getInstance()->setPieceSelected(false);
 	}
+}
+
+void Node::removePiece(Piece* piece) {
+	if (piece == NULL) {
+		prims.clear();
+	} else {
+		for (int i = 0; i < prims.size(); i++) {
+			if (((Piece*) (prims[i]))->getLevel() == piece->getLevel()
+					&& ((Piece*) (prims[i]))->getCol() == piece->getCol()
+					&& ((Piece*) (prims[i]))->getLine() == piece->getLine()) {
+
+				prims.erase(prims.begin() + i);
+				break;
+			}
+		}
+	}
+
 }
 
 void Node::setVisibility(bool is_visible) {

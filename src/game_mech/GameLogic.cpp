@@ -16,6 +16,7 @@
 #include <list>
 #include <sys/types.h>
 #include <unistd.h>
+#include "Repeat.h"
 
 using namespace std;
 
@@ -312,82 +313,19 @@ void GameLogic::undo() {
 		break;
 	}
 
-	deletePieceFromScene(trailPieces.back());
+	Scene::getInstance()->getNode("trail")->removePiece(trailPieces.back());
 	trailPieces.pop_back();
 }
 
 void GameLogic::repeat() {
-	list<Piece*> trail(trailPieces);
+	Repeat::getInstance()->setTrail(trailPieces);
 	trailPieces.clear();
-	deletePieceFromScene(NULL);
+	Scene::getInstance()->getNode("trail")->removePiece(NULL);
+	Repeat::getInstance()->pushLastMove(
+			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default"));
 	resetGame();
-	trail.pop_front();
-	repeatAux(trail);
-}
-
-void GameLogic::repeatAux(list<Piece*> trail) {
-
-	int col = trail.front()->getCol();
-	int line = trail.front()->getLine();
-	int level = trail.front()->getLevel();
-
-	int ldiff = piece->getLine() - line;
-	int cdiff = piece->getCol() - col;
-
-	if (piece->getLevel() > level && ldiff == 0 && cdiff == 0) {
-		executeMove(5);
-	} else if (piece->getLevel() < level && ldiff == 0 && cdiff == 0) {
-		executeMove(0);
-	} else if (piece->getLevel() == level) {
-		if (ldiff == -1) {
-			if (cdiff == -1) {
-				executeMove(3);
-			} else if (cdiff == 1) {
-				executeMove(1);
-			} else if (cdiff == 0) {
-				executeMove(2);
-			}
-		} else if (ldiff == 1) {
-			if (cdiff == -1) {
-				executeMove(9);
-			} else if (cdiff == 1) {
-				executeMove(7);
-			} else if (cdiff == 0) {
-				executeMove(8);
-			}
-		} else if (ldiff == 0) {
-			if (cdiff == -1) {
-				executeMove(6);
-			} else if (cdiff == 1) {
-				executeMove(4);
-			}
-		}
-	}
-
-	trail.pop_front();
-	if (!trail.empty()) {
-		repeatAux(trail);
-	}
-}
-
-void GameLogic::deletePieceFromScene(Piece* piece) {
-
-	if (piece == NULL) {
-		Scene::getInstance()->getNode("trail")->getPrims().clear();
-	} else {
-		for (int i = 0; i < Scene::getInstance()->getNode("trail")->getPrims().size(); i++) {
-			if (((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLevel() == piece->getLevel()
-					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getCol() == piece->getCol()
-					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLine()
-							== piece->getLine()) {
-
-				Scene::getInstance()->getNode("trail")->getPrims().erase(
-						Scene::getInstance()->getNode("trail")->getPrims().begin() + i);
-				break;
-			}
-		}
-	}
-
+	Repeat::getInstance()->popFirst();
+	Repeat::getInstance()->start();
 }
 
 void GameLogic::resetGame() {
@@ -418,16 +356,16 @@ GameLogic::~GameLogic() {
 
 void GameLogic::startupCommunication() {
 	/*pid_t pid = fork();
-	switch(pid) {
-	case -1:
-		cout << "Error starting Prolog's component." << endl;
-		exit(-1);
-	case 0:
-		sleep(1);
-		break;
-	default:
-		execl("../rastros", NULL)
-		;
-	}*/
+	 switch(pid) {
+	 case -1:
+	 cout << "Error starting Prolog's component." << endl;
+	 exit(-1);
+	 case 0:
+	 sleep(1);
+	 break;
+	 default:
+	 execl("../rastros", NULL)
+	 ;
+	 }*/
 	//cout << Client::getInstance()->sendRequest("test.\n") << endl;
 }
