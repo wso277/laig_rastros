@@ -49,11 +49,11 @@ Client* Client::getInstance() {
 
 char* Client::sendRequest(string request) {
 	int n = 0;
-	n = write(sockFd, request.c_str(), request.size() - 1);
-	if (n != request.size() - 1) {
+	n = write(sockFd, request.c_str(), request.size());
+	if (n != request.size()) {
 		throw SocketError("Error writing to socket!");
 	}
-cout << "Waiting for reply" << endl;
+
 	char *reply;
 	reply = (char *) malloc(MAX_REPLY_SIZE);
 	memset(reply, '0', MAX_REPLY_SIZE);
@@ -65,7 +65,8 @@ cout << "Waiting for reply" << endl;
 		if (n > MAX_REPLY_SIZE) {
 			throw SocketError("Message Incomplete!");
 		}
-	} while (reply[n - 1] != '.');
+	} while (reply[n - 1] != '\n');
+	reply[n] = '\0';
 
 	return reply;
 }

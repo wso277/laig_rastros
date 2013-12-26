@@ -16,6 +16,7 @@
 #include <list>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string>
 
 using namespace std;
 
@@ -84,82 +85,32 @@ void GameLogic::setPieceSelected(bool selected) {
 }
 
 void GameLogic::executeMove(int dir) {
+	cout << getTestPredicate(dir) << endl;
+	/*string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
 
-	Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
-	Scene::getInstance()->getNode("trail")->addPrimitive(p);
-	trailPieces.push_back(p);
+	 if (response.compare("Success.") == 0) {
 
-	if (piece->getLevel() == 1) {
-		topBoard[piece->getLine()][piece->getCol()] = '#';
-	} else if (piece->getLevel() == 2) {
-		midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
-	} else {
-		botBoard[piece->getLine() - 3][piece->getCol()] = '#';
-	}
+	 string animations[] = { "0descend", "1leftdown", "2down", "3rightdown",
+	 "4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
 
-	switch (dir) {
-	case 0:
-		Scene::getInstance()->getNode("piece")->setAnimation("0descend");
-		piece->setDir(0);
-		Scene::getInstance()->getAnimation("0descend")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 0);
-		break;
-	case 1:
-		Scene::getInstance()->getNode("piece")->setAnimation("1leftdown");
-		piece->setDir(1);
-		Scene::getInstance()->getAnimation("1leftdown")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 1);
-		break;
-	case 2:
-		Scene::getInstance()->getNode("piece")->setAnimation("2down");
-		piece->setDir(2);
-		Scene::getInstance()->getAnimation("2down")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 2);
-		break;
-	case 3:
-		Scene::getInstance()->getNode("piece")->setAnimation("3rightdown");
-		piece->setDir(3);
-		Scene::getInstance()->getAnimation("3rightdown")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 3);
-		break;
-	case 4:
-		Scene::getInstance()->getNode("piece")->setAnimation("4left");
-		piece->setDir(4);
-		Scene::getInstance()->getAnimation("4left")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 4);
-		break;
-	case 5:
-		Scene::getInstance()->getNode("piece")->setAnimation("5climb");
-		piece->setDir(5);
-		Scene::getInstance()->getAnimation("5climb")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 5);
-		break;
-	case 6:
-		Scene::getInstance()->getNode("piece")->setAnimation("6right");
-		piece->setDir(6);
-		Scene::getInstance()->getAnimation("6right")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 6);
-		break;
-	case 7:
-		Scene::getInstance()->getNode("piece")->setAnimation("7leftup");
-		piece->setDir(7);
-		Scene::getInstance()->getAnimation("7leftup")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 7);
-		break;
-	case 8:
-		Scene::getInstance()->getNode("piece")->setAnimation("8up");
-		piece->setDir(8);
-		Scene::getInstance()->getAnimation("8up")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 8);
-		break;
-	case 9:
-		Scene::getInstance()->getNode("piece")->setAnimation("9rightup");
-		piece->setDir(9);
-		Scene::getInstance()->getAnimation("9rightup")->resetTime();
-		glutTimerFunc(ANIMATION_TIME, updateValues, 9);
-		break;
-	}
+	 Piece *p = new Piece(piece->getCol(), piece->getLine(),
+	 piece->getLevel(), false, true, "default");
+	 Scene::getInstance()->getNode("trail")->addPrimitive(p);
+	 trailPieces.push_back(p);
 
+	 if (piece->getLevel() == 1) {
+	 topBoard[piece->getLine()][piece->getCol()] = '#';
+	 } else if (piece->getLevel() == 2) {
+	 midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
+	 } else {
+	 botBoard[piece->getLine() - 3][piece->getCol()] = '#';
+	 }
+
+	 Scene::getInstance()->getNode("piece")->setAnimation(animations[dir]);
+	 piece->setDir(dir);
+	 Scene::getInstance()->getAnimation(animations[dir])->resetTime();
+	 glutTimerFunc(ANIMATION_TIME, updateValues, 0);
+	 }*/
 }
 
 string GameLogic::getEncodedCharBoard() {
@@ -172,72 +123,44 @@ string GameLogic::getEncodedCharBoard() {
 		botBoard[piece->getLine() - 3][piece->getCol()] = 'O';
 	}
 
-	string enc_board = "[[";
-	int i = 0;
-	for (i; i < 2; i++) {
-		for (int j = 0; j < 7; j++) {
-			enc_board = enc_board + "cell(" + topBoard[i][j] + ",X,X)";
+	string enc_board = "[";
+
+	for (unsigned int i = 0; i < 7; i++) {
+		enc_board += "[";
+		for (unsigned int j = 0; j < 7; j++) {
+			enc_board += "cell(";
+			if (i < 2 || (i == 2 && j < 2) || (i == 2 && j > 5)) {
+				enc_board = enc_board + "'" + topBoard[i][j] + "','X','X'";
+			} else if (i == 2 && j >= 2 && j > 5) {
+				enc_board = enc_board + "'" + topBoard[i][j] + "','"
+						+ midBoard[i - 2][j - 2] + "','X'";
+			} else if (i == 4 && j >= 2 && j > 5) {
+				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','"
+						+ botBoard[i - 5][j] + "'";
+			} else if (i == 4 && j >= 2 && j < 5) {
+				enc_board = enc_board + "'X','X','" + botBoard[i - 5][j] + "'";
+			} else if (i == 3) {
+				if (j < 2 || j >= 5) {
+					enc_board = enc_board + "'" + topBoard[i][j] + "','X','"
+							+ botBoard[i - 5][j] + "'";
+				} else {
+					enc_board = enc_board + "'" + topBoard[i][j] + "','"
+							+ midBoard[i - 2][j - 2] + "','"
+							+ botBoard[i - 5][j] + "'";
+				}
+			}
+			enc_board += ")";
 			if (j != 6) {
-				enc_board = enc_board + ",";
+				enc_board += ",";
 			}
 		}
-		enc_board = enc_board + "],[";
+		if (i != 6) {
+			enc_board += ",";
+		}
+		enc_board += "]";
 	}
 
-	for (int j = 0; j < 7; j++) {
-		if (j > 1 && j < 5) {
-			enc_board = enc_board + "cell(" + topBoard[i][j] + "," + midBoard[i - 2][j - 2] + ",X)";
-		} else {
-			enc_board = enc_board + "cell(" + topBoard[i][j] + ",X,X)";
-		}
-		if (j != 6) {
-			enc_board = enc_board + ",";
-		}
-	}
-	enc_board = enc_board + "],[";
-
-	i++;
-	for (int j = 0; j < 7; j++) {
-		if (j > 1 && j < 5) {
-			enc_board = enc_board + "cell(" + topBoard[i][j] + "," + midBoard[i - 2][j - 2] + "," + botBoard[i - 3][j]
-					+ ")";
-		} else {
-			enc_board = enc_board + "cell(" + topBoard[i][j] + ",X," + botBoard[i - 3][j] + ")";
-		}
-		if (j != 6) {
-			enc_board = enc_board + ",";
-		}
-	}
-	enc_board = enc_board + "],[";
-
-	i++;
-	for (int j = 0; j < 7; j++) {
-		if (j > 1 && j < 5) {
-			enc_board = enc_board + "cell(X," + midBoard[i - 2][j - 2] + "," + botBoard[i - 3][j] + ")";
-		} else {
-			enc_board = enc_board + "cell(X,X," + botBoard[i - 3][j] + ")";
-		}
-		if (j != 6) {
-			enc_board = enc_board + ",";
-		}
-	}
-	enc_board = enc_board + "],[";
-
-	i = 2;
-	for (i; i < 4; i++) {
-		for (int j = 0; j < 7; j++) {
-			enc_board = enc_board + "cell(X,X," + botBoard[i][j] + ")";
-			if (j != 6) {
-				enc_board = enc_board + ",";
-			}
-		}
-		if (i != 3) {
-			enc_board = enc_board + "],[";
-		} else {
-			enc_board = enc_board + "]]";
-		}
-	}
-
+	enc_board += "]";
 	return enc_board;
 }
 
@@ -279,7 +202,7 @@ string GameLogic::getTestPredicate(int index) {
 		break;
 	}
 
-	predicate = predicate + "," + getEncodedCharBoard() + ").";
+	predicate = predicate + "," + getEncodedCharBoard() + ").\n";
 	return predicate;
 }
 
@@ -375,14 +298,19 @@ void GameLogic::deletePieceFromScene(Piece* piece) {
 	if (piece == NULL) {
 		Scene::getInstance()->getNode("trail")->getPrims().clear();
 	} else {
-		for (int i = 0; i < Scene::getInstance()->getNode("trail")->getPrims().size(); i++) {
-			if (((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLevel() == piece->getLevel()
-					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getCol() == piece->getCol()
+		for (int i = 0;
+				i < Scene::getInstance()->getNode("trail")->getPrims().size();
+				i++) {
+			if (((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLevel()
+					== piece->getLevel()
+					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getCol()
+							== piece->getCol()
 					&& ((Piece*) (Scene::getInstance()->getNode("trail")->getPrims()[i]))->getLine()
 							== piece->getLine()) {
 
 				Scene::getInstance()->getNode("trail")->getPrims().erase(
-						Scene::getInstance()->getNode("trail")->getPrims().begin() + i);
+						Scene::getInstance()->getNode("trail")->getPrims().begin()
+								+ i);
 				break;
 			}
 		}
@@ -417,8 +345,8 @@ GameLogic::~GameLogic() {
 }
 
 void GameLogic::startupCommunication() {
-	/*pid_t pid = fork();
-	switch(pid) {
+	pid_t pid = fork();
+	switch (pid) {
 	case -1:
 		cout << "Error starting Prolog's component." << endl;
 		exit(-1);
@@ -426,8 +354,7 @@ void GameLogic::startupCommunication() {
 		sleep(1);
 		break;
 	default:
-		execl("../rastros", NULL)
-		;
-	}*/
-	//cout << Client::getInstance()->sendRequest("test.\n") << endl;
+		system("../rastros");
+	}
+	//Client::getInstance();
 }

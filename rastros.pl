@@ -183,18 +183,18 @@ iteratePossibleMoves(Board, Ls, N) :- N < 12, N1 is N + 1,
  11 - descend
  12 - exit
  *******************************************************/
-testMove(8, Board) :- testMoveUp(Board), writeResponseToStream('Success.').
-testMove(2, Board) :- testMoveDown(Board), writeResponseToStream('Success.').
-testMove(4, Board) :- testMoveLeft(Board), writeResponseToStream('Success.').
-testMove(6, Board) :- testMoveRight(Board), writeResponseToStream('Success.').
-testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToStream('Success.').
-testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToStream('Success.').
-testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToStream('Success.').
-testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToStream('Success.').
-testMove(10, Board) :- testRotateCenter(Board), writeResponseToStream('Success.').
-testMove(5, Board) :- testClimb(Board), writeResponseToStream('Success.').
-testMove(0, Board) :- testDescend(Board), writeResponseToStream('Success.').
-testMove(_, _) :- writeResponseToStream('Failure.').
+testMove(8, Board) :- testMoveUp(Board), writeResponseToSocketStream('Success.').
+testMove(2, Board) :- testMoveDown(Board), writeResponseToSocketStream('Success.').
+testMove(4, Board) :- testMoveLeft(Board), writeResponseToSocketStream('Success.').
+testMove(6, Board) :- testMoveRight(Board), writeResponseToSocketStream('Success.').
+testMove(7, Board) :- testMoveDiagUpLeft(Board), writeResponseToSocketStream('Success.').
+testMove(9, Board) :- testMoveDiagUpRight(Board), writeResponseToSocketStream('Success.').
+testMove(1, Board) :- testMoveDiagDownLeft(Board), writeResponseToSocketStream('Success.').
+testMove(3, Board) :- testMoveDiagDownRight(Board), writeResponseToSocketStream('Success.').
+testMove(10, Board) :- testRotateCenter(Board), writeResponseToSocketStream('Success.').
+testMove(5, Board) :- testClimb(Board), writeResponseToSocketStream('Success.').
+testMove(0, Board) :- testDescend(Board), writeResponseToSocketStream('Success.').
+testMove(_, _) :- writeResponseToSocketStream('Failure.').
 
 testMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
 					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X).
@@ -456,24 +456,25 @@ connectToClient(InitSocket) :- write('Waiting for connection\n'),
 						asserta(socketInputStream(IStream)),
 						asserta(socketOutputStream(OStream)).
 
-receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), read(IStream, Messg), write(Messg).
+receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), read(IStream, Messg).
 
-writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, '~q~n', [Messg]), flush_output(OStream).
+writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, '~w~n', [Messg]), flush_output(OStream).
 
 closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream), socketStream(Stream), close(Stream, [force(true)]).
 closeSocket :- write('None socket opened yet\n').
 
-test:- fail.
+test :- writeResponseToSocketStream('Success.').
 
 run :- 
 	openSocket,
 	loop.
 
 loop :- 
-	repeat,
 	receiveInputFromSocketStream(Messg),
-	write(Messg),
+	write('Message received: '), write(Messg), nl, 
 	Messg \= end_of_file,
 	Messg,
-	!.
-loop :- write(kkdkdkdkk), writeResponseToSocketStream('Failure.').
+	!,
+	loop.
+
+loop :- writeResponseToSocketStream('Failure.'), closeSocket.
