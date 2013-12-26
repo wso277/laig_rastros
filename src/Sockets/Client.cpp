@@ -76,6 +76,7 @@ void Client::closeConnection() {
 
 Client::~Client() {
 	cout << sendRequest("fail.\n") << endl;
-	close(sockFd);
+	closeConnection();
+	system("killall rastros");
 }
 

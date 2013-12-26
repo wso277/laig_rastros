@@ -460,7 +460,7 @@ receiveInputFromSocketStream(Messg) :- socketInputStream(IStream), read(IStream,
 
 writeResponseToSocketStream(Messg) :-  socketOutputStream(OStream), format(OStream, '~w~n', [Messg]), flush_output(OStream).
 
-closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream), socketStream(Stream), close(Stream, [force(true)]).
+closeSocket :- socketInputStream(IStream), socketOutputStream(OStream), close(IStream), close(OStream).
 closeSocket :- write('None socket opened yet\n').
 
 test :- writeResponseToSocketStream('Success.').
