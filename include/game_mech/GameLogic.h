@@ -21,6 +21,10 @@ class GameLogic {
 	char midBoard[3][3];
 	char botBoard[4][7];
 	bool piece_selected;
+	int current_player;
+	int player1;
+	int player2;
+	int last_point;
 	static GameLogic *game;
 
 	void startupCommunication();

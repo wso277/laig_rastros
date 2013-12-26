@@ -34,6 +34,10 @@ GameLogic::GameLogic() {
 	piece = new CurrentPiece(5, 3, 2, 1, 1);
 	board = new Board();
 	piece_selected = false;
+	current_player = 1;
+	player1 = 0;
+	player2 = 0;
+	last_point = 0;
 	// used piece example
 	//Piece *test_piece = new Piece(5, 3, 1, false, true, "default");
 
@@ -100,60 +104,145 @@ void GameLogic::executeMove(int dir) {
 
 	switch (dir) {
 	case 0:
+		if (current_player == 1) {
+			player1 += 2;
+			last_point = 2;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 -= 2;
+			last_point = -2;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("0descend");
 		piece->setDir(0);
 		Scene::getInstance()->getAnimation("0descend")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 0);
 		break;
 	case 1:
+		if (current_player == 1) {
+			player1 += 2;
+			last_point = 2;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 -= 1;
+			last_point = -1;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("1leftdown");
 		piece->setDir(1);
 		Scene::getInstance()->getAnimation("1leftdown")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 1);
 		break;
 	case 2:
+		if (current_player == 1) {
+			player1 += 1;
+			last_point = 1;
+			current_player = 2;
+		} else if (current_player == 2) {
+			last_point = 0;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("2down");
 		piece->setDir(2);
 		Scene::getInstance()->getAnimation("2down")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 2);
 		break;
 	case 3:
+		if (current_player == 1) {
+			last_point = 0;
+			current_player = 2;
+		} else if (current_player == 2) {
+			last_point = 0;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("3rightdown");
 		piece->setDir(3);
 		Scene::getInstance()->getAnimation("3rightdown")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 3);
 		break;
 	case 4:
+		if (current_player == 1) {
+			player1 += 1;
+			last_point = 1;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 -= 1;
+			last_point = -1;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("4left");
 		piece->setDir(4);
 		Scene::getInstance()->getAnimation("4left")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 4);
 		break;
 	case 5:
+		if (current_player == 1) {
+			player1 -= 2;
+			last_point = -2;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 += 2;
+			last_point = 2;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("5climb");
 		piece->setDir(5);
 		Scene::getInstance()->getAnimation("5climb")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 5);
 		break;
 	case 6:
+		if (current_player == 1) {
+			player1 -= 1;
+			last_point = -1;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 += 1;
+			last_point = 1;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("6right");
 		piece->setDir(6);
 		Scene::getInstance()->getAnimation("6right")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 6);
 		break;
 	case 7:
+		if (current_player == 1) {
+			last_point = 0;
+			current_player = 2;
+		} else if (current_player == 2) {
+			last_point = 0;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("7leftup");
 		piece->setDir(7);
 		Scene::getInstance()->getAnimation("7leftup")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 7);
 		break;
 	case 8:
+		if (current_player == 1) {
+			player1 -= 1;
+			last_point = -1;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 += 1;
+			last_point = 1;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("8up");
 		piece->setDir(8);
 		Scene::getInstance()->getAnimation("8up")->resetTime();
 		glutTimerFunc(ANIMATION_TIME, updateValues, 8);
 		break;
 	case 9:
+		if (current_player == 1) {
+			player1 -= 2;
+			last_point = -2;
+			current_player = 2;
+		} else if (current_player == 2) {
+			player2 += 2;
+			last_point = 2;
+			current_player = 1;
+		}
 		Scene::getInstance()->getNode("piece")->setAnimation("9rightup");
 		piece->setDir(9);
 		Scene::getInstance()->getAnimation("9rightup")->resetTime();
@@ -297,6 +386,14 @@ void GameLogic::undo() {
 		break;
 	}
 
+	if (current_player == 1) {
+		player1 -= last_point;
+		current_player = 2;
+	} else if (current_player == 2) {
+		player2 -= last_point;
+		current_player = 1;
+	}
+
 	piece->setLevel(trailPieces.back()->getLevel());
 	piece->setLine(trailPieces.back()->getLine());
 	piece->setCol(trailPieces.back()->getCol());
@@ -329,6 +426,11 @@ void GameLogic::repeat() {
 }
 
 void GameLogic::resetGame() {
+	current_player = 1;
+	player1 = 0;
+	player2 = 0;
+	last_point = 0;
+
 	piece->setCol(5);
 	piece->setLine(3);
 	piece->setLevel(2);
