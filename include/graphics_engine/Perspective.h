@@ -6,6 +6,8 @@
 
 using namespace std;
 
+#define CAMERA_POS 5
+
 /**
  * call used to define a perspective camera
  */

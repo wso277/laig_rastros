@@ -106,7 +106,7 @@ void Interface::initGUI() {
 
 	GLUI_Translation *trans_x = glui_window->add_translation("Animation",
 	GLUI_TRANSLATION_X, &obj_pos[0]);
-	trans_x->set_speed(.01);
+	trans_x->set_speed(.02);
 
 	glui_window->add_column(true);
 

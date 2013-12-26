@@ -20,9 +20,7 @@ unsigned int Scene::WIDTH = 1024;
 
 extern int main_window;
 extern bool inSelectMode;
-float view_rotate[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
-float obj_pos[] = { 0.0, 0.0, 0.0 };
 
 Scene::Scene() {
 	bckg_r = 0;
@@ -288,9 +286,6 @@ void display() {
 
 	if (!inSelectMode)
 		Scene::getInstance()->initCamera();
-
-	glTranslatef(obj_pos[0], obj_pos[1], -obj_pos[2]);
-	glMultMatrixf(view_rotate);
 
 	glPushMatrix();
 	glMultMatrixf(

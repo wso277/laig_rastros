@@ -4,6 +4,8 @@
 
 using namespace std;
 
+float obj_pos[] = { 0.0, 0.0, 0.0 };
+
 Perspective::Perspective() {
 	angle = 0;
 	px = 0;
@@ -75,8 +77,17 @@ void Perspective::setCamera() {
 	gluPerspective(angle, Scene::WIDTH / Scene::HEIGHT, near, far); //setting up Perspective
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(px, py, pz, tx, ty, tz, 0, 1, 0); //vector direction is always up
 
+	if (px + obj_pos[0] <= CAMERA_POS && px + obj_pos[0] >= -CAMERA_POS) {
+		gluLookAt(px + obj_pos[0], py, pz, tx, ty, tz, 0, 1, 0); //vector direction is always up
+	} else {
+		if (px + obj_pos[0] > CAMERA_POS) {
+			gluLookAt(CAMERA_POS, py, pz, tx, ty, tz, 0, 1, 0);
+		}
+		if (px + obj_pos[0] < -CAMERA_POS) {
+			gluLookAt(-CAMERA_POS, py, pz, tx, ty, tz, 0, 1, 0);
+		}
+	}
 }
 
 Perspective::~Perspective() {
