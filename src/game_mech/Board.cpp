@@ -129,6 +129,9 @@ void Board::draw() {
 		glRotatef(-rotation, 0, 1, 0);
 		t3dDraw3D("2", 0, 0, 0.2f);
 		glPopMatrix();
+		glPushMatrix();
+		//t3dDraw2D("1", 0, 0, 0.2f);
+		glPopMatrix();
 		topLevel.draw();
 	}
 	glPopMatrix();

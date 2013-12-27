@@ -114,7 +114,7 @@ void GameLogic::setPieceSelected(bool selected) {
 void GameLogic::executeMove(int dir) {
 
 	string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
-	cout << response << endl;
+
 	if (response.compare(SUCCESS_MESSG) == 0
 			|| response.compare(VICTORY1_MESSG) == 0
 			|| response.compare(VICTORY2_MESSG) == 0) {
@@ -545,8 +545,6 @@ void GameLogic::endMiddleRot() {
 			int new_j = new_x + 1;
 			int new_i = new_y + 1;
 
-			cout << new_i << " " << new_j << endl;
-
 			new_mid_board[new_i][new_j] = midBoard[i][j];
 		}
 	}
@@ -561,7 +559,14 @@ void GameLogic::endMiddleRot() {
 	for (it = mid_pieces.begin(); it != mid_pieces.end(); it++) {
 		(*it)->endRot();
 	}
-
+	switch (current_player) {
+	case 1:
+		current_player = 2;
+		break;
+	case 2:
+		current_player = 1;
+		break;
+	}
 	finishedMoving();
 }
 
@@ -605,7 +610,7 @@ void GameLogic::executeAIMove(int dir) {
 
 void GameLogic::rotateMidBoard() {
 	piece_moving = true;
-
+	piece->setDir(10);
 	board->rotateMiddleBoard();
 }
 
@@ -615,7 +620,6 @@ bool GameLogic::existPossibleMoves() {
 	predicate += ").\n";
 
 	char * resp = Client::getInstance()->sendRequest(predicate);
-	cout << strlen(resp) << endl;
 
 	if (strcmp(resp, "[]\n") == 0) {
 		free(resp);
