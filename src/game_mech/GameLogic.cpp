@@ -398,6 +398,7 @@ void GameLogic::repeat() {
 
 void GameLogic::resetGame() {
 	if (is_new_game) {
+		piece_moving = false;
 		Scene::getInstance()->getNode("UI")->removePrims();
 
 		PointsHud *points = new PointsHud();
@@ -675,9 +676,11 @@ void GameLogic::finishedMoving() {
 		piece_moving = true;
 		return;
 	} else {
-		if ((current_player == 1 && player1Name == "Computer")
-				|| (current_player == 2 && player2Name == "Computer")) {
-			aiMove(current_player);
+		if (piece_moving == true) {
+			if ((current_player == 1 && player1Name == "Computer")
+					|| (current_player == 2 && player2Name == "Computer")) {
+				aiMove(current_player);
+			}
 		}
 	}
 
