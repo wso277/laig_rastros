@@ -58,6 +58,7 @@ public:
 	void rotateMidBoard();
 	void rotatePiecesInMiddle(float factor);
 	void endMiddleRot();
+	void executeAIMove(int dir);
 };
 
 #endif /* GAMELOGIC_H_ */

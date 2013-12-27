@@ -563,6 +563,44 @@ void GameLogic::endMiddleRot() {
 	}
 }
 
+void GameLogic::executeAIMove(int dir) {
+	switch (dir) {
+	case 1:
+		executeMove(8);
+		break;
+	case 2:
+		executeMove(2);
+		break;
+	case 3:
+		executeMove(4);
+		break;
+	case 4:
+		executeMove(6);
+		break;
+	case 5:
+		executeMove(7);
+		break;
+	case 6:
+		executeMove(9);
+		break;
+	case 7:
+		executeMove(1);
+		break;
+	case 8:
+		executeMove(3);
+		break;
+	case 9:
+		rotateMidBoard();
+		break;
+	case 10:
+		executeMove(5);
+		break;
+	case 11:
+		executeMove(0);
+		break;
+	}
+}
+
 void GameLogic::rotateMidBoard() {
 	piece_moving = true;
 
