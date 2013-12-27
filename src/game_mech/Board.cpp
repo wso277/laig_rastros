@@ -250,7 +250,7 @@ void updateMiddAnim(int index) {
 	} else {
 		Board::midBoardRot = 0;
 		Board::rotationsCounter++;
-		piece_moving = false;
+		//piece_moving = false;
 		GameLogic::getInstance()->endMiddleRot();
 	}
 }
