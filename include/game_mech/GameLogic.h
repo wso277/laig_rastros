@@ -13,6 +13,8 @@
 #include "Board.h"
 #include <list>
 
+void animTrailScale(int index);
+
 class GameLogic {
 	CurrentPiece *piece;
 	list<Piece*> trailPieces;
@@ -62,6 +64,8 @@ public:
 	bool existPossibleMoves();
 	void finishedMoving();
 	void executeAIMove(int dir);
+
+	friend void animTrailScale(int index);
 };
 
 #endif /* GAMELOGIC_H_ */

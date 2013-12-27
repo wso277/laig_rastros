@@ -20,7 +20,6 @@
 #define ROT_FACTOR 0.01667
 
 extern bool inSelectMode;
-extern bool piece_moving;
 
 float Board::rotation = 0.0;
 float Board::midBoardRot = 0.0;
@@ -250,7 +249,6 @@ void updateMiddAnim(int index) {
 	} else {
 		Board::midBoardRot = 0;
 		Board::rotationsCounter++;
-		piece_moving = false;
 		GameLogic::getInstance()->endMiddleRot();
 	}
 }

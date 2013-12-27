@@ -21,6 +21,8 @@ protected:
 	int level;
 	MyCylinder *piece;
 	float rotation;
+	bool is_trail;
+	float scale_factor;
 public:
 	Piece();
 	Piece(int col, int line, int level, bool select, bool visible, string appearance);
@@ -35,6 +37,8 @@ public:
 	virtual ~Piece();
 	void incRot(float inc);
 	void endRot();
+	float getScaleFact();
+	void incScaleFact(float inc);
 };
 
 #endif /* PIECE_H_ */

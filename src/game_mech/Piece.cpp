@@ -8,6 +8,7 @@
 #include "Piece.h"
 #include "Scene.h"
 #include "Interface.h"
+#include "GL/glut.h"
 
 extern bool inSelectMode;
 
@@ -17,6 +18,8 @@ Piece::Piece() :
 	line = 3;
 	level = 2;
 	rotation = 0;
+	is_trail = true;
+	scale_factor = 0.0;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
@@ -35,6 +38,7 @@ Piece::Piece(int col, int line, int level, bool select, bool visible,
 	setAppearance(appearance);
 	setSelectable(select);
 	setVisibility(visible);
+
 }
 
 void Piece::setCol(int col) {
@@ -84,6 +88,9 @@ void Piece::drawPiece() {
 		glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
+		if (is_trail) {
+			glScalef(scale_factor, scale_factor, scale_factor);
+		}
 		piece->draw();
 		glPopMatrix();
 	}
@@ -111,3 +118,16 @@ void Piece::endRot() {
 	line = new_y + 4;
 }
 
+float Piece::getScaleFact() {
+	if(is_trail) {
+		return scale_factor;
+	} else {
+		return 0;
+	}
+}
+
+void Piece::incScaleFact(float inc) {
+	if (is_trail) {
+		scale_factor += inc;
+	}
+}

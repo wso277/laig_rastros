@@ -22,6 +22,7 @@ CurrentPiece::CurrentPiece() :
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 	addTextures();
+	is_trail = false;
 }
 
 CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff,

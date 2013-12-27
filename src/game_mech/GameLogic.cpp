@@ -27,11 +27,15 @@
 #define VICTORY2_MESSG "Victory2.\n"
 #define FAILURE_MESSG "Failure.\n"
 
+#define ANIM_FRAMERATE 0.01667
+
 using namespace std;
 
 bool piece_moving = false;
 extern int GAME_MODE;
 extern int DIFFICULTY_LEVEL;
+
+float timeLast = 0.0;
 
 bool is_new_game = true;
 
@@ -128,6 +132,7 @@ void GameLogic::executeMove(int dir) {
 					piece->getLevel(), false, true, "default");
 			Scene::getInstance()->getNode("trail")->addPrimitive(p);
 			trailPieces.push_back(p);
+			glutTimerFunc(ANIM_FRAMERATE, animTrailScale, 0);
 
 			if (piece->getLevel() == 1) {
 				topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
@@ -691,5 +696,36 @@ void GameLogic::finishedMoving() {
 	} else {
 		Scene::getInstance()->setInitCamera("player2");
 	}
+}
 
+void animTrailScale(int index) {
+	float curr_scale =
+			GameLogic::getInstance()->trailPieces.back()->getScaleFact();
+
+	if (curr_scale >= 1) {
+		return;
+	}
+
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	float timer = t.tv_nsec * 0.000000001 + timeLast;
+
+	float sub = 0;
+
+	if (timer < timeLast) {
+		sub = (1 - timeLast) + timer;
+	} else {
+		sub = timer - timeLast;
+	}
+
+	float ratio = (sub / ANIM_FRAMERATE) / 10;
+	timeLast = timer;
+
+	if ((curr_scale + ratio) > 1) {
+		ratio = 1 - curr_scale;
+	}
+
+	GameLogic::getInstance()->trailPieces.back()->incScaleFact(ratio);
+
+	glutTimerFunc(ANIM_FRAMERATE, animTrailScale, 0);
 }
