@@ -23,7 +23,7 @@ void PointsHud::draw() {
 	glTranslatef(70, 15, 0);
 	glScalef(20,20,20);
 	glRotatef(180, 1,0,0);
-	t3dDraw2D("Player 1", 0, 0, 0.2f);
+	t3dDraw2D(GameLogic::getInstance()->getPlayer1Name(), 0, 0, 0.2f);
 	glPopMatrix();
 
 	stringstream ss;
@@ -41,7 +41,7 @@ void PointsHud::draw() {
 	glTranslatef(950, 15, 0);
 	glScalef(20,20,20);
 	glRotatef(180, 1,0,0);
-	t3dDraw2D("Player 2", 0, 0, 0.2f);
+	t3dDraw2D(GameLogic::getInstance()->getPlayer2Name(), 0, 0, 0.2f);
 	glPopMatrix();
 
 	ss.str("");

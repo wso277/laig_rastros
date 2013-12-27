@@ -54,6 +54,8 @@ GameLogic::GameLogic() {
 	Scene::getInstance()->getNode("UI")->addPrimitive(time);
 
 	gameMode = 1;
+	player1Name = "Human 1";
+	player2Name = "Human 2";
 	difficultyLevel = 1;
 	piece_selected = false;
 	current_player = 1;
@@ -390,6 +392,25 @@ void GameLogic::resetGame() {
 	player2 = 0;
 	last_point.clear();
 	gameMode = GAME_MODE + 1;
+
+	switch(gameMode) {
+	case 1:
+		player1Name = "Human 1";
+		player2Name = "Human 2";
+		break;
+	case 2:
+		player1Name = "Human";
+		player2Name = "Computer";
+		break;
+	case 3:
+		player1Name = "Computer";
+		player2Name = "Human";
+		break;
+	case 4:
+		player1Name = "Computer";
+		player2Name = "Computer";
+		break;
+	}
 	difficultyLevel = DIFFICULTY_LEVEL + 1;
 
 	piece->setCol(5);
@@ -422,6 +443,14 @@ int GameLogic::getPlayer1() {
 
 int GameLogic::getPlayer2() {
 	return player2;
+}
+
+string GameLogic::getPlayer1Name() {
+	return player1Name;
+}
+
+string GameLogic::getPlayer2Name() {
+	return player2Name;
 }
 
 int GameLogic::getCurrentPlayer() {

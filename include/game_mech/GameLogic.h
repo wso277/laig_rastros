@@ -24,6 +24,8 @@ class GameLogic {
 	int current_player;
 	int player1;
 	int player2;
+	string player1Name;
+	string player2Name;
 	vector<int> last_point;
 	int gameMode;
 	int difficultyLevel;
@@ -47,6 +49,8 @@ public:
 	void resetGame();
 	int getPlayer1();
 	int getPlayer2();
+	string getPlayer1Name();
+	string getPlayer2Name();
 	int getCurrentPlayer();
 	void assignPoints(int dir);
 
