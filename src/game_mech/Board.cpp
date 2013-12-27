@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Interface.h"
 #include "text3d.h"
+#include "cmath"
+#include "GameLogic.h"
 
 #define LEV1_TOP_APP "lev1_board_top"
 #define LEV1_SIDES_APP "lev1_board_sides"
@@ -15,9 +17,12 @@
 #define ROT_FACTOR 0.01667
 
 extern bool inSelectMode;
+extern bool piece_moving;
 
 float Board::rotation = 0.0;
+float Board::midBoardRot = 0.0;
 float time_last = 0.0;
+float time_last2 = 0.0;
 
 Board::Board() :
 		MyPrimitive() {
@@ -165,6 +170,7 @@ void Board::draw() {
 			}
 		}
 	} else {
+		glRotatef(midBoardRot, 0, 1, 0);
 		middleLevel.draw();
 	}
 	glPopMatrix();
@@ -179,7 +185,6 @@ float Board::incrementRotation(float inc) {
 }
 
 void updateRotation(int index) {
-
 	struct timespec t;
 	clock_gettime(CLOCK_MONOTONIC, &t);
 	float timer = t.tv_nsec * 0.000000001;
@@ -198,8 +203,40 @@ void updateRotation(int index) {
 	glutTimerFunc(ROT_FACTOR, updateRotation, 0);
 }
 
-bool Board::rotateBoard(int boardIndex) {
-	if (boardIndex < 1 || boardIndex > 3) {
-		return false;
+void Board::rotateMiddleBoard() {
+	time_last2 = 0.0;
+	glutTimerFunc(ROT_FACTOR, updateMiddAnim, 0);
+}
+
+void updateMiddAnim(int index) {
+
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	float timer = t.tv_nsec * 0.000000001 + floor(time_last2);
+
+	if (Board::midBoardRot <= 90.0) {
+
+		float sub = 0;
+
+		if (timer < time_last2) {
+			sub = ceil(time_last2) + timer;
+		} else {
+			sub = timer - time_last2;
+		}
+
+		float ratio = sub / ROT_FACTOR;
+		time_last2 = timer;
+
+		if (ratio > 90 - Board::midBoardRot) {
+			ratio = 90 - Board::midBoardRot;
+		}
+		Board::midBoardRot += ratio;
+		cout << Board::midBoardRot << endl;
+		GameLogic::getInstance()->rotatePiecesInMiddle(ratio);
+		glutTimerFunc(ROT_FACTOR, updateMiddAnim, 0);
+	} else {
+		piece_moving = false;
+		GameLogic::getInstance()->endMiddleRot();
 	}
 }
+

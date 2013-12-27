@@ -16,6 +16,7 @@ Piece::Piece() :
 	col = 5;
 	line = 3;
 	level = 2;
+	rotation = 0;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
@@ -26,6 +27,7 @@ Piece::Piece(int col, int line, int level, bool select, bool visible, string app
 	this->col = col;
 	this->line = line;
 	this->level = level;
+	rotation = 0;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 
@@ -65,8 +67,9 @@ void Piece::draw() {
 
 void Piece::drawPiece() {
 	if (inSelectMode && is_selectable) {
-		glPushName(000);
+		glPushName(0);
 		glPushMatrix();
+		glRotatef(rotation, 0, 1, 0);
 		glTranslatef(col - 4, -(level * 2) + 4, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
@@ -76,6 +79,7 @@ void Piece::drawPiece() {
 
 	if (!inSelectMode) {
 		glPushMatrix();
+		glRotatef(rotation, 0, 1, 0);
 		glTranslatef(col - 4, -(level * 2) + 4, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
@@ -86,5 +90,17 @@ void Piece::drawPiece() {
 }
 
 Piece::~Piece() {
+}
+
+
+void Piece::incRot(float inc) {
+	rotation += inc;
+}
+
+void Piece::endRot() {
+	rotation = 0;
+
+	col = - (line - 4) + 4;
+	line = (col - 4) + 4;
 }
 

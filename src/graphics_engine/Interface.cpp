@@ -203,12 +203,18 @@ void Interface::initGUI() {
 	glui_window->add_column(true);
 
 	GLUI_Panel *Skybox = glui_window->add_panel("Skybox");
-	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox", &skybox_selected, 1, skybox_handler);
+	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox",
+			&skybox_selected, 1, skybox_handler);
 	for (int i = 0; i < Scene::getInstance()->getSkyboxes().size(); i++) {
-		sky_list->add_item(i, Scene::getInstance()->getSkyboxes()[i]->getId().c_str());
+		sky_list->add_item(i,
+				Scene::getInstance()->getSkyboxes()[i]->getId().c_str());
 	}
 
 	glui_window->add_column(true);
+
+	GLUI_Panel *Movements = glui_window->add_panel("Other movements");
+	glui_window->add_button_to_panel(Movements, "Rotate Middle Board", 4,
+			button_handler);
 
 }
 
@@ -232,6 +238,9 @@ void button_handler(int id) {
 	case 3:
 		Scene::getInstance()->setInitCamera("player1");
 		GameLogic::getInstance()->resetGame();
+		break;
+	case 4:
+		GameLogic::getInstance()->rotateMidBoard();
 		break;
 	}
 }

@@ -115,13 +115,15 @@ void GameLogic::executeMove(int dir) {
 
 	string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
 	cout << response << endl;
-	if (response.compare(SUCCESS_MESSG) == 0 || response.compare(VICTORY1_MESSG) == 0
+	if (response.compare(SUCCESS_MESSG) == 0
+			|| response.compare(VICTORY1_MESSG) == 0
 			|| response.compare(VICTORY2_MESSG) == 0) {
 
-		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown", "4left", "5climb", "6right", "7leftup",
-				"8up", "9rightup" };
+		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown",
+				"4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
 
-		Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
+		Piece *p = new Piece(piece->getCol(), piece->getLine(),
+				piece->getLevel(), false, true, "default");
 		Scene::getInstance()->getNode("trail")->addPrimitive(p);
 		trailPieces.push_back(p);
 
@@ -267,14 +269,18 @@ string GameLogic::getEncodedCharBoard() {
 			} else if (i > 4 || (i == 4 && j < 2) || (i == 4 && j >= 5)) {
 				enc_board = enc_board + "'X','X','" + botBoard[i - 3][j] + "'";
 			} else if (i == 2 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','X'";
+				enc_board = enc_board + "'" + topBoard[i][j] + "','"
+						+ midBoard[i - 2][j - 2] + "','X'";
 			} else if (i == 4 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','" + botBoard[i - 3][j] + "'";
+				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','"
+						+ botBoard[i - 3][j] + "'";
 			} else if (i == 3) {
 				if (j < 2 || j >= 5) {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','X','" + botBoard[i - 3][j] + "'";
+					enc_board = enc_board + "'" + topBoard[i][j] + "','X','"
+							+ botBoard[i - 3][j] + "'";
 				} else {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','"
+					enc_board = enc_board + "'" + topBoard[i][j] + "','"
+							+ midBoard[i - 2][j - 2] + "','"
 							+ botBoard[i - 3][j] + "'";
 				}
 			}
@@ -379,7 +385,8 @@ void GameLogic::repeat() {
 	Repeat::getInstance()->setTrail(trailPieces);
 	trailPieces.clear();
 	Repeat::getInstance()->pushLastMove(
-			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default"));
+			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(),
+					false, true, "default"));
 	resetGame();
 
 	Repeat::getInstance()->popFirst();
@@ -393,7 +400,7 @@ void GameLogic::resetGame() {
 	last_point.clear();
 	gameMode = GAME_MODE + 1;
 
-	switch(gameMode) {
+	switch (gameMode) {
 	case 1:
 		player1Name = "Human 1";
 		player2Name = "Human 2";
@@ -472,5 +479,58 @@ void GameLogic::startupCommunication() {
 	default:
 		system("../rastros");
 	}
-
 }
+
+vector<Piece*> GameLogic::getMiddlePieces() {
+	vector<Piece*> middle_pieces;
+	list<Piece*>::iterator it;
+	for (it = trailPieces.begin(); it != trailPieces.end(); it++) {
+		if ((*it)->getLevel() == 2) {
+			middle_pieces.push_back(*it);
+		}
+	}
+
+	if (piece->getLevel() == 2) {
+		middle_pieces.push_back(piece);
+	}
+
+	return middle_pieces;
+}
+
+void GameLogic::rotatePiecesInMiddle(float factor) {
+	vector<Piece*> mid_pieces = getMiddlePieces();
+	vector<Piece*>::iterator it;
+	for (it = mid_pieces.begin(); it != mid_pieces.end(); it++) {
+		(*it)->incRot(factor);
+	}
+}
+
+void GameLogic::endMiddleRot() {
+	char new_mid_board[3][3];
+
+	for (unsigned int i = 0; i < 3; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			int x = -(i - 2) + 2;
+			int y = (j - 2) + 2;
+			new_mid_board[y][x] = midBoard[i][j];
+		}
+	}
+
+	for (unsigned int i = 0; i < 3; i++) {
+		for (unsigned int j = 0; j < 3; j++) {
+			midBoard[i][j] = new_mid_board[i][j];
+		}
+	}
+	vector<Piece*> mid_pieces = getMiddlePieces();
+	vector<Piece*>::iterator it;
+	for (it = mid_pieces.begin(); it != mid_pieces.end(); it++) {
+		(*it)->endRot();
+	}
+}
+
+void GameLogic::rotateMidBoard() {
+	piece_moving = true;
+
+	board->rotateMiddleBoard();
+}
+

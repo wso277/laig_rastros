@@ -20,6 +20,7 @@ protected:
 	int line;
 	int level;
 	MyCylinder *piece;
+	float rotation;
 public:
 	Piece();
 	Piece(int col, int line, int level, bool select, bool visible, string appearance);
@@ -32,6 +33,8 @@ public:
 	virtual void draw();
 	void drawPiece();
 	virtual ~Piece();
+	void incRot(float inc);
+	void endRot();
 };
 
 #endif /* PIECE_H_ */

@@ -32,6 +32,8 @@ class GameLogic {
 	static GameLogic *game;
 
 	void startupCommunication();
+	vector<Piece*> getMiddlePieces();
+
 public:
 	static GameLogic* getInstance();
 	GameLogic();
@@ -53,7 +55,9 @@ public:
 	string getPlayer2Name();
 	int getCurrentPlayer();
 	void assignPoints(int dir);
-
+	void rotateMidBoard();
+	void rotatePiecesInMiddle(float factor);
+	void endMiddleRot();
 };
 
 #endif /* GAMELOGIC_H_ */

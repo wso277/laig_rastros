@@ -13,6 +13,7 @@
 #include "Plane.h"
 
 void updateRotation(int index);
+void updateMiddAnim(int index);
 
 class Board : public MyPrimitive {
 	static float rotation;
@@ -25,7 +26,8 @@ public:
 	virtual ~Board();
 	void draw();
 	static float incrementRotation(float inc);
-	bool rotateBoard(int boardIndex);
+	void rotateMiddleBoard();
+	static float midBoardRot;
 };
 
 #endif /* BOARD_H_ */
