@@ -150,6 +150,7 @@ float Animation::updateAnimation(int index) {
 		return ratio;
 	} else {
 		resetAnimation();
+		GameLogic::getInstance()->finishedMoving();
 	}
 
 	return 0;

@@ -613,6 +613,7 @@ bool GameLogic::existPossibleMoves() {
 	predicate += ").\n";
 
 	char * resp = Client::getInstance()->sendRequest(predicate);
+	cout << resp;
 
 	if (strcmp(resp, "[]") == 0) {
 		free(resp);
