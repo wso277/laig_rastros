@@ -1,0 +1,51 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{titlepic}
+\usepackage{listings}
+\usepackage{color}
+
+\begin{document}
+
+\title{LAIG - PROJ3: Jogo do Rastros 3D}
+\author{Diogo Pinto - 201108016 \\ Wilson Oliveira - 201109281}
+\titlepic{\includegraphics[scale=0.5]{feup.jpg}}
+
+\pagestyle{fancy}
+	
+\lhead{\rightmark}
+\chead{}
+\rhead{\leftmark}
+	
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}	
+
+\maketitle
+
+\section{Instruções}
+Para executar o jogo, será apenas necessário garantir que ambos os executáveis (jogo, e prolog) possuem permissões de execução. 
+Este jogo só pode ser utilizado em ambiente linux.
+
+\section{Regras de Jogo}
+Este jogo coloca dois jogadores um contra o outro, ambos os jogadores movimentam a mesma peça alternadamente. Esta peça pode-se movimentar uma casa em qualquer direção, deixando um rastro sempre que se desloca, o que impossibilita o movimento para essa casa novamente.
+O jogador tem como objectivo deslocar a peça para a sua casa alvo (assinaladas com 1 e 2), ou deixar o oponente sem casas disponiveis.
+Nesta versão 3D, o tabuleiro tem 3 niveis diferentes, a mudança da peça de nivel, pode ser feita deslocando para a casa imediatamente acima ou abaixo da sua posição atual. A execução de uma mudança de nivel da peça não termina a jogada atual, uma vez que não conta como uma deslocação principal da peça (este movimento nao deixa rastro no tabuleiro). É ainda possivel executar uma rotação do tabuleiro central.
+
+\section{Instruções de Uso}
+O jogo é inicializado em modo de Humano vs Humano. A modificação do modo de jogo e dificuldade é feita através da barra de comandos no fundo da janela, selecionando a opção desejada e pressionando o botão de "novo jogo".
+O movimento da peça é executado, selecionando primeiro a peça e de seguida a casa desejada. Para cancelar um movimento, após a seleção da peça basta clicar numa posição inválida do tabuleiro.
+A rotação do tabuleiro central é feita através de um botão na barra de comandos.
+Todas as outras modificações presentes na barra de comandos são executadas em tempo real, a mudança de camera é executada automaticamente com a mudança de jogador, mas pode ser controlada pelo utilizador, através da seta de controlo. Esta seta permite a deslocação da camera entre a posição um e dois, que são as perspectivas que oferecem melhor visualização do tabuleiro.
+A anulação de uma jogada prévia é feita através do botão, a repetição de jogo é também inicializada por um botão e permite a continuação do jogo no fim da repetição.
+A mudança do tema da skybox também é feita em tempo real com a escolha presente na listbox.
+A janela de jogo apresenta uma HUD que contém a pontuação dos dois jogadores, assim como o tempo total de jogo.
+
+\end{document}
