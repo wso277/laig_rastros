@@ -91,7 +91,6 @@ void Piece::drawPiece() {
 	glScalef(0.9, 0.5, 0.9);
 	glRotatef(-90, 1, 0, 0);
 	if (is_trail) {
-		cout << "scale: " << scale_factor << endl;
 		glScalef(scale_factor, scale_factor, scale_factor);
 	}
 	piece->draw();

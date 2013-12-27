@@ -702,7 +702,6 @@ void animTrailScale(int index) {
 	float curr_scale =
 			GameLogic::getInstance()->trailPieces.back()->getScaleFact();
 
-	cout << curr_scale << endl;
 	if (curr_scale >= 1) {
 		return;
 	}
@@ -719,7 +718,7 @@ void animTrailScale(int index) {
 		sub = timer - timeLast;
 	}
 
-	float ratio = (sub / ANIM_FRAMERATE) / 10000.0;
+	float ratio = (sub / ANIM_FRAMERATE) / 800000.0;
 	timeLast = timer;
 
 	if ((curr_scale + ratio) > 1) {
