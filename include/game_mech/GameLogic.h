@@ -60,6 +60,7 @@ public:
 	void endMiddleRot();
 	bool existPossibleMoves();
 	void finishedMoving();
+	void executeAIMove(int dir);
 };
 
 #endif /* GAMELOGIC_H_ */
