@@ -521,3 +521,21 @@ sDifficultyLevel(3) :- asserta(level(25)), writeResponseToSocketStream('Success.
 sDifficultyLevel(4) :- asserta(level(0)), writeResponseToSocketStream('Success.').
 
 findMoves(Board) :- findMoves(Board, List, 0), writeResponseToSocketStream(List).
+
+
+moveAI(Player, Board) :- findMoves(Board, Avail, 0),
+									playerPrefMoves(Player, Dir, Pref),
+									moveAI(Player, Board, Avail, Dir, Pref).
+
+moveAI(_Player, Board, AvailMoves, _Dir, [_P | _Ps]) :- 
+			level(X), random(0, 100, Y), Y =< X, random_member(Z, AvailMoves), writeResponseToSocketStream(Z).
+
+moveAI(_Player, Board, AvailMoves, Dir, [P | _Ps]) :-
+			member(Dir, AvailMoves), writeResponseToSocketStream(Dir).
+			
+moveAI(_Player, Board, AvailMoves, _Dir, [P | _Ps]) :-
+			member(P, AvailMoves), writeResponseToSocketStream(P).
+
+moveAI(Player, Board, AvailMoves, Dir, [P | Ps]) :-
+			\+member(P, AvailMoves), 
+			moveAI(Player, Board, AvailMoves, Dir, Ps).

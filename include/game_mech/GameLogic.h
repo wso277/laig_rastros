@@ -33,6 +33,7 @@ class GameLogic {
 
 	void startupCommunication();
 	vector<Piece*> getMiddlePieces();
+	void aiMove(int current_player);
 
 public:
 	static GameLogic* getInstance();

@@ -114,7 +114,6 @@ void GameLogic::setPieceSelected(bool selected) {
 void GameLogic::executeMove(int dir) {
 
 	string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
-
 	if (response.compare(SUCCESS_MESSG) == 0
 			|| response.compare(VICTORY1_MESSG) == 0
 			|| response.compare(VICTORY2_MESSG) == 0) {
@@ -468,6 +467,10 @@ void GameLogic::resetGame() {
 			}
 		}
 	}
+
+	if (gameMode >= 3) {
+		aiMove(current_player);
+	}
 }
 
 int GameLogic::getPlayer1() {
@@ -620,6 +623,7 @@ bool GameLogic::existPossibleMoves() {
 	predicate += ").\n";
 
 	char * resp = Client::getInstance()->sendRequest(predicate);
+	cout << "Possible moves: " << resp << endl;
 
 	if (strcmp(resp, "[]\n") == 0) {
 		free(resp);
@@ -628,6 +632,20 @@ bool GameLogic::existPossibleMoves() {
 		free(resp);
 		return true;
 	}
+}
+
+void GameLogic::aiMove(int current_player) {
+	string predicate = "moveAI(";
+	if (current_player == 1) {
+		predicate += "1,";
+	} else {
+		predicate += "2,";
+	}
+	predicate += getEncodedCharBoard() + ").\n";
+	string reply = Client::getInstance()->sendRequest(predicate);
+	cout << "ai move: " << reply << endl;
+	int dir = atoi(reply.c_str());
+	executeAIMove(dir);
 }
 
 void GameLogic::finishedMoving() {
@@ -642,6 +660,11 @@ void GameLogic::finishedMoving() {
 		Scene::getInstance()->getNode("UI")->addPrimitive(vict);
 		piece_moving = true;
 		return;
+	} else {
+		if ((current_player == 1 && player1Name == "Computer")
+				|| (current_player == 2 && player2Name == "Computer")) {
+			aiMove(current_player);
+		}
 	}
 
 	if (GameLogic::getInstance()->getCurrentPlayer() == 1) {
@@ -650,4 +673,5 @@ void GameLogic::finishedMoving() {
 		Scene::getInstance()->setInitCamera("player2");
 	}
 	piece_moving = false;
+
 }
