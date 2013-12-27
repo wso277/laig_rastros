@@ -121,16 +121,18 @@ void GameLogic::executeMove(int dir) {
 		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown", "4left", "5climb", "6right", "7leftup",
 				"8up", "9rightup" };
 
-		Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
-		Scene::getInstance()->getNode("trail")->addPrimitive(p);
-		trailPieces.push_back(p);
+		if (dir != 0 && dir != 5) {
+			Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
+			Scene::getInstance()->getNode("trail")->addPrimitive(p);
+			trailPieces.push_back(p);
 
-		if (piece->getLevel() == 1) {
-			topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
-		} else if (piece->getLevel() == 2) {
-			midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
-		} else {
-			botBoard[piece->getLine() - 4][piece->getCol() - 1] = '#';
+			if (piece->getLevel() == 1) {
+				topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
+			} else if (piece->getLevel() == 2) {
+				midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
+			} else {
+				botBoard[piece->getLine() - 4][piece->getCol() - 1] = '#';
+			}
 		}
 
 		Scene::getInstance()->getNode("piece")->setAnimation(animations[dir]);
@@ -235,9 +237,9 @@ void GameLogic::assignPoints(int dir) {
 		break;
 	}
 
-	if (current_player == 1) {
+	if (current_player == 1 && dir != 0 && dir != 5) {
 		current_player = 2;
-	} else if (current_player == 2) {
+	} else if (current_player == 2 && dir != 0 && dir != 5) {
 		current_player = 1;
 	}
 }
@@ -393,7 +395,7 @@ void GameLogic::resetGame() {
 	last_point.clear();
 	gameMode = GAME_MODE + 1;
 
-	switch(gameMode) {
+	switch (gameMode) {
 	case 1:
 		player1Name = "Human 1";
 		player2Name = "Human 2";
@@ -407,8 +409,8 @@ void GameLogic::resetGame() {
 		player2Name = "Human";
 		break;
 	case 4:
-		player1Name = "Computer";
-		player2Name = "Computer";
+		player1Name = "Computer 1";
+		player2Name = "Computer 2";
 		break;
 	}
 	difficultyLevel = DIFFICULTY_LEVEL + 1;
