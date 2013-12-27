@@ -644,4 +644,22 @@ void GameLogic::finishedMoving() {
 		Scene::getInstance()->setInitCamera("player2");
 	}
 	piece_moving = false;
+
+	if ((current_player == 1 && player1Name == "Computer") || (current_player == 2 && player2Name == "Computer")) {
+		string predicate = "moveAI(";
+		if (current_player == 1) {
+			predicate += "1,";
+		} else {
+			predicate += "2,";
+		}
+
+		predicate += getEncodedCharBoard() + ").\n";
+
+		string reply = Client::getInstance()->sendRequest(predicate);
+		cout << "ai move: " << reply << endl;
+
+		int dir = atoi(reply.c_str());
+
+		executeAIMove(dir);
+	}
 }
