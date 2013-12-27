@@ -18,6 +18,8 @@ extern float obj_pos[3];
 GLUI_Panel *Buttons;
 
 int skybox_selected = 0;
+int GAME_MODE = 0;
+int DIFFICULTY_LEVEL = 0;
 
 int Interface::modifiers = 0;
 map<string, int*> Interface::cams_rb;
@@ -170,14 +172,12 @@ void Interface::initGUI() {
 	glui_window->add_column(true);
 
 	GLUI_Panel *difficultyPanel = glui_window->add_panel("Difficulty Level");
-	difficulty_id = id_counter++;
 	difficulty_grp = glui_window->add_radiogroup_to_panel(difficultyPanel,
-			difficulty_vars, difficulty_id, Interface::processGUI);
-	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 1");
-	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 2");
-	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 3");
-	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 4");
-	glui_window->add_radiobutton_to_group(difficulty_grp, "Level 5");
+			&DIFFICULTY_LEVEL, 1, radiogroup_handler);
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Easy");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Medium");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Hard");
+	glui_window->add_radiobutton_to_group(difficulty_grp, "Extreme");
 
 	glui_window->add_column(true);
 
@@ -192,6 +192,16 @@ void Interface::initGUI() {
 
 	glui_window->add_column(true);
 
+	GLUI_Panel *modePanel = glui_window->add_panel("Game Mode");
+	GLUI_RadioGroup *mode_grp = glui_window->add_radiogroup_to_panel(modePanel,
+			&GAME_MODE, 2, radiogroup_handler);
+	glui_window->add_radiobutton_to_group(mode_grp, "Human vs Human");
+	glui_window->add_radiobutton_to_group(mode_grp, "Human vs Computer");
+	glui_window->add_radiobutton_to_group(mode_grp, "Computer vs Human");
+	glui_window->add_radiobutton_to_group(mode_grp, "Computer vs Computer");
+
+	glui_window->add_column(true);
+
 	GLUI_Panel *Skybox = glui_window->add_panel("Skybox");
 	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox", &skybox_selected, 1, skybox_handler);
 	for (int i = 0; i < Scene::getInstance()->getSkyboxes().size(); i++) {
@@ -199,6 +209,10 @@ void Interface::initGUI() {
 	}
 
 	glui_window->add_column(true);
+
+}
+
+void radiogroup_handler(int id) {
 
 }
 

@@ -25,6 +25,8 @@ class GameLogic {
 	int player1;
 	int player2;
 	vector<int> last_point;
+	int gameMode;
+	int difficultyLevel;
 	static GameLogic *game;
 
 	void startupCommunication();
