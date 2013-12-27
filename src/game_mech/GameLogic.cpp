@@ -30,6 +30,8 @@
 using namespace std;
 
 bool piece_moving = false;
+extern int GAME_MODE;
+extern int DIFFICULTY_LEVEL;
 
 GameLogic* GameLogic::game = NULL;
 
@@ -51,6 +53,8 @@ GameLogic::GameLogic() {
 	TimeHud *time = new TimeHud();
 	Scene::getInstance()->getNode("UI")->addPrimitive(time);
 
+	gameMode = 1;
+	difficultyLevel = 1;
 	piece_selected = false;
 	current_player = 1;
 	player1 = 0;
@@ -385,6 +389,8 @@ void GameLogic::resetGame() {
 	player1 = 0;
 	player2 = 0;
 	last_point.clear();
+	gameMode = GAME_MODE + 1;
+	difficultyLevel = DIFFICULTY_LEVEL + 1;
 
 	piece->setCol(5);
 	piece->setLine(3);
