@@ -1,0 +1,17 @@
+\select@language {portuguese}
+\contentsline {section}{\numberline {0.1}Sum\IeC {\'a}rio}{1}
+\contentsline {section}{\numberline {0.2}Introdu\IeC {\c c}\IeC {\~a}o}{3}
+\contentsline {section}{\numberline {0.3}Aplica\IeC {\c c}\IeC {\~a}o de download}{3}
+\contentsline {subsection}{\numberline {0.3.1}Arquitetura da aplica\IeC {\c c}\IeC {\~a}o}{3}
+\contentsline {subsection}{\numberline {0.3.2}Teste da aplica\IeC {\c c}\IeC {\~a}o}{3}
+\contentsline {section}{\numberline {0.4}An\IeC {\'a}lise e configura\IeC {\c c}\IeC {\~a}o da rede}{4}
+\contentsline {subsection}{\numberline {0.4.1}Experi\IeC {\^e}ncia 1 - Configurar uma rede de Ip}{4}
+\contentsline {subsection}{\numberline {0.4.2}Experi\IeC {\^e}ncia 2 - Implementar duas Vlans num switch}{4}
+\contentsline {subsection}{\numberline {0.4.3}Experi\IeC {\^e}ncia 3 - Configura\IeC {\c c}\IeC {\~a}o de um router em Linux}{5}
+\contentsline {subsection}{\numberline {0.4.4}Experi\IeC {\^e}ncia 4 - Configura\IeC {\c c}\IeC {\~a}o de um router comercial com Nat}{5}
+\contentsline {subsection}{\numberline {0.4.5}Experi\IeC {\^e}ncia 5 - Dns}{6}
+\contentsline {subsection}{\numberline {0.4.6}Experi\IeC {\^e}ncia 6 - Conex\IeC {\~a}o Tcp}{7}
+\contentsline {subsection}{\numberline {0.4.7}Experi\IeC {\^e}ncia 7 - Implementa\IeC {\c c}\IeC {\~a}o de NAT}{7}
+\contentsline {section}{\numberline {0.5}Conclus\IeC {\~a}o}{7}
+\contentsline {section}{\numberline {0.6}Refer\IeC {\^e}ncias}{8}
+\contentsline {section}{\numberline {.1}download.c}{9}
