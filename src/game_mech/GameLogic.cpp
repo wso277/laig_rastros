@@ -123,7 +123,8 @@ void GameLogic::executeMove(int dir) {
 				"4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
 
 		if (dir != 0 && dir != 5) {
-			Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
+			Piece *p = new Piece(piece->getCol(), piece->getLine(),
+					piece->getLevel(), false, true, "default");
 			Scene::getInstance()->getNode("trail")->addPrimitive(p);
 			trailPieces.push_back(p);
 
@@ -535,9 +536,18 @@ void GameLogic::endMiddleRot() {
 
 	for (unsigned int i = 0; i < 3; i++) {
 		for (unsigned int j = 0; j < 3; j++) {
-			int x = -(i - 2) + 2;
-			int y = (j - 2) + 2;
-			new_mid_board[y][x] = midBoard[i][j];
+			int x = j - 1;
+			int y = i - 1;
+
+			int new_x = -y;
+			int new_y = x;
+
+			int new_j = new_x + 1;
+			int new_i = new_y + 1;
+
+			cout << new_i << " " << new_j << endl;
+
+			new_mid_board[new_i][new_j] = midBoard[i][j];
 		}
 	}
 

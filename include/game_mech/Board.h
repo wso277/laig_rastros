@@ -28,6 +28,7 @@ public:
 	static float incrementRotation(float inc);
 	void rotateMiddleBoard();
 	static float midBoardRot;
+	static int rotationsCounter;
 };
 
 #endif /* BOARD_H_ */

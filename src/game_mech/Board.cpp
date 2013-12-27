@@ -21,6 +21,8 @@ extern bool piece_moving;
 
 float Board::rotation = 0.0;
 float Board::midBoardRot = 0.0;
+int Board::rotationsCounter = 0;
+
 float time_last = 0.0;
 float time_last2 = 0.0;
 
@@ -170,7 +172,7 @@ void Board::draw() {
 			}
 		}
 	} else {
-		glRotatef(midBoardRot, 0, 1, 0);
+		glRotatef(-(midBoardRot + 90.0 * rotationsCounter), 0, 1, 0);
 		middleLevel.draw();
 	}
 	glPopMatrix();
@@ -214,7 +216,7 @@ void updateMiddAnim(int index) {
 	clock_gettime(CLOCK_MONOTONIC, &t);
 	float timer = t.tv_nsec * 0.000000001 + floor(time_last2);
 
-	if (Board::midBoardRot <= 90.0) {
+	if (Board::midBoardRot < 90.0) {
 
 		float sub = 0;
 
@@ -230,11 +232,13 @@ void updateMiddAnim(int index) {
 		if (ratio > 90 - Board::midBoardRot) {
 			ratio = 90 - Board::midBoardRot;
 		}
-		Board::midBoardRot += ratio;
+		Board::midBoardRot += ratio / 2.0;
 		cout << Board::midBoardRot << endl;
-		GameLogic::getInstance()->rotatePiecesInMiddle(ratio);
+		GameLogic::getInstance()->rotatePiecesInMiddle(ratio / 2.0);
 		glutTimerFunc(ROT_FACTOR, updateMiddAnim, 0);
 	} else {
+		Board::midBoardRot = 0;
+		Board::rotationsCounter++;
 		piece_moving = false;
 		GameLogic::getInstance()->endMiddleRot();
 	}

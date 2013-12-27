@@ -21,7 +21,8 @@ Piece::Piece() :
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
 
-Piece::Piece(int col, int line, int level, bool select, bool visible, string appearance) :
+Piece::Piece(int col, int line, int level, bool select, bool visible,
+		string appearance) :
 		MyPrimitive() {
 
 	this->col = col;
@@ -79,7 +80,7 @@ void Piece::drawPiece() {
 
 	if (!inSelectMode) {
 		glPushMatrix();
-		glRotatef(rotation, 0, 1, 0);
+		glRotatef(-rotation, 0, 1, 0);
 		glTranslatef(col - 4, -(level * 2) + 4, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
@@ -92,15 +93,21 @@ void Piece::drawPiece() {
 Piece::~Piece() {
 }
 
-
 void Piece::incRot(float inc) {
 	rotation += inc;
 }
 
+#include <iostream>
+
 void Piece::endRot() {
 	rotation = 0;
+	int x = col - 4;
+	int y = line - 4;
 
-	col = - (line - 4) + 4;
-	line = (col - 4) + 4;
+	int new_x = -y;
+	int new_y = x;
+
+	col = new_x + 4;
+	line = new_y + 4;
 }
 
