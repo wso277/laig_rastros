@@ -171,9 +171,12 @@ void Node::processNode(stack<string> apps_stack, stack<string> ani_stack) {
 
 	glPushMatrix();
 	if (ani_stack.top() != "default") {
-		Point pt = Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
+		Point pt =
+				Scene::getInstance()->getAnimation(ani_stack.top())->getPoint();
 		glTranslatef(pt.getX(), pt.getY(), pt.getZ());
-		glRotatef(Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(), 0, 1, 0);
+		glRotatef(
+				Scene::getInstance()->getAnimation(ani_stack.top())->getRotation(),
+				0, 1, 0);
 	}
 
 	if (!is_visible) {
@@ -268,7 +271,7 @@ void Node::setSelectable(bool sel) {
 }
 
 void Node::processPick(vector<unsigned int> names) {
-	if (names[0] == 0 && ! piece_moving) {
+	if (names[0] == 0 && !piece_moving) {
 		GameLogic::getInstance()->setPieceSelected(true);
 	} else if (GameLogic::getInstance()->getPieceSelected()) {
 		int level, line, col;
@@ -341,4 +344,11 @@ void Node::setVisibility(bool is_visible) {
 
 bool Node::isVisible() {
 	return is_visible;
+}
+
+void Node::removePrims() {
+	for (unsigned int i = 0; i < prims.size(); i++) {
+		delete (prims[i]);
+	}
+	prims.erase(prims.begin(), prims.end() - 1);
 }

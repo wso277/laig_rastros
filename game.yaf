@@ -6,14 +6,38 @@
 		<perspective id="player2" near="0.0001" far="1500.0" angle="45.0" pos="5.0 10.0 20.0" target="0.0 0.0 0.0" />
 	</cameras>
 	<lighting doublesided="true" local="true" enabled="true" ambient="0.1 0.1 0.1 1.0" >
+		<spot id="light0" enabled="true"
+		location="5.5 6.0 1.5"
+		ambient="0.1 0.1 0.1 1.0"
+		diffuse="2.0 2.0 2.0 1.0"
+		specular="2.0 2.0 2.0 1.0"
+		angle="20.0"
+		exponent="20.0"
+		direction="1.0 -0.5 1.0"
+		/>
+		<spot id="light1" enabled="true"
+		location="14.5 6.0 1.5"
+		ambient="0.1 0.1 0.1 1.0"
+		diffuse="2.0 2.0 2.0 1.0"
+		specular="2.0 2.0 2.0 1.0"
+		angle="20.0"
+		exponent="20.0"
+		direction="-1.0 -0.5 1.0"
+		/>
 		<omni id="light2" enabled="true"
-		location="0.0 10.0 0.0"
+		location="4.5 10.0 22.0"
 		ambient="0.1 0.1 0.1 1.0"
 		diffuse="2.0 2.0 2.0 1.0"
 		specular="2.0 2.0 2.0 1.0"
 		/>
 		<omni id="light3" enabled="true"
-		location="0.0 15.0 22.0"
+		location="15.5 10.0 22.0"
+		ambient="0.1 0.1 0.1 1.0"
+		diffuse="2.0 2.0 2.0 1.0"
+		specular="2.0 2.0 2.0 1.0"
+		/>
+		<omni id="light4" enabled="false"
+		location="30.0 30.0 30.0"
 		ambient="0.1 0.1 0.1 1.0"
 		diffuse="2.0 2.0 2.0 1.0"
 		specular="2.0 2.0 2.0 1.0"
@@ -211,7 +235,6 @@
 			<children>
 				<noderef id="home" />
 				<noderef id="garden" />
-				<noderef id="street" />
 			</children>
 		</node>
 		<node id="home">

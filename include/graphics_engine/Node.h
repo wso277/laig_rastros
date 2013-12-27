@@ -63,6 +63,7 @@ public:
 	void setVisibility(bool is_visible);
 	bool isVisible();
 	void removePiece(Piece* piece);
+	void removePrims();
 };
 
 #endif /* NODE_H_ */

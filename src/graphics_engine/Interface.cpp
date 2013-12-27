@@ -8,6 +8,7 @@
 #define DEFAULT_GRAPH_DEPTH 100
 
 extern int main_window;
+extern bool is_new_game;
 
 using namespace std;
 
@@ -76,7 +77,7 @@ void Interface::init(int parent) {
 }
 
 void Interface::initGUI() {
-
+/*
 	// create cameras panel
 	CameraElem::iterator cam_it;
 	int i = 0;
@@ -95,25 +96,40 @@ void Interface::initGUI() {
 		cams_vars[i++] = live_var;
 		cams_rb.insert(map<string, int*>::value_type(cam_it->first, ptr));
 	}
+*/
+
+	glui_window->add_column(true);
 
 	GLUI_Panel *camsPanel = glui_window->add_panel("Cameras");
 	radio_id = id_counter++;
 	/*cams_group = glui_window->add_radiogroup_to_panel(camsPanel, cams_vars,
-			radio_id, Interface::processGUI);
+	 radio_id, Interface::processGUI);
 
-	map<string, int*>::iterator cb_it;
-	for (cb_it = cams_rb.begin(); cb_it != cams_rb.end(); cb_it++) {
-		glui_window->add_radiobutton_to_group(cams_group, cb_it->first.c_str());
-	}
+	 map<string, int*>::iterator cb_it;
+	 for (cb_it = cams_rb.begin(); cb_it != cams_rb.end(); cb_it++) {
+	 glui_window->add_radiobutton_to_group(cams_group, cb_it->first.c_str());
+	 }
 
-	cams_group->set_int_val(init_camera_pos);*/
-	GLUI_Translation *trans_y = glui_window->add_translation("AnimationY",
-	GLUI_TRANSLATION_Y, &obj_pos[1]);
+	 cams_group->set_int_val(init_camera_pos);*/
+	GLUI_Translation *trans_y = glui_window->add_translation_to_panel(camsPanel,
+			"AnimationY",
+			GLUI_TRANSLATION_Y, &obj_pos[1]);
 	trans_y->set_speed(.02);
 
-	GLUI_Translation *trans_x = glui_window->add_translation("Animation",
-	GLUI_TRANSLATION_X, &obj_pos[0]);
+	GLUI_Translation *trans_x = glui_window->add_translation_to_panel(camsPanel,
+			"Animation",
+			GLUI_TRANSLATION_X, &obj_pos[0]);
 	trans_x->set_speed(.02);
+
+	glui_window->add_column(true);
+
+	GLUI_Panel *Skybox = glui_window->add_panel("Skybox");
+	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox",
+			&skybox_selected, 1, skybox_handler);
+	for (int i = 0; i < Scene::getInstance()->getSkyboxes().size(); i++) {
+		sky_list->add_item(i,
+				Scene::getInstance()->getSkyboxes()[i]->getId().c_str());
+	}
 
 	glui_window->add_column(true);
 
@@ -140,9 +156,7 @@ void Interface::initGUI() {
 		glui_window->add_checkbox_to_panel(lightsPanel, rb_it->first.c_str(),
 				&rb_it->second[0], rb_it->second[1], Interface::processGUI);
 	}
-
-	glui_window->add_column(true);
-
+/*
 	// create drawmode panel
 
 	switch (Scene::getInstance()->getDrawmode()) {
@@ -171,7 +185,7 @@ void Interface::initGUI() {
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Wireframe");
 	glui_window->add_radiobutton_to_group(drawmd_grp, "Points");
 	drawmd_grp->set_int_val(0);
-
+*/
 	glui_window->add_column(true);
 
 	GLUI_Panel *difficultyPanel = glui_window->add_panel("Difficulty Level");
@@ -190,10 +204,14 @@ void Interface::initGUI() {
 
 	glui_window->add_column(true);
 
-	GLUI_Panel *Menu = glui_window->add_panel("Menu");
-	glui_window->add_button_to_panel(Menu, "New Game", 3, button_handler);
+	GLUI_Panel *Movements = glui_window->add_panel("Other movements");
+	glui_window->add_button_to_panel(Movements, "Rotate Middle Board", 4,
+			button_handler);
 
 	glui_window->add_column(true);
+
+	GLUI_Panel *Menu = glui_window->add_panel("Menu");
+	glui_window->add_button_to_panel(Menu, "New Game", 3, button_handler);
 
 	GLUI_Panel *modePanel = glui_window->add_panel("Game Mode");
 	GLUI_RadioGroup *mode_grp = glui_window->add_radiogroup_to_panel(modePanel,
@@ -204,20 +222,6 @@ void Interface::initGUI() {
 	glui_window->add_radiobutton_to_group(mode_grp, "Computer vs Computer");
 
 	glui_window->add_column(true);
-
-	GLUI_Panel *Skybox = glui_window->add_panel("Skybox");
-	GLUI_Listbox *sky_list = glui_window->add_listbox_to_panel(Skybox, "Skybox",
-			&skybox_selected, 1, skybox_handler);
-	for (int i = 0; i < Scene::getInstance()->getSkyboxes().size(); i++) {
-		sky_list->add_item(i,
-				Scene::getInstance()->getSkyboxes()[i]->getId().c_str());
-	}
-
-	glui_window->add_column(true);
-
-	GLUI_Panel *Movements = glui_window->add_panel("Other movements");
-	glui_window->add_button_to_panel(Buttons, "Rotate Middle Board", 4,
-			button_handler);
 
 }
 
@@ -240,6 +244,7 @@ void button_handler(int id) {
 		break;
 	case 3:
 		Scene::getInstance()->setInitCamera("player1");
+		is_new_game = true;
 		GameLogic::getInstance()->resetGame();
 		break;
 	case 4:

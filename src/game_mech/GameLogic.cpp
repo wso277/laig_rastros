@@ -33,6 +33,8 @@ bool piece_moving = false;
 extern int GAME_MODE;
 extern int DIFFICULTY_LEVEL;
 
+bool is_new_game = true;
+
 GameLogic* GameLogic::game = NULL;
 
 GameLogic* GameLogic::getInstance() {
@@ -395,6 +397,15 @@ void GameLogic::repeat() {
 }
 
 void GameLogic::resetGame() {
+	if (is_new_game) {
+		Scene::getInstance()->getNode("UI")->removePrims();
+
+		PointsHud *points = new PointsHud();
+		Scene::getInstance()->getNode("UI")->addPrimitive(points);
+
+		TimeHud *time = new TimeHud();
+		Scene::getInstance()->getNode("UI")->addPrimitive(time);
+	}
 	current_player = 1;
 	player1 = 0;
 	player2 = 0;
@@ -418,8 +429,8 @@ void GameLogic::resetGame() {
 		queryMode = queryMode + "3).\n";
 		break;
 	case 4:
-		player1Name = "Computer 1";
-		player2Name = "Computer 2";
+		player1Name = "Computer";
+		player2Name = "Computer";
 		queryMode = queryMode + "4).\n";
 		break;
 	}
@@ -468,8 +479,11 @@ void GameLogic::resetGame() {
 		}
 	}
 
-	if (gameMode >= 3) {
-		aiMove(current_player);
+	if (is_new_game) {
+		if (gameMode >= 3) {
+			aiMove(current_player);
+		}
+		is_new_game = false;
 	}
 }
 

@@ -13,6 +13,9 @@
 #define LEV2_TOP_APP "lev2_board_top"
 #define LEV2_SIDES_APP "lev2_board_sides"
 #define LEV2_BOTTOM_APP "lev2_board_bottom"
+#define LEV3_TOP_APP "lev3_board_top"
+#define LEV3_SIDES_APP "lev3_board_sides"
+#define LEV3_BOTTOM_APP "lev3_board_bottom"
 
 #define ROT_FACTOR 0.01667
 
@@ -31,12 +34,14 @@ Board::Board() :
 	is_selectable = true;
 	Scene::getInstance()->addTexture("board_body", "../data/wood.png");
 	Scene::getInstance()->addTexture("board_top", "../data/board.png");
+	Scene::getInstance()->addTexture("board_top2", "../data/board2.png");
 
 	// level 1
 
 	Appearance *a;
 	a = new Appearance(LEV1_TOP_APP);
 	a->setTextProp("board_top", 1.0 / 3.5, 1.0 / 2.0);
+	a->setSpecular(0.8, 0.8, 0.8, 1.0);
 	Scene::getInstance()->addAppearance(LEV1_TOP_APP, a);
 
 	a = new Appearance(LEV1_SIDES_APP);
@@ -50,11 +55,17 @@ Board::Board() :
 	topLevel.setDims(7, 0.5, 4);
 	topLevel.setAppearances(LEV1_TOP_APP, LEV1_BOTTOM_APP, LEV1_SIDES_APP);
 
+	a = new Appearance(LEV1_TOP_APP);
+	a->setTextProp("board_top2", 1.0 / 3.5, 1.0 / 2.0);
+	a->setSpecular(0.8, 0.8, 0.8, 1.0);
+	Scene::getInstance()->addAppearance(LEV3_TOP_APP, a);
+
 	bottomLevel.setDims(7, 0.5, 4);
-	bottomLevel.setAppearances(LEV1_TOP_APP, LEV1_BOTTOM_APP, LEV1_SIDES_APP);
+	bottomLevel.setAppearances(LEV3_TOP_APP, LEV1_BOTTOM_APP, LEV1_SIDES_APP);
 
 	a = new Appearance(LEV2_TOP_APP);
-	a->setTextProp("board_top", 1.0 / 1.5, 1.0 / 1.5);
+	a->setTextProp("board_top2", 1.0 / 1.5, 1.0 / 1.5);
+	a->setSpecular(0.8, 0.8, 0.8, 1.0);
 	Scene::getInstance()->addAppearance(LEV2_TOP_APP, a);
 
 	a = new Appearance(LEV2_SIDES_APP);
@@ -128,9 +139,6 @@ void Board::draw() {
 		Scene::getInstance()->getAppearance("goal_homes")->apply();
 		glRotatef(-rotation, 0, 1, 0);
 		t3dDraw3D("2", 0, 0, 0.2f);
-		glPopMatrix();
-		glPushMatrix();
-		//t3dDraw2D("1", 0, 0, 0.2f);
 		glPopMatrix();
 		topLevel.draw();
 	}
