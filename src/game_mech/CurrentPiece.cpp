@@ -105,6 +105,8 @@ CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff,
 	Scene::getInstance()->addAnimation("9rightup", a);
 
 	addTextures();
+
+	is_trail = false;
 }
 
 void CurrentPiece::draw() {

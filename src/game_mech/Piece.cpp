@@ -9,6 +9,9 @@
 #include "Scene.h"
 #include "Interface.h"
 #include "GL/glut.h"
+#include <iostream>
+
+using namespace std;
 
 extern bool inSelectMode;
 
@@ -18,8 +21,9 @@ Piece::Piece() :
 	line = 3;
 	level = 2;
 	rotation = 0;
+
 	is_trail = true;
-	scale_factor = 0.0;
+	scale_factor = 0.000001;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
 }
@@ -38,6 +42,9 @@ Piece::Piece(int col, int line, int level, bool select, bool visible,
 	setAppearance(appearance);
 	setSelectable(select);
 	setVisibility(visible);
+
+	is_trail = true;
+	scale_factor = 0.000001;
 
 }
 
@@ -71,29 +78,24 @@ void Piece::draw() {
 }
 
 void Piece::drawPiece() {
+	if (inSelectMode && !is_selectable) {
+		return;
+	}
 	if (inSelectMode && is_selectable) {
 		glPushName(0);
-		glPushMatrix();
-		glRotatef(rotation, 0, 1, 0);
-		glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
-		glScalef(0.9, 0.5, 0.9);
-		glRotatef(-90, 1, 0, 0);
-		piece->draw();
-		glPopMatrix();
 	}
 
-	if (!inSelectMode) {
-		glPushMatrix();
-		glRotatef(-rotation, 0, 1, 0);
-		glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
-		glScalef(0.9, 0.5, 0.9);
-		glRotatef(-90, 1, 0, 0);
-		if (is_trail) {
-			glScalef(scale_factor, scale_factor, scale_factor);
-		}
-		piece->draw();
-		glPopMatrix();
+	glPushMatrix();
+	glRotatef(-rotation, 0, 1, 0);
+	glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
+	glScalef(0.9, 0.5, 0.9);
+	glRotatef(-90, 1, 0, 0);
+	if (is_trail) {
+		cout << "scale: " << scale_factor << endl;
+		glScalef(scale_factor, scale_factor, scale_factor);
 	}
+	piece->draw();
+	glPopMatrix();
 
 }
 
@@ -119,7 +121,7 @@ void Piece::endRot() {
 }
 
 float Piece::getScaleFact() {
-	if(is_trail) {
+	if (is_trail) {
 		return scale_factor;
 	} else {
 		return 0;
