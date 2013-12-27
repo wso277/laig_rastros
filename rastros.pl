@@ -1,6 +1,6 @@
 /* compilation
 
-swipl --goal=<START-FUNC> --stand_alone=true -o rastros -c rastros.pl
+swipl --goal=run --stand_alone=true -o rastros -c rastros.pl
 
 */
 
@@ -16,7 +16,7 @@ swipl --goal=<START-FUNC> --stand_alone=true -o rastros -c rastros.pl
  *******************************************************/
 
 nthElem(1, [X | _Xs], X).
-nthElem(N, [_X | Xs], _Y) :- N1 is N - 1, nthElem(N1, Xs, _Y).
+nthElem(N, [_X | Xs], Y) :- N1 is N - 1, nthElem(N1, Xs, Y).
 
 getElemPos(X, [X | _Xs], 1).
 getElemPos(X, [_Y | Xs], N) :- getElemPos(X, Xs, N1), N is N1 + 1.
@@ -481,21 +481,21 @@ testMove(0, Board) :- testExtDescend(Board).
 testMove(_, _) :- writeResponseToSocketStream('Failure.').
 
 testExtMoveUp(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, 
-					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Board, Level).
+					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Level, Board).
 testExtMoveDown(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, 
-					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Board, Level).
+					getElemInPos(Nr1, Nc, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc, Level, Board).
 testExtMoveLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nc1 is Nc - 1, 
-					getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Board, Level). 
+					getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Level, Board). 
 testExtMoveRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nc1 is Nc + 1, 
-						getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Board, Level).
+						getElemInPos(Nr, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr, Nc1, Level, Board).
 testExtMoveDiagUpLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, Nc1 is Nc - 1,
-							getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level).
+							getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Level, Board).
 testExtMoveDiagUpRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr - 1, Nc1 is Nc + 1,
-									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Level, Board). 
 testExtMoveDiagDownLeft(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, Nc1 is Nc - 1,
-									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Level, Board). 
 testExtMoveDiagDownRight(Board) :- getCurrPos(Board, Nr, Nc, Level), Nr1 is Nr + 1, Nc1 is Nc + 1,
-									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Board, Level). 
+									getElemInPos(Nr1, Nc1, Board, Level, X), emptyPlace(X), testVictory(Nr1, Nc1, Level, Board). 
 
 testExtRotateCenter(Board) :- getCurrPos(Board, Nr, Nc, _Level),
 						Nr < 6 , Nr > 2, Nc < 6, Nc > 2, writeResponseToSocketStream('Success.').

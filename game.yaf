@@ -212,7 +212,6 @@
 				<noderef id="home" />
 				<noderef id="garden" />
 				<noderef id="street" />
-				<noderef id="water" />
 			</children>
 		</node>
 		<node id="home">

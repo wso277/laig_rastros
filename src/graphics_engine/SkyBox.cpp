@@ -128,6 +128,5 @@ string SkyBox::getId() {
 }
 
 SkyBox::~SkyBox() {
-	// TODO Auto-generated destructor stub
 }
 

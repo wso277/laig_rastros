@@ -20,6 +20,7 @@
 #include "Repeat.h"
 #include "PointsHud.h"
 #include "TimeHud.h"
+#include "VictoryHud.h"
 
 #define SUCCESS_MESSG "Success.\n"
 #define VICTORY1_MESSG "Victory1.\n"
@@ -138,8 +139,14 @@ void GameLogic::executeMove(int dir) {
 		assignPoints(dir);
 		if (response.compare(VICTORY1_MESSG) == 0) {
 			cout << "Victory player 1" << endl;
-		} else if (response.compare(VICTORY1_MESSG) == 0) {
+			VictoryHud *vict = new VictoryHud(1);
+			Scene::getInstance()->getNode("UI")->addPrimitive(vict);
+			piece_moving = true;
+		} else if (response.compare(VICTORY2_MESSG) == 0) {
 			cout << "Victory player2" << endl;
+			VictoryHud *vict = new VictoryHud(2);
+			Scene::getInstance()->getNode("UI")->addPrimitive(vict);
+			piece_moving = true;
 		}
 	}
 }
