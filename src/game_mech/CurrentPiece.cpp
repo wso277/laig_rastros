@@ -9,6 +9,11 @@
 #include "Animation.h"
 #include "Scene.h"
 #include <iostream>
+#include "Appearance.h"
+#include "GameLogic.h"
+#include "CGFtexture.h"
+
+extern bool piece_moving;
 
 CurrentPiece::CurrentPiece() :
 		Piece() {
@@ -16,9 +21,11 @@ CurrentPiece::CurrentPiece() :
 	level_diff = 2;
 
 	piece = new MyCylinder(0.5, 0.5, 1, 10, 10);
+	addTextures();
 }
 
-CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff, int level_diff) :
+CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff,
+		int level_diff) :
 		Piece(col, line, level, true, true, "default") {
 
 	this->side_diff = side_diff;
@@ -28,7 +35,7 @@ CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff, int leve
 
 	a = new Animation("0descend", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(0, -(level_diff+1), 0);
+	a->addPoint(0, -(level_diff + 1), 0);
 	a->calculateDelta();
 
 	Scene::getInstance()->addAnimation("0descend", a);
@@ -63,7 +70,7 @@ CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff, int leve
 
 	a = new Animation("5climb", ANIMATION_SPAN, "linear");
 	a->addPoint(0, 0, 0);
-	a->addPoint(0, level_diff+1, 0);
+	a->addPoint(0, level_diff + 1, 0);
 	a->calculateDelta();
 
 	Scene::getInstance()->addAnimation("5climb", a);
@@ -96,10 +103,15 @@ CurrentPiece::CurrentPiece(int col, int line, int level, int side_diff, int leve
 
 	Scene::getInstance()->addAnimation("9rightup", a);
 
+	addTextures();
 }
 
 void CurrentPiece::draw() {
-	Scene::getInstance()->getAppearance("goal_homes")->apply();
+	if (GameLogic::getInstance()->getPieceSelected()) {
+		Scene::getInstance()->getAppearance("piece_selected")->apply();
+	} else {
+		Scene::getInstance()->getAppearance("normal_piece")->apply();
+	}
 	drawPiece();
 }
 
@@ -160,7 +172,6 @@ void CurrentPiece::updateCoords() {
 	}
 }
 
-
 void CurrentPiece::setDir(int dir) {
 	this->dir = dir;
 }
@@ -169,5 +180,20 @@ int CurrentPiece::getDir() {
 }
 
 CurrentPiece::~CurrentPiece() {
+}
+
+void CurrentPiece::addTextures() {
+
+	Scene::getInstance()->addTexture("normal_piece", "../data/piece.jpg");
+	Scene::getInstance()->addTexture("piece_selected",
+			"../data/piece_selected2.jpg");
+
+	Appearance *normal = new Appearance("normal_piece");
+	normal->setTextProp("normal_piece", 1, 1);
+	Scene::getInstance()->addAppearance("normal_piece", normal);
+
+	Appearance *selected = new Appearance("piece_selected");
+	selected->setTextProp("piece_selected", 1, 1);
+	Scene::getInstance()->addAppearance("piece_selected", selected);
 }
 

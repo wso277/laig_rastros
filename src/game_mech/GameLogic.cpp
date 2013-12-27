@@ -561,6 +561,8 @@ void GameLogic::endMiddleRot() {
 	for (it = mid_pieces.begin(); it != mid_pieces.end(); it++) {
 		(*it)->endRot();
 	}
+
+	finishedMoving();
 }
 
 void GameLogic::executeAIMove(int dir) {
@@ -613,9 +615,9 @@ bool GameLogic::existPossibleMoves() {
 	predicate += ").\n";
 
 	char * resp = Client::getInstance()->sendRequest(predicate);
-	cout << resp;
+	cout << strlen(resp) << endl;
 
-	if (strcmp(resp, "[]") == 0) {
+	if (strcmp(resp, "[]\n") == 0) {
 		free(resp);
 		return false;
 	} else {

@@ -27,6 +27,7 @@ public:
 	void setDir(int dir);
 	int getDir();
 	virtual ~CurrentPiece();
+	void addTextures();
 };
 
 #endif /* CURRENTPIECE_H_ */

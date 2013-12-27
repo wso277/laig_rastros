@@ -71,7 +71,7 @@ void Piece::drawPiece() {
 		glPushName(0);
 		glPushMatrix();
 		glRotatef(rotation, 0, 1, 0);
-		glTranslatef(col - 4, -(level * 2) + 4, line - 4);
+		glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
 		piece->draw();
@@ -81,7 +81,7 @@ void Piece::drawPiece() {
 	if (!inSelectMode) {
 		glPushMatrix();
 		glRotatef(-rotation, 0, 1, 0);
-		glTranslatef(col - 4, -(level * 2) + 4, line - 4);
+		glTranslatef(col - 4, -(level * 2) + 4.1, line - 4);
 		glScalef(0.9, 0.5, 0.9);
 		glRotatef(-90, 1, 0, 0);
 		piece->draw();
