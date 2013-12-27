@@ -347,8 +347,5 @@ bool Node::isVisible() {
 }
 
 void Node::removePrims() {
-	for (unsigned int i = 0; i < prims.size(); i++) {
-		delete (prims[i]);
-	}
-	prims.erase(prims.begin(), prims.end() - 1);
+	prims.clear();
 }
