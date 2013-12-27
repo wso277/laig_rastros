@@ -394,7 +394,8 @@ void GameLogic::resetGame() {
 	player2 = 0;
 	last_point.clear();
 	gameMode = GAME_MODE + 1;
-
+	string queryMode = "sGameMode(";
+	string queryDifficulty = "sDifficultyLevel(";
 	switch (gameMode) {
 	case 1:
 		player1Name = "Human 1";
@@ -403,17 +404,40 @@ void GameLogic::resetGame() {
 	case 2:
 		player1Name = "Human";
 		player2Name = "Computer";
+		queryMode = queryMode + "2).\n";
 		break;
 	case 3:
 		player1Name = "Computer";
 		player2Name = "Human";
+		queryMode = queryMode + "3).\n";
 		break;
 	case 4:
 		player1Name = "Computer 1";
 		player2Name = "Computer 2";
+		queryMode = queryMode + "4).\n";
 		break;
 	}
 	difficultyLevel = DIFFICULTY_LEVEL + 1;
+
+	if (gameMode != 1) {
+		switch (difficultyLevel) {
+		case 1:
+			queryDifficulty = queryDifficulty + "1).\n";
+			break;
+		case 2:
+			queryDifficulty = queryDifficulty + "2).\n";
+			break;
+		case 3:
+			queryDifficulty = queryDifficulty + "3).\n";
+			break;
+		case 4:
+			queryDifficulty = queryDifficulty + "4).\n";
+			break;
+		}
+		Client::getInstance()->sendRequest(queryMode);
+		Client::getInstance()->sendRequest(queryDifficulty);
+
+	}
 
 	piece->setCol(5);
 	piece->setLine(3);

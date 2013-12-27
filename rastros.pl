@@ -509,3 +509,13 @@ testExtDescend(Board) :- getCurrPos(Board, Nr, Nc, Level), Level1 is Level + 1,
 testVictory(Row, Col, Level, Board) :- getElemInPos(Row, Col, Board, Level, '1'), writeResponseToSocketStream('Victory1.').
 testVictory(Row, Col, Level, Board) :- getElemInPos(Row, Col, Board, Level, '2'), writeResponseToSocketStream('Victory2.').
 testVictory(_,_,_,_) :- writeResponseToSocketStream('Success.').
+
+sGameMode(1) :- asserta(player(1, human)), asserta(player(2, human)).
+sGameMode(2) :- asserta(player(1, human)), asserta(player(2, computer)), writeResponseToSocketStream('Success.').
+sGameMode(3) :- asserta(player(1, computer)), asserta(player(2, human)), writeResponseToSocketStream('Success.').
+sGameMode(4) :- asserta(player(1, computer)), asserta(player(2, computer)), writeResponseToSocketStream('Success.').
+
+sDifficultyLevel(1) :- asserta(level(75)), writeResponseToSocketStream('Success.').
+sDifficultyLevel(2) :- asserta(level(50)), writeResponseToSocketStream('Success.').
+sDifficultyLevel(3) :- asserta(level(25)), writeResponseToSocketStream('Success.').
+sDifficultyLevel(4) :- asserta(level(0)), writeResponseToSocketStream('Success.').
