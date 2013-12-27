@@ -519,3 +519,5 @@ sDifficultyLevel(1) :- asserta(level(75)), writeResponseToSocketStream('Success.
 sDifficultyLevel(2) :- asserta(level(50)), writeResponseToSocketStream('Success.').
 sDifficultyLevel(3) :- asserta(level(25)), writeResponseToSocketStream('Success.').
 sDifficultyLevel(4) :- asserta(level(0)), writeResponseToSocketStream('Success.').
+
+findMoves(Board) :- findMoves(Board, List, 0), writeResponseToSocketStream(List).

@@ -58,6 +58,8 @@ public:
 	void rotateMidBoard();
 	void rotatePiecesInMiddle(float factor);
 	void endMiddleRot();
+	bool existPossibleMoves();
+	void finishedMoving();
 };
 
 #endif /* GAMELOGIC_H_ */

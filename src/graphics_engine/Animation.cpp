@@ -150,15 +150,6 @@ float Animation::updateAnimation(int index) {
 		return ratio;
 	} else {
 		resetAnimation();
-		CurrentPiece *p = (CurrentPiece*)(Scene::getInstance()->getNode("piece")->getPrims()[0]);
-		p->updateCoords();
-		if (GameLogic::getInstance()->getCurrentPlayer() == 1) {
-			Scene::getInstance()->setInitCamera("player1");
-		} else {
-			Scene::getInstance()->setInitCamera("player2");
-		}
-		piece_moving = false;
-		return 0;
 	}
 
 	return 0;

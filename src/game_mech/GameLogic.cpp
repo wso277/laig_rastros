@@ -569,3 +569,35 @@ void GameLogic::rotateMidBoard() {
 	board->rotateMiddleBoard();
 }
 
+bool GameLogic::existPossibleMoves() {
+	string predicate = "findMoves(";
+	predicate += getEncodedCharBoard();
+	predicate += ").\n";
+
+	char * resp = Client::getInstance()->sendRequest(predicate);
+
+	if (strcmp(resp, "[]") == 0) {
+		free(resp);
+		return false;
+	} else {
+		free(resp);
+		return true;
+	}
+}
+
+void GameLogic::finishedMoving() {
+	CurrentPiece *p =
+			(CurrentPiece*) (Scene::getInstance()->getNode("piece")->getPrims()[0]);
+	p->updateCoords();
+
+	if (!existPossibleMoves()) {
+
+	}
+
+	if (GameLogic::getInstance()->getCurrentPlayer() == 1) {
+		Scene::getInstance()->setInitCamera("player1");
+	} else {
+		Scene::getInstance()->setInitCamera("player2");
+	}
+	piece_moving = false;
+}
