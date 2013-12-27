@@ -122,17 +122,18 @@ void GameLogic::executeMove(int dir) {
 		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown",
 				"4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
 
-		Piece *p = new Piece(piece->getCol(), piece->getLine(),
-				piece->getLevel(), false, true, "default");
-		Scene::getInstance()->getNode("trail")->addPrimitive(p);
-		trailPieces.push_back(p);
+		if (dir != 0 && dir != 5) {
+			Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
+			Scene::getInstance()->getNode("trail")->addPrimitive(p);
+			trailPieces.push_back(p);
 
-		if (piece->getLevel() == 1) {
-			topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
-		} else if (piece->getLevel() == 2) {
-			midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
-		} else {
-			botBoard[piece->getLine() - 4][piece->getCol() - 1] = '#';
+			if (piece->getLevel() == 1) {
+				topBoard[piece->getLine() - 1][piece->getCol() - 1] = '#';
+			} else if (piece->getLevel() == 2) {
+				midBoard[piece->getLine() - 3][piece->getCol() - 3] = '#';
+			} else {
+				botBoard[piece->getLine() - 4][piece->getCol() - 1] = '#';
+			}
 		}
 
 		Scene::getInstance()->getNode("piece")->setAnimation(animations[dir]);
@@ -237,9 +238,9 @@ void GameLogic::assignPoints(int dir) {
 		break;
 	}
 
-	if (current_player == 1) {
+	if (current_player == 1 && dir != 0 && dir != 5) {
 		current_player = 2;
-	} else if (current_player == 2) {
+	} else if (current_player == 2 && dir != 0 && dir != 5) {
 		current_player = 1;
 	}
 }
@@ -399,7 +400,8 @@ void GameLogic::resetGame() {
 	player2 = 0;
 	last_point.clear();
 	gameMode = GAME_MODE + 1;
-
+	string queryMode = "sGameMode(";
+	string queryDifficulty = "sDifficultyLevel(";
 	switch (gameMode) {
 	case 1:
 		player1Name = "Human 1";
@@ -408,17 +410,40 @@ void GameLogic::resetGame() {
 	case 2:
 		player1Name = "Human";
 		player2Name = "Computer";
+		queryMode = queryMode + "2).\n";
 		break;
 	case 3:
 		player1Name = "Computer";
 		player2Name = "Human";
+		queryMode = queryMode + "3).\n";
 		break;
 	case 4:
-		player1Name = "Computer";
-		player2Name = "Computer";
+		player1Name = "Computer 1";
+		player2Name = "Computer 2";
+		queryMode = queryMode + "4).\n";
 		break;
 	}
 	difficultyLevel = DIFFICULTY_LEVEL + 1;
+
+	if (gameMode != 1) {
+		switch (difficultyLevel) {
+		case 1:
+			queryDifficulty = queryDifficulty + "1).\n";
+			break;
+		case 2:
+			queryDifficulty = queryDifficulty + "2).\n";
+			break;
+		case 3:
+			queryDifficulty = queryDifficulty + "3).\n";
+			break;
+		case 4:
+			queryDifficulty = queryDifficulty + "4).\n";
+			break;
+		}
+		Client::getInstance()->sendRequest(queryMode);
+		Client::getInstance()->sendRequest(queryDifficulty);
+
+	}
 
 	piece->setCol(5);
 	piece->setLine(3);
