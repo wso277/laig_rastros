@@ -98,7 +98,7 @@ void Interface::initGUI() {
 
 	GLUI_Panel *camsPanel = glui_window->add_panel("Cameras");
 	radio_id = id_counter++;
-	cams_group = glui_window->add_radiogroup_to_panel(camsPanel, cams_vars,
+	/*cams_group = glui_window->add_radiogroup_to_panel(camsPanel, cams_vars,
 			radio_id, Interface::processGUI);
 
 	map<string, int*>::iterator cb_it;
@@ -106,7 +106,10 @@ void Interface::initGUI() {
 		glui_window->add_radiobutton_to_group(cams_group, cb_it->first.c_str());
 	}
 
-	cams_group->set_int_val(init_camera_pos);
+	cams_group->set_int_val(init_camera_pos);*/
+	GLUI_Translation *trans_y = glui_window->add_translation("AnimationY",
+	GLUI_TRANSLATION_Y, &obj_pos[1]);
+	trans_y->set_speed(.02);
 
 	GLUI_Translation *trans_x = glui_window->add_translation("Animation",
 	GLUI_TRANSLATION_X, &obj_pos[0]);
@@ -213,7 +216,7 @@ void Interface::initGUI() {
 	glui_window->add_column(true);
 
 	GLUI_Panel *Movements = glui_window->add_panel("Other movements");
-	glui_window->add_button_to_panel(Movements, "Rotate Middle Board", 4,
+	glui_window->add_button_to_panel(Buttons, "Rotate Middle Board", 4,
 			button_handler);
 
 }

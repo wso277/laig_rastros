@@ -115,16 +115,14 @@ void GameLogic::executeMove(int dir) {
 
 	string response = Client::getInstance()->sendRequest(getTestPredicate(dir));
 	cout << response << endl;
-	if (response.compare(SUCCESS_MESSG) == 0
-			|| response.compare(VICTORY1_MESSG) == 0
+	if (response.compare(SUCCESS_MESSG) == 0 || response.compare(VICTORY1_MESSG) == 0
 			|| response.compare(VICTORY2_MESSG) == 0) {
 
-		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown",
-				"4left", "5climb", "6right", "7leftup", "8up", "9rightup" };
+		string animations[] = { "0descend", "1leftdown", "2down", "3rightdown", "4left", "5climb", "6right", "7leftup",
+				"8up", "9rightup" };
 
 		if (dir != 0 && dir != 5) {
-			Piece *p = new Piece(piece->getCol(), piece->getLine(),
-					piece->getLevel(), false, true, "default");
+			Piece *p = new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default");
 			Scene::getInstance()->getNode("trail")->addPrimitive(p);
 			trailPieces.push_back(p);
 
@@ -271,18 +269,14 @@ string GameLogic::getEncodedCharBoard() {
 			} else if (i > 4 || (i == 4 && j < 2) || (i == 4 && j >= 5)) {
 				enc_board = enc_board + "'X','X','" + botBoard[i - 3][j] + "'";
 			} else if (i == 2 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'" + topBoard[i][j] + "','"
-						+ midBoard[i - 2][j - 2] + "','X'";
+				enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','X'";
 			} else if (i == 4 && j >= 2 && j < 5) {
-				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','"
-						+ botBoard[i - 3][j] + "'";
+				enc_board = enc_board + "'X','" + midBoard[i - 2][j - 2] + "','" + botBoard[i - 3][j] + "'";
 			} else if (i == 3) {
 				if (j < 2 || j >= 5) {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','X','"
-							+ botBoard[i - 3][j] + "'";
+					enc_board = enc_board + "'" + topBoard[i][j] + "','X','" + botBoard[i - 3][j] + "'";
 				} else {
-					enc_board = enc_board + "'" + topBoard[i][j] + "','"
-							+ midBoard[i - 2][j - 2] + "','"
+					enc_board = enc_board + "'" + topBoard[i][j] + "','" + midBoard[i - 2][j - 2] + "','"
 							+ botBoard[i - 3][j] + "'";
 				}
 			}
@@ -387,8 +381,7 @@ void GameLogic::repeat() {
 	Repeat::getInstance()->setTrail(trailPieces);
 	trailPieces.clear();
 	Repeat::getInstance()->pushLastMove(
-			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(),
-					false, true, "default"));
+			new Piece(piece->getCol(), piece->getLine(), piece->getLevel(), false, true, "default"));
 	resetGame();
 
 	Repeat::getInstance()->popFirst();
@@ -627,8 +620,7 @@ bool GameLogic::existPossibleMoves() {
 }
 
 void GameLogic::finishedMoving() {
-	CurrentPiece *p =
-			(CurrentPiece*) (Scene::getInstance()->getNode("piece")->getPrims()[0]);
+	CurrentPiece *p = (CurrentPiece*) (Scene::getInstance()->getNode("piece")->getPrims()[0]);
 	p->updateCoords();
 
 	int current_player = GameLogic::getInstance()->getCurrentPlayer();
@@ -638,6 +630,24 @@ void GameLogic::finishedMoving() {
 		Scene::getInstance()->getNode("UI")->addPrimitive(vict);
 		piece_moving = true;
 		return;
+	} else {
+		if ((current_player == 1 && player1Name == "Computer") || (current_player == 2 && player2Name == "Computer")) {
+			string predicate = "moveAI(";
+			if (current_player == 1) {
+				predicate += "1,";
+			} else {
+				predicate += "2,";
+			}
+
+			predicate += getEncodedCharBoard() + ").\n";
+
+			string reply = Client::getInstance()->sendRequest(predicate);
+			cout << "ai move: " << reply << endl;
+
+			int dir = atoi(reply.c_str());
+
+			executeAIMove(dir);
+		}
 	}
 
 	if (GameLogic::getInstance()->getCurrentPlayer() == 1) {
@@ -647,21 +657,4 @@ void GameLogic::finishedMoving() {
 	}
 	piece_moving = false;
 
-	if ((current_player == 1 && player1Name == "Computer") || (current_player == 2 && player2Name == "Computer")) {
-		string predicate = "moveAI(";
-		if (current_player == 1) {
-			predicate += "1,";
-		} else {
-			predicate += "2,";
-		}
-
-		predicate += getEncodedCharBoard() + ").\n";
-
-		string reply = Client::getInstance()->sendRequest(predicate);
-		cout << "ai move: " << reply << endl;
-
-		int dir = atoi(reply.c_str());
-
-		executeAIMove(dir);
-	}
 }

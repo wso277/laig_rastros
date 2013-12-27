@@ -79,13 +79,13 @@ void Perspective::setCamera() {
 	glLoadIdentity();
 
 	if (px + obj_pos[0] <= CAMERA_POS && px + obj_pos[0] >= -CAMERA_POS) {
-		gluLookAt(px + obj_pos[0], py, pz, tx, ty, tz, 0, 1, 0); //vector direction is always up
+		gluLookAt(px + obj_pos[0], py + obj_pos[1], pz, tx, ty, tz, 0, 1, 0); //vector direction is always up
 	} else {
 		if (px + obj_pos[0] > CAMERA_POS) {
-			gluLookAt(CAMERA_POS, py, pz, tx, ty, tz, 0, 1, 0);
+			gluLookAt(CAMERA_POS, py + obj_pos[1], pz, tx, ty, tz, 0, 1, 0);
 		}
 		if (px + obj_pos[0] < -CAMERA_POS) {
-			gluLookAt(-CAMERA_POS, py, pz, tx, ty, tz, 0, 1, 0);
+			gluLookAt(-CAMERA_POS, py + obj_pos[1], pz, tx, ty, tz, 0, 1, 0);
 		}
 	}
 }
