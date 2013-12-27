@@ -680,6 +680,8 @@ void GameLogic::finishedMoving() {
 			if ((current_player == 1 && player1Name == "Computer")
 					|| (current_player == 2 && player2Name == "Computer")) {
 				aiMove(current_player);
+			} else {
+				piece_moving = false;
 			}
 		}
 	}
@@ -689,6 +691,5 @@ void GameLogic::finishedMoving() {
 	} else {
 		Scene::getInstance()->setInitCamera("player2");
 	}
-	piece_moving = false;
 
 }
