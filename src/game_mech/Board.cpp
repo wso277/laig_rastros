@@ -197,3 +197,9 @@ void updateRotation(int index) {
 	Board::incrementRotation(ratio * 2);
 	glutTimerFunc(ROT_FACTOR, updateRotation, 0);
 }
+
+bool Board::rotateBoard(int boardIndex) {
+	if (boardIndex < 1 || boardIndex > 3) {
+		return false;
+	}
+}
