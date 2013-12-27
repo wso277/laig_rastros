@@ -63,8 +63,6 @@ int main(int argc, char* argv[]) {
 
 	Scene::getInstance()->initScene();
 
-	//GameLogic::getInstance()->initGame();
-
 	Interface interface;
 
 	interface.init(main_window);

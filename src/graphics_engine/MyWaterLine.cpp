@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include <time.h>
 #include <stdio.h>
+#include <iostream>
 
 float MyWaterLine::delta = 0;
 float MyWaterLine::prev_delta = 0;
@@ -42,7 +43,7 @@ void MyWaterLine::setAppearance(string appearance) {
 void MyWaterLine::draw() {
 	shader.bind();
 	GLint delta_loc = glGetUniformLocation(shader.id(), "delta");
-	glUniform1f(delta_loc, time);
+	glUniform1f(delta_loc, MyWaterLine::time);
 
 	GLint text_loc = glGetUniformLocation(shader.id(), "texturemap");
 	glUniform1i(text_loc, 0);
@@ -79,7 +80,6 @@ void updateWaterLine(int i) {
 	}
 
 	MyWaterLine::time = MyWaterLine::delta / 32.0;
-
 	if (MyWaterLine::time >= 1) {
 		MyWaterLine::delta = 0;
 		MyWaterLine::time -= 1;
